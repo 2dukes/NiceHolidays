@@ -1,4 +1,4 @@
-﻿  Source.cpp
-  main.cpp
-  Generating Code...
+﻿  Menus.cpp
+c:\users\rui pinto\documents\c++\projetoprog2\projetoprog2\menus.cpp(15): warning C4018: '<=': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\projetoprog2\projetoprog2\menus.cpp(52): warning C4018: '<=': signed/unsigned mismatch
   ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\ProjetoPROG2\Debug\ProjetoPROG2.exe
