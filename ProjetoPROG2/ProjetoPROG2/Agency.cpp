@@ -52,7 +52,7 @@ Agency::Agency(string fileName)
 	address.setPostalCode(adressElems.at(3));
 	address.setLocation(adressElems.at(4));
 	getline(agencyfile, this->URL);*/
-	
+
 	ifstream in_stream(fileName);
 	string fileInput;
 	getline(in_stream, this->name); // Name
@@ -68,32 +68,32 @@ Agency::Agency(string fileName)
 // metodos GET
 string Agency::getName() const {
 
-	return this->name;
+	return name;
 }
 
 unsigned Agency::getVATnumber() const {
 
-	return this->VATnumber;
+	return VATnumber;
 }
 
 Address Agency::getAddress() const {
 
-	//  IMPLEMENTATION REQUIRED 
+	return address;
 }
 
 string Agency::getURL() const {
 
-	return this->URL;
+	return URL;
 }
 
 vector<Client> Agency::getClients() const {
 
-	return this->clients;
+	return clients;
 }
 
 vector<Packet> Agency::getPackets() const {
 
-	return this->packets;
+	return packets;
 }
 
 
@@ -136,5 +136,8 @@ void Agency::setPackets(vector<Packet> &packets) {
  // mostra o conteudo de uma agencia
 ostream& operator<<(ostream& out, const Agency & agency) {
 
-	// A IMPLEMENTATION REQUIRED 
+	out << agency.getName() << "\n"
+		<< agency.getVATnumber() << "\n"
+		<< agency.getURL() << "\n"
+		<< agency.address << "\n";
 }
