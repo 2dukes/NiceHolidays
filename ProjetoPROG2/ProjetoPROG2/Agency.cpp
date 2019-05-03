@@ -101,32 +101,33 @@ vector<Packet> Agency::getPackets() const {
 
 void Agency::setName(string name) {
 
+	this->name = name;
 	//  IMPLEMENTATION REQUIRED 
 }
 
 void Agency::setVATnumber(unsigned VATnumber) {
 
+	this->VATnumber = VATnumber;
 	//  IMPLEMENTATION REQUIRED 
 }
 
 void Agency::setAddress(Address address) {
 
+	this->address = address;
 	//  IMPLEMENTATION REQUIRED 
 }
 void Agency::setURL(string url) {
 
+	this->URL = url;
 	//  IMPLEMENTATION REQUIRED 
-
 }
 void Agency::setClients(vector<Client> &clients) {
 
 	//  IMPLEMENTATION REQUIRED 
-
 }
 void Agency::setPackets(vector<Packet> &packets) {
 
 	//  IMPLEMENTATION REQUIRED 
-
 }
 
 /*********************************
@@ -136,8 +137,9 @@ void Agency::setPackets(vector<Packet> &packets) {
  // mostra o conteudo de uma agencia
 ostream& operator<<(ostream& out, const Agency & agency) {
 
-	out << agency.getName() << "\n"
-		<< agency.getVATnumber() << "\n"
-		<< agency.getURL() << "\n"
+	out << agency.name << "\n"
+		<< agency.VATnumber<< "\n"
+		<< agency.URL << "\n"
 		<< agency.address << "\n";
+	return out;
 }

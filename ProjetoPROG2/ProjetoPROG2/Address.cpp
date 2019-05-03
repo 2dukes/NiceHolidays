@@ -9,13 +9,13 @@ Address::Address(string adr)
 	int auxiliar;
     // Rua Sem Nome / 100 / - / 4400-345 / Porto
 	// Suppose that file format is alright
-	getline(iS, this->street, '/'); // Street
+	getline(iS, street, '/'); // Street
 	getline(iS, adrInfo, '/');
 	auxiliar = stoi(adrInfo);
-	this->doorNumber = static_cast<unsigned short> (auxiliar); // doorNumber
-	getline(iS, this->floor, '/');  // floor
-	getline(iS, this->postalCode, '/'); // postalCode
-	getline(iS, this->location); // location
+	doorNumber = static_cast<unsigned short> (auxiliar); // doorNumber
+	getline(iS, floor, '/');  // floor
+	getline(iS, postalCode, '/'); // postalCode
+	getline(iS, location); // location
 }
 
 Address::Address(string street, unsigned short doorNumber, string floor, string postalCode, string location) {
@@ -87,6 +87,7 @@ void Address::setLocation(string  location) {
  // discplyes an address in a nice format
 ostream& operator<<(ostream& out, const Address & address) {
 
-	out << address.getStreet() << " / " << address.getDoorNumber() << " / " << address.getFloor()
-		<< address.getPostalCode() << address.getLocation();
+	out << address.street << " / " << address.doorNumber << " / " << address.floor
+		<< address.postalCode << address.location;
+	return out;
 }

@@ -11,9 +11,9 @@ Date::Date(string date) {
 	getline(Dat, dayS, '/');
 	getline(Dat, monthS, '/');
 	getline(Dat, yearS, '/');
-	this->day = (unsigned short)stoi(dayS);
-	this->month = (unsigned short)stoi(monthS);
-	this->year = (unsigned short)stoi(yearS);
+	day = (unsigned short)stoi(dayS);
+	month = (unsigned short)stoi(monthS);
+	year = (unsigned short)stoi(yearS);
 }
 
 
@@ -73,6 +73,6 @@ void Date::setYear(unsigned year) {
  // disply a Date in a nice format
 ostream& operator<<(ostream& out, const Date & date) {
 
-	// REQUIRES IMPLEMENTATION
-
+	out << date.day << " / " << date.month << " / " << date.year;
+	return out;
 }
