@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <sstream>
 #include "Agency.h"
 
 void trimLeft(string &s)
@@ -35,11 +36,13 @@ void decompose(string s, vector<string> &elements, char sep)
 	elements.push_back(s);
 } // decompoe string a partir de separador
 
-Agency::Agency(string fileName) 
+
+Agency::Agency(string fileName)
 {
-	ifstream agencyfile;
+	/*ifstream agencyfile;
 	vector<string> adressElems;
 	string adressString;
+
 	decompose(adressString, adressElems, '/');
 	getline(agencyfile, this->name);
 	agencyfile >> this->VATnumber;
@@ -48,8 +51,18 @@ Agency::Agency(string fileName)
 	address.setFloor(adressElems.at(2));
 	address.setPostalCode(adressElems.at(3));
 	address.setLocation(adressElems.at(4));
-	getline(agencyfile, this->URL);
+	getline(agencyfile, this->URL);*/
 	
+	ifstream in_stream(fileName);
+	string fileInput;
+	getline(in_stream, this->name); // Name
+	getline(in_stream, fileInput);
+	this->VATnumber = stoi(fileInput); // VAT
+	getline(in_stream, this->URL); // URL
+	getline(in_stream, fileInput);
+	address = Address(fileInput); // To Do: Default Address constructor 
+	getline(in_stream, this->clientsFile);
+	getline(in_stream, this->packetsFile);
 }
 
 // metodos GET

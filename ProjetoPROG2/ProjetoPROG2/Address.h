@@ -18,7 +18,7 @@ class Address{
   string location; // site
 
  public:
-  Address();
+  Address(string adr);
   Address(string street, unsigned short doorNumber, string floor, string postalCode, string location);
 
   // metodos GET

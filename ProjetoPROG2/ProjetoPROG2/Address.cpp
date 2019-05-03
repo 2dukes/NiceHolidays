@@ -1,7 +1,21 @@
+#include <sstream>
 #include "Address.h"
 
 
-Address::Address() {
+Address::Address(string adr) 
+{
+	istringstream iS(adr);
+	string adrInfo;
+	int auxiliar;
+    // Rua Sem Nome / 100 / - / 4400-345 / Porto
+	// Suppose that file format is alright
+	getline(iS, this->street, '/'); // Street
+	getline(iS, adrInfo, '/');
+	auxiliar = stoi(adrInfo);
+	this->doorNumber = static_cast<unsigned short> (auxiliar); // doorNumber
+	getline(iS, this->floor, '/');  // floor
+	getline(iS, this->postalCode, '/'); // postalCode
+	getline(iS, this->location); // location
 }
 
 Address::Address(string street, unsigned short doorNumber, string floor, string postalCode, string location) {

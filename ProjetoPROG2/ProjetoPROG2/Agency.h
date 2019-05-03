@@ -18,6 +18,8 @@ private:
 	unsigned int VATnumber; // VAT number of the agency
 	Address address; // address of the agency
 	string URL; // URL of the agency Web site
+	string clientsFile; // Clients .txt
+	string packetsFile; // Packets .txt
 	vector<Client> clients; // vector to store the existing clients
 	vector<Packet> packets; // vector to store the existing packets
 

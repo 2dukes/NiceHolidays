@@ -1,4 +1,18 @@
-﻿  Menus.cpp
-c:\users\rui pinto\documents\c++\projetoprog2\projetoprog2\menus.cpp(15): warning C4018: '<=': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\projetoprog2\projetoprog2\menus.cpp(52): warning C4018: '<=': signed/unsigned mismatch
-  ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\ProjetoPROG2\Debug\ProjetoPROG2.exe
+﻿  Address.cpp
+  Agency.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(40): error C2512: 'Address': no appropriate default constructor available
+  c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.h(12): note: see declaration of 'Address'
+  Client.cpp
+  Date.cpp
+  main.cpp
+  Menus.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(15): warning C4018: '<=': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(52): warning C4018: '<=': signed/unsigned mismatch
+  Packet.cpp
+  Generating Code...
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.cpp(42): error C4716: 'Address::getFloor': must return a value
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.cpp(37): error C4716: 'Address::getDoorNumber': must return a value
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.cpp(32): error C4716: 'Address::getStreet': must return a value
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.cpp(47): error C4716: 'Address::getPostalCode': must return a value
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.cpp(52): error C4716: 'Address::getLocation': must return a value
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\address.cpp(92): error C4716: 'operator<<': must return a value
