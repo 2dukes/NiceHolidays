@@ -77,5 +77,23 @@ void Packet::setMaxPersons(unsigned maxPersons){
 // shows a packet content 
 ostream& operator<<(ostream& out, const Packet & packet){
 
-  // REQUIRES IMPLEMENTATION
+	out << packet.id << endl;
+		for (size_t i = 0; i < packet.sites.size(); i++)
+		{
+			if (i == 0)
+				out << packet.sites.at(0);
+			else
+			{
+				if (i == 1)
+					out << " - " + packet.sites.at(1);
+				else
+					out << ", " + packet.sites.at(i);
+			}
+		}
+	out	<< endl
+		<< packet.begin << endl
+		<< packet.end << endl
+		<< packet.pricePerPerson << endl
+		<< packet.maxPersons << endl;
+	return out;
 }
