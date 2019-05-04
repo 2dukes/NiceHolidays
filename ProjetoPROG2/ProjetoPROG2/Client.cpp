@@ -1,80 +1,89 @@
-//#include "Client.h"
-//
-//Client::Client(string name, unsigned VATnumber, unsigned short familySize, Address address){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
-//Client::Client(string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet> & packets, unsigned totalPurchased){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
-//  // GET methods
-//
-//string Client::getName() const{
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//  
-//unsigned Client::getVATnumber() const{
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
-//unsigned short Client::getFamilySize() const{
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
-//Address Client::getAddress() const{
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
+#include "Client.h"
+
+Client::Client(string name, unsigned VATnumber, unsigned short familySize, Address address) // New client
+{
+	this->name = name;
+	this->VATnumber = VATnumber;
+	this->familySize = familySize;
+	this->address = address;
+}
+
+Client::Client(string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet*> &packets, unsigned totalPurchased) // Client read from file
+{
+	this->name = name;
+	this->VATnumber = VATnumber;
+	this->familySize = familySize;
+	this->address = address;
+	this->packets = packets; // Could be replaced
+	this->totalPurchased = totalPurchased;
+}
+
+  // GET methods
+
+string Client::getName() const{
+  
+	return name;
+}
+  
+unsigned Client::getVATnumber() const{
+  
+	return VATnumber;
+}
+
+unsigned short Client::getFamilySize() const{
+  
+	return familySize;
+}
+
+Address Client::getAddress() const{
+  
+	return address;
+}
+
 //vector<Packet> Client::getPacketList() const{
 //  
-//  // REQUIRES IMPLEMENTATION 
+//	// return packets; // -> Could be changed
 //}
-//
-//unsigned Client::getTotalPurchased() const{
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//  
-//  // metodos SET
-//	  
-//void Client::setName(string nome){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
-//void Client::setVATnumber(unsigned VATnumber){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//
-//void Client::setFamilySize(unsigned short familySize){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//void Client::setAddress(Address address){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//void Client::setPacketList(vector<Packet> & packets){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//unsigned Client::setTotalPurchased(unsigned totalPurchased){
-//  
-//  // REQUIRES IMPLEMENTATION 
-//}
-//  
-//  // outros metodos
-//
-//ostream& operator<<(ostream& out, const Client & client){
-//
-//  // REQUIRES IMPLEMENTATION 
-//
-//}
+
+unsigned Client::getTotalPurchased() const{
+  
+	return totalPurchased;
+}
+  
+  // metodos SET
+	  
+void Client::setName(string name){
+  
+	this->name = name;
+}
+
+void Client::setVATnumber(unsigned VATnumber){
+  
+	this->VATnumber = VATnumber;
+}
+
+void Client::setFamilySize(unsigned short familySize){
+  
+	this->familySize = familySize;
+}
+void Client::setAddress(Address address){
+  
+	this->address = address;
+}
+void Client::setPacketList(vector<Packet> & packets){
+  
+	// this->packets = packets;
+	// Maybe we'll work with pointers...
+}
+void Client::setTotalPurchased(unsigned totalPurchased){
+  
+	this->totalPurchased = totalPurchased;
+}
+  
+  // outros metodos
+
+ostream& operator<<(ostream& out, const Client & client){
+
+  // REQUIRES IMPLEMENTATION 
+  return out;
+}

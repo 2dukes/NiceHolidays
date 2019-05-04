@@ -53,3 +53,9 @@ public:
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 
 };
+
+void trim(string &s);
+
+void trimRight(string &s);
+
+void trimLeft(string &s);

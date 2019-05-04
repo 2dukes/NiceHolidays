@@ -1,11 +1,12 @@
 #include "Menus.h"
+#include "UpdateAgencyInfo.h"
 
-int displays(vector<string> displays, string explorer)
+int displays(vector<string> &displays, string explorer, string &agencyName)
 {
 	int option;
 
 	system("cls");
-	explorer = "NiceHolidays | " + explorer;
+	explorer = agencyName + " | " + explorer;
 	cout << explorer << endl << endl << endl;
 	for (size_t i = 0; i < displays.size(); i++)
 		cout << "\t" << displays.at(i) << endl;
@@ -23,16 +24,15 @@ int displays(vector<string> displays, string explorer)
 	return option;
 }
 
-unsigned mainMenu(Agency agency) {
-
-	// A IMPLEMENTAR
+void mainMenu(Agency &agency) {
 
 	int option, mainMenu, option1, option2;
+	string agencyName = agency.getName();
 
 	/*readWriteClientSt();
 	readWritePackSt();
-	verifyPackValidity();*/
-
+	verifyPackValidity();
+*/
 	system("cls");
 	vector<string> mainChoices = { "1. Update Agency Info", "2. Manage", "3. View client", "4. View All Clients", "5. View Available Travel Pack(s)", "6. View Sold Travel Pack(s)", "7. Buy Travel Pack", "8. View Total Amount and Number of Sold Travel Packs","9. Show most visited destinations","10. Temp", "0. Exit" };
 	vector<string> manageChoices = { "1. Create", "2. Alter", "3. Remove", "0. Main Menu" };
@@ -43,7 +43,7 @@ unsigned mainMenu(Agency agency) {
 	do
 	{
 		system("cls");
-		cout << "NiceHolidays" << endl << endl << endl;
+		cout << agencyName << endl << endl << endl;
 		for (size_t i = 0; i < mainChoices.size(); i++)
 			cout << "\t" << mainChoices.at(i) << endl;
 		cout << endl << endl;
@@ -61,13 +61,14 @@ unsigned mainMenu(Agency agency) {
 		{
 		case 1:
 			//agencyCreation(mainChoices.at(mainMenu - 1));
+			agencyInfoUpdate(mainChoices.at(mainMenu - 1));
 			break;
 		case 2:
 			while (true)
 			{
-				option1 = displays(manageChoices, mainChoices.at(mainMenu - 1));
+				option1 = displays(manageChoices, mainChoices.at(mainMenu - 1), agencyName);
 				if (option1 != 0)
-					option2 = displays(manageSecundaryChoices, mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1));
+					option2 = displays(manageSecundaryChoices, mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1), agencyName);
 				else
 					break;
 				if (option2 != 0)
@@ -111,7 +112,7 @@ unsigned mainMenu(Agency agency) {
 							// Alter | Pack
 							//packAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
 							// Update packs.txt
-							//vectorToFile_Packs();
+							// vectorToFile_Packs();
 							break;
 						default:
 							break;
@@ -154,7 +155,7 @@ unsigned mainMenu(Agency agency) {
 			//viewAllClients(mainChoices.at(mainMenu - 1));
 			break;
 		case 5:
-			option = displays(viewAvailablePackChoices, mainChoices.at(mainMenu - 1));
+			option = displays(viewAvailablePackChoices, mainChoices.at(mainMenu - 1), agencyName);
 			switch (option)
 			{
 			case 1:
@@ -178,7 +179,7 @@ unsigned mainMenu(Agency agency) {
 			}
 			break;
 		case 6:
-			option = displays(viewSoldPackChoices, mainChoices.at(mainMenu - 1));
+			option = displays(viewSoldPackChoices, mainChoices.at(mainMenu - 1), agencyName);
 			switch (option)
 			{
 			case 1:
@@ -203,15 +204,16 @@ unsigned mainMenu(Agency agency) {
 			//amountAndNumberOfSoldPacks(mainChoices.at(mainMenu - 1));
 			break;
 		case 9:
-			system("pause");
 			break;
 		case 10:
-			system("pause");
 			break;
 		default:
 			break;
 		}
 	} while (mainMenu != 0);
-	return 0;
+	
+	// A IMPLEMENTAR
+
+	
 }
 

@@ -16,13 +16,13 @@ class Client{
   string name; // name of the client
   unsigned VATnumber; // VAT number of client
   unsigned short familySize;  // number of family members
-  Address address; // client's address
-  vector<Packet> packets; // vector to store client's packets bought
-  unsigned  totalPurchased; // total value spent by the client
+  Address address; // client's address  
+  vector<Packet*> packets; // vector to store client's packets bought
+  unsigned totalPurchased; // total value spent by the client
 
  public:
   Client(string name, unsigned VATnumber, unsigned short familySize, Address address);  // for a new client
-  Client(string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet> & packets, unsigned totalPurchased);  // client read from file
+  Client(string name, unsigned VATnumber, unsigned short familySize, Address address, vector<Packet*> & packets, unsigned totalPurchased);  // client read from file
 
   // GET methods
   
@@ -40,7 +40,7 @@ class Client{
   void setFamilySize(unsigned short familySize);
   void setAddress(Address address);
   void setPacketList(vector<Packet> & packets);
-  unsigned setTotalPurchased(unsigned totalPurchased);
+  void setTotalPurchased(unsigned totalPurchased);
   
   // other methods
 

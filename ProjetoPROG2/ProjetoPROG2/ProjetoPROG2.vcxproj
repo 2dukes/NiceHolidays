@@ -122,6 +122,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menus.cpp" />
     <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="UpdateAgencyInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Address.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="defs.h" />
     <ClInclude Include="Menus.h" />
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="UpdateAgencyInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

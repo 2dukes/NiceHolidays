@@ -1,6 +1,14 @@
 #include <sstream>
 #include "Address.h"
 
+Address::Address()
+{
+	street = "UNKNOWN";
+	doorNumber = -1;
+	floor = "";
+	postalCode = "";
+	location = "";
+}
 
 Address::Address(string adr) 
 {

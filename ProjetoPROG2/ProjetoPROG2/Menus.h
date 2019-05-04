@@ -3,4 +3,4 @@
 #include "Agency.h"
 
 
-unsigned mainMenu(Agency agency);
+void mainMenu(Agency &agency);
