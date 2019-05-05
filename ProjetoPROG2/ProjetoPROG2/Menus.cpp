@@ -60,8 +60,7 @@ void mainMenu(Agency &agency) {
 		switch (mainMenu)
 		{
 		case 1:
-			//agencyCreation(mainChoices.at(mainMenu - 1));
-			agencyInfoUpdate(mainChoices.at(mainMenu - 1));
+			agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
 			break;
 		case 2:
 			while (true)

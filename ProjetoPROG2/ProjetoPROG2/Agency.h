@@ -9,6 +9,7 @@
 #include "Address.h"
 #include "Client.h"
 #include "Packet.h"
+#include "GeneralFunctions.h"
 
 using namespace std;
 
@@ -18,8 +19,6 @@ private:
 	unsigned int VATnumber; // VAT number of the agency
 	Address address; // address of the agency
 	string URL; // URL of the agency Web site
-	string clientsFile; // Clients .txt
-	string packetsFile; // Packets .txt
 	vector<Client> clients; // vector to store the existing clients
 	vector<Packet> packets; // vector to store the existing packets
 
@@ -49,13 +48,7 @@ public:
 	void setPackets(vector<Packet> & packets);
 
 	// other methods */
-
+	string UpdateAgencyInfo(string &explorer);
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 
 };
-
-void trim(string &s);
-
-void trimRight(string &s);
-
-void trimLeft(string &s);

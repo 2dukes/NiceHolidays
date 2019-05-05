@@ -1,3 +1,9 @@
-﻿  UpdateAgencyInfo.cpp
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\updateagencyinfo.cpp(12): warning C4101: 'flag': unreferenced local variable
+﻿  Agency.cpp
+  Client.cpp
+  GeneralFunctions.cpp
+  Menus.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(16): warning C4018: '<=': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(52): warning C4018: '<=': signed/unsigned mismatch
+  main.cpp
+  Generating Code...
   ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

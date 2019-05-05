@@ -37,7 +37,6 @@ public:
 	void setLocation(string  location);
 
 	// outros */
-
 	friend ostream& operator<<(ostream& out, const Address & address);
 
 };

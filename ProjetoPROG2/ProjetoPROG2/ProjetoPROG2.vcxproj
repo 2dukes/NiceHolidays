@@ -119,10 +119,10 @@
     <ClCompile Include="Agency.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="GeneralFunctions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menus.cpp" />
     <ClCompile Include="Packet.cpp" />
-    <ClCompile Include="UpdateAgencyInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Address.h" />
@@ -130,9 +130,9 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="defs.h" />
+    <ClInclude Include="GeneralFunctions.h" />
     <ClInclude Include="Menus.h" />
     <ClInclude Include="Packet.h" />
-    <ClInclude Include="UpdateAgencyInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
