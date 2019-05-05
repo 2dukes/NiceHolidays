@@ -1,5 +1,4 @@
 #include "Menus.h"
-#include "UpdateAgencyInfo.h"
 
 int displays(vector<string> &displays, string explorer, string &agencyName)
 {
@@ -61,6 +60,7 @@ void mainMenu(Agency &agency) {
 		{
 		case 1:
 			agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
+			cin.clear();
 			break;
 		case 2:
 			while (true)
@@ -80,6 +80,7 @@ void mainMenu(Agency &agency) {
 						{
 						case 1:
 							// Create | Client
+
 							//clientCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
 							// Update packs.txt
 							//vectorToFile_Packs();

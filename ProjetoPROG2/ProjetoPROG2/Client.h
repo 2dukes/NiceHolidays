@@ -42,6 +42,7 @@ class Client{
   void setPacketList(vector<Packet> & packets);
   void setTotalPurchased(unsigned totalPurchased);
   
-  // other methods
+  // other methods 
+  // void clientCreation(string explorer); -> TO DO
   friend ostream& operator<<(ostream& out, const Client & client);
 };

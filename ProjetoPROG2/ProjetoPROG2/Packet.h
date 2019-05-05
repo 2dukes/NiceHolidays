@@ -18,6 +18,7 @@ class Packet{
   Date end;  // end date
   double pricePerPerson; // price per person
   unsigned maxPersons; // number of persons still available in the packet (updated whenever the packet is sold to a new client)
+  unsigned currentPersons; // Current number of people that embrace the packet
   
  public:
   Packet(vector<string> sites, Date begin, Date end, double pricePerPerson, unsigned maxPersons);
@@ -39,6 +40,10 @@ class Packet{
   void setMaxPersons(unsigned maxPersons);
 
   // other methods
-
+  bool sitesFormat(string sitesStr);
+  vector<string> sitesNormalization(string sitesStr);
+  bool existingDate(string dt);
+  bool endLaterThenBeg(string endD, string begD);
+  Packet packetCreation(string explorer);
   friend ostream& operator<<(ostream& out, const Packet & packet);
 };

@@ -12,3 +12,7 @@ bool VATConfirm(int VAT);
 int slashCount(std::string reader);
 
 bool adrConfirm(std::string &reader);
+
+bool leapYear(int year);
+
+int days(int year, int month);
