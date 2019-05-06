@@ -32,7 +32,7 @@ void mainMenu(Agency &agency) {
 	/*readWriteClientSt();
 	readWritePackSt();
 	verifyPackValidity();
-*/
+*/ 
 	system("cls");
 	vector<string> mainChoices = { "1. Update Agency Info", "2. Manage", "3. View client", "4. View All Clients", "5. View Available Travel Pack(s)", "6. View Sold Travel Pack(s)", "7. Buy Travel Pack", "8. View Total Amount and Number of Sold Travel Packs","9. Show most visited destinations","10. Temp", "0. Exit" };
 	vector<string> manageChoices = { "1. Create", "2. Alter", "3. Remove", "0. Main Menu" };
@@ -99,9 +99,10 @@ void mainMenu(Agency &agency) {
 								break;
 							}
 
-							// Update packets.txt file . . .
+							agency.setPacket(cPacket);
+							/*// Update packets.txt file . . .
 
-							ofstream out_stream("packets.txt", std::ios_base::app);
+							ofstream out_stream(, std::ios_base::app);
 							if (out_stream.is_open())
 							{
 								int pId = agency.getPacketsId() + 1;
@@ -123,6 +124,7 @@ void mainMenu(Agency &agency) {
 							//packsCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
 							// Update vpacks
 							//readWritePackSt();
+							*/
 							break;
 						}
 						break;
@@ -190,6 +192,9 @@ void mainMenu(Agency &agency) {
 			case 1:
 				// View All Available Packs
 				//viewall(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
+				
+				agency.viewAllPackets();
+				system("pause");
 				break;
 			case 2:
 				// View Available Packs according to Destination

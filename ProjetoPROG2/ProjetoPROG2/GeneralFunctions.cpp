@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "GeneralFunctions.h"
 
@@ -21,6 +22,21 @@ void trim(string &s)
 	trimLeft(s);
 	trimRight(s);
 } 
+
+void decompose(string str, vector<string> &elements, char sep)
+{
+	size_t pos = str.find(sep);
+	while (pos != string::npos)
+	{
+		string elem = str.substr(0, pos);
+		//trim(elem);
+		elements.push_back(elem);
+		str.erase(0, pos + 1);
+		pos = str.find(sep);
+	}
+	//trim(s);
+	elements.push_back(str);
+} // decompoe string a partir de separador
 
 bool VATConfirm(int VAT)
 {

@@ -1,6 +1,2 @@
-﻿  Date.cpp
-  Menus.cpp
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(16): warning C4018: '<=': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(52): warning C4018: '<=': signed/unsigned mismatch
-  Generating Code...
-  ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe
+﻿  Agency.cpp
+  ProjetoPROG2.vcxproj -> C:\Users\vidin\OneDrive\Documentos\1Ano\2S\PROG\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

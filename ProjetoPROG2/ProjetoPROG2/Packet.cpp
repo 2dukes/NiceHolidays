@@ -18,14 +18,14 @@ Packet::Packet() // Irregular packet
 {
 	id = 0;
 }
-  // metodos GET
+// metodos GET
 
-unsigned Packet::getId() const{
+unsigned Packet::getId() const {
 
 	return id;
 }
 
-string Packet::getSites() const{
+string Packet::getSites() const {
 
 	string places;
 	vector<string>::const_iterator sPtr;
@@ -45,68 +45,73 @@ string Packet::getSites() const{
 	return places;
 }
 
-Date Packet::getBeginDate() const{
+Date Packet::getBeginDate() const {
 
 	return begin;
 }
 
-Date Packet::getEndDate() const{
+Date Packet::getEndDate() const {
 
 	return end;
 }
 
-double Packet::getPricePerPerson() const{
+double Packet::getPricePerPerson() const {
 
 	return pricePerPerson;
 }
 
-unsigned Packet::getMaxPersons() const{
+unsigned Packet::getMaxPersons() const {
 
 	return maxPersons;
 }
 
-  // metodos SET
+// metodos SET
 
-void Packet::setId(unsigned id){
+void Packet::setId(unsigned id) {
 
 	this->id = id;
 }
 
-void Packet::setSites(vector<string> sites){
+void Packet::setSites(vector<string> sites) {
 
 	this->sites = sites;
 }
 
-void Packet::setBeginDate(Date begin){
+void Packet::setBeginDate(Date begin) {
 
 	this->begin = begin;
 }
 
-void Packet::setEndDate(Date end){
+void Packet::setEndDate(Date end) {
 
 	this->end = end;
 }
 
-void Packet::setPricePerPerson(double pricePerPerson){
+void Packet::setPricePerPerson(double pricePerPerson) {
 
 	this->pricePerPerson = pricePerPerson;
 }
 
-void Packet::setMaxPersons(unsigned maxPersons){
+void Packet::setMaxPersons(unsigned maxPersons) {
 
 	this->maxPersons = maxPersons;
+}
+
+void Packet::setCurrentPersons(unsigned takenTickets)
+{
+	this->currentPersons = takenTickets;
 }
 
 
 /*********************************
  * Show Packet information
- ********************************/  
+ ********************************/
 
 bool Packet::sitesFormat(string &sitesStr)
 {
 	istringstream iS(sitesStr);
 	string mainPlace;
-	getline(iS, mainPlace, '-'); 
+	getline(iS, mainPlace, '-');
 	if (iS.eof())
 		return false;
 	else
@@ -212,12 +217,12 @@ void Packet::packetCreation(string &explorer)
 	cout << "-> CTRL+Z to leave..." << endl << endl;
 
 	cout << "Places to visit: "; getline(cin, places); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
-		
+
 	while ((places.empty() || sitesFormat(places)) && !cin.eof()) // Overload sitesFormat
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
 		cout << endl << "Places to visit: "; getline(cin, places);
-		
+
 	}
 	if (cin.eof())
 		return;
@@ -233,7 +238,7 @@ void Packet::packetCreation(string &explorer)
 	if (cin.eof())
 		return;
 	trim(begD);
-	begin = Date (begD);
+	begin = Date(begD);
 
 	cout << "End date (Year / Month / Day): "; getline(cin, endD);
 	while ((endD.empty() || existingDate(endD) || endLaterThenBeg(endD, begD)) && !cin.eof())
@@ -284,22 +289,22 @@ void Packet::packetCreation(string &explorer)
 }
 
 // shows a packet content 
-ostream& operator<<(ostream& out, const Packet & packet){
+ostream& operator<<(ostream& out, const Packet & packet) {
 
 	out << packet.id << endl;
-		for (size_t i = 0; i < packet.sites.size(); i++)
+	for (size_t i = 0; i < packet.sites.size(); i++)
+	{
+		if (i == 0)
+			out << packet.sites.at(0);
+		else
 		{
-			if (i == 0)
-				out << packet.sites.at(0);
+			if (i == 1)
+				out << " - " + packet.sites.at(1);
 			else
-			{
-				if (i == 1)
-					out << " - " + packet.sites.at(1);
-				else
-					out << ", " + packet.sites.at(i);
-			}
+				out << ", " + packet.sites.at(i);
 		}
-	out	<< endl
+	}
+	out << endl
 		<< packet.begin << endl
 		<< packet.end << endl
 		<< packet.pricePerPerson << endl

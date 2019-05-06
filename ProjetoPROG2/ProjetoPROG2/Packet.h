@@ -19,7 +19,7 @@ class Packet{
   double pricePerPerson; // price per person
   unsigned maxPersons; // number of persons still available in the packet (updated whenever the packet is sold to a new client)
   unsigned currentPersons; // Current number of people that embrace the packet
-  
+
  public:
   Packet(vector<string> sites, Date begin, Date end, double pricePerPerson, unsigned maxPersons);
   Packet();
@@ -38,6 +38,7 @@ class Packet{
   void setEndDate(Date end);
   void setPricePerPerson(double pricePerPerson);
   void setMaxPersons(unsigned maxPersons);
+  void setCurrentPersons(unsigned takenTickets);
 
   // other methods
   bool sitesFormat(string &sitesStr);

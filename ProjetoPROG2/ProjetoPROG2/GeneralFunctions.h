@@ -7,6 +7,8 @@ void trimRight(std::string &s);
 
 void trimLeft(std::string &s);
 
+void decompose(std::string str, std::vector<std::string> &elements, char sep);
+
 bool VATConfirm(int VAT);
 
 int slashCount(std::string reader);

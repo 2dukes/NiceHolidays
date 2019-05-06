@@ -6,20 +6,7 @@
 #include "Agency.h"
 #include "GeneralFunctions.h"
 
-void decompose(string s, vector<string> &elements, char sep)
-{
-	size_t pos = s.find(sep);
-	while (pos != string::npos)
-	{
-		string elem = s.substr(0, pos);
-		//trim(elem);
-		elements.push_back(elem);
-		s.erase(0, pos + 1);
-		pos = s.find(sep);
-	}
-	//trim(s);
-	elements.push_back(s);
-} // decompoe string a partir de separador
+
 
 
 Agency::Agency(string fileName)
@@ -51,7 +38,10 @@ Agency::Agency(string fileName)
 		getline(in_stream, this->URL); // URL
 		getline(in_stream, fileInput);
 		address = Address(fileInput); // To Do: Default Address constructor 
-		packetsId = 1; // For test purposes...
+		getline(in_stream, this->clientsFilename);
+		getline(in_stream, this->packetsFilename);
+		//packetsId = 1; // For test purposes...
+
 	}
 	else
 	{
@@ -97,43 +87,81 @@ unsigned Agency::getPacketsId() const
 	return packetsId;
 }
 
+void Agency::viewAllPackets() const
+{
+	for (size_t i = 0; i < packets.size(); i++)
+	{
+		cout << packets.at(i);
+		if (i < (packets.size() - 1))
+			cout << "::::::::::\n";
+	}
+}
 // SET Methods
 
 void Agency::setName(string name) {
 
 	this->name = name;
-	//  IMPLEMENTATION REQUIRED 
 }
 
 void Agency::setVATnumber(unsigned VATnumber) {
 
 	this->VATnumber = VATnumber;
-	//  IMPLEMENTATION REQUIRED 
 }
 
 void Agency::setAddress(Address address) {
 
 	this->address = address;
-	//  IMPLEMENTATION REQUIRED 
 }
 void Agency::setURL(string url) {
 
-	this->URL = url;
-	//  IMPLEMENTATION REQUIRED 
+	this->URL = url; 
 }
 void Agency::setClients(vector<Client> &clients) {
 
 	//  IMPLEMENTATION REQUIRED 
 }
-void Agency::setPackets(vector<Packet> &packets) {
+void Agency::setPacket(Packet &packet) {
 
-	//  IMPLEMENTATION REQUIRED 
+	(this->packets).push_back(packet);
 }
 
 void Agency::setPacketsId(unsigned id)
 {
 	packetsId = id;
 }
+
+
+//funcoes de ler as informacoes de pacotes e clientes
+
+void Agency::readPackets()
+{
+	ifstream pkts(packetsFilename);
+	Packet currentPacket;
+	string auxString;
+	string separator; // separador "::::::::::"
+	getline(pkts, auxString);
+	packetsId = stoi(auxString);
+	/*while (!pkts.eof())
+	{
+		getline(pkts, auxString);
+		currentPacket.setId(stoi(auxString));
+		getline(pkts, auxString);
+		currentPacket.sitesNormalization(auxString);
+		getline(pkts, auxString);
+		currentPacket.setBeginDate(Date(auxString));
+		getline(pkts, auxString);
+		currentPacket.setEndDate(Date(auxString));
+		getline(pkts, auxString);
+		currentPacket.setPricePerPerson(stoi(auxString));
+		getline(pkts, auxString);
+		currentPacket.setMaxPersons(stoi(auxString));
+		getline(pkts, auxString);
+		getline(pkts, separator);
+		packets.push_back(currentPacket); //store packet in agency packets vector
+	}*/
+}
+
+
 
 /*********************************
  * Mostrar Loja
@@ -208,6 +236,12 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	trim(reader);
 	adr = reader;
 		
+	setName(agencyName);
+	setVATnumber(VAT);
+	setURL(aUrl);
+	setAddress(adr);
+
+	/*
 	// File agency.txt flush
 	ofstream out_stream(AGENCY_FILE_NAME);
 	if (out_stream.is_open())
@@ -217,14 +251,15 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		out_stream << aUrl + "\n";
 		out_stream << adr + "\n";
 
-		out_stream << "clients.txt\n";
-		out_stream << "packs.txt\n";
+		out_stream << clientsFilename << "\n";
+		out_stream << packetsFilename << "\n";
 		out_stream.close();
 		cout << endl << "Your data was successfully inserted!" << endl << endl;
 	}
 	else
 		cerr << "An error occurred during the process...";		
 	system("pause");
+	*/
 	return agencyName;
 }
 
