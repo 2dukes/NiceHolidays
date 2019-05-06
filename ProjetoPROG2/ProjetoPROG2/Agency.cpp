@@ -51,6 +51,7 @@ Agency::Agency(string fileName)
 		getline(in_stream, this->URL); // URL
 		getline(in_stream, fileInput);
 		address = Address(fileInput); // To Do: Default Address constructor 
+		packetsId = 1; // For test purposes...
 	}
 	else
 	{
@@ -91,6 +92,10 @@ vector<Packet> Agency::getPackets() const {
 	return packets;
 }
 
+unsigned Agency::getPacketsId() const
+{
+	return packetsId;
+}
 
 // SET Methods
 
@@ -123,6 +128,11 @@ void Agency::setClients(vector<Client> &clients) {
 void Agency::setPackets(vector<Packet> &packets) {
 
 	//  IMPLEMENTATION REQUIRED 
+}
+
+void Agency::setPacketsId(unsigned id)
+{
+	packetsId = id;
 }
 
 /*********************************

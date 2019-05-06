@@ -24,6 +24,7 @@ class Date{
   unsigned short getDay() const;
   unsigned short getMonth() const;
   unsigned getYear() const;
+  string getDate() const;
   
   // SET methods
   

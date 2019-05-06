@@ -1,12 +1,23 @@
 #include <sstream>
+#include <fstream>
 #include "Packet.h"
 #include "GeneralFunctions.h"
 
-Packet::Packet(vector<string> sites, Date inicio, Date fim, double precoPessoa, unsigned maxPessoas){
-
-  // REQUIRES IMPLEMENTATION
+Packet::Packet(vector<string> sites, Date inicio, Date fim, double precoPessoa, unsigned maxPessoas)
+{
+	// Id will be incremented
+	this->sites = sites;
+	begin = inicio;
+	end = fim;
+	pricePerPerson = precoPessoa;
+	maxPersons = maxPessoas;
+	currentPersons = 0;
 }
 
+Packet::Packet() // Irregular packet
+{
+	id = 0;
+}
   // metodos GET
 
 unsigned Packet::getId() const{
@@ -14,9 +25,24 @@ unsigned Packet::getId() const{
 	return id;
 }
 
-vector<string> Packet::getSites() const{
+string Packet::getSites() const{
 
-	return sites;
+	string places;
+	vector<string>::const_iterator sPtr;
+	if (sites.size() == 1)
+	{
+		places = sites.at(0);
+		return places;
+	}
+	else
+		places = sites.at(0) + " - ";
+	for (sPtr = sites.begin() + 1; sPtr != sites.end(); sPtr++)
+	{
+		places += *sPtr;
+		if (sPtr + 1 != sites.end())
+			places += ", ";
+	}
+	return places;
 }
 
 Date Packet::getBeginDate() const{
@@ -76,7 +102,7 @@ void Packet::setMaxPersons(unsigned maxPersons){
  * Show Packet information
  ********************************/  
 
-bool Packet::sitesFormat(string sitesStr)
+bool Packet::sitesFormat(string &sitesStr)
 {
 	istringstream iS(sitesStr);
 	string mainPlace;
@@ -96,7 +122,7 @@ bool Packet::sitesFormat(string sitesStr)
 	return false;
 }
 
-vector<string> Packet::sitesNormalization(string sitesStr)
+vector<string> Packet::sitesNormalization(string &sitesStr)
 {
 	istringstream iS(sitesStr);
 	vector<string> tSites;
@@ -120,7 +146,7 @@ vector<string> Packet::sitesNormalization(string sitesStr)
 	return tSites;
 }
 
-bool existingDate(string dt)
+bool Packet::existingDate(string &dt)
 {
 	istringstream iS(dt);
 	int year, month, day, maxDays;
@@ -143,7 +169,7 @@ bool existingDate(string dt)
 	return true;
 }
 
-bool endLaterThenBeg(string endD, string begD)
+bool Packet::endLaterThenBeg(string &endD, string &begD)
 {
 	istringstream iS(endD);
 	int endYear, endMonth, endDay;
@@ -172,70 +198,53 @@ bool endLaterThenBeg(string endD, string begD)
 	return false;
 }
 
-Packet Packet::packetCreation(string explorer)
+void Packet::packetCreation(string &explorer)
 {
-	string reader, begD;
+	string reader, begD, endD, places;
 	double price;
-	int tId, tMax;
+	int tMax;
 	bool flag;
 
 	system("cls");
 	cout << explorer << endl << endl;
-	// ofstream out_stream("packs.txt", std::ios_base::app);
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	cout << "-> CTRL+Z to leave..." << endl << endl;
-	cout << "Pack ID: ";
-	// while (!(cin >> id) || !verifyIDExistence(to_string(q)) || id < 0) -> TO DO verifyIDExistence Compare with last inserted ID which will be a static variable in agency
-	while ((!(cin >> tId) || tId < 0) && !cin.eof())
-	{
-		// cout << !verifyIDExistence(to_string(q)) << endl;
-		cerr << "Invalid Option or existing ID! Please enter a valid input." << endl;
-		cout << endl << "Pack ID: ";
-		if (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-	}
-	if (cin.eof())
-		return;
-	// out_stream << q << "\n";
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	cout << "Places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
-	while ((reader.empty() || sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
+	cout << "Places to visit: "; getline(cin, places); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
+		
+	while ((places.empty() || sitesFormat(places)) && !cin.eof()) // Overload sitesFormat
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Places to visit: "; getline(cin, reader);
+		cout << endl << "Places to visit: "; getline(cin, places);
+		
 	}
 	if (cin.eof())
 		return;
-	trim(reader);
-	// out_stream << reader + "\n";
+	trim(places);
+	sites = sitesNormalization(places);
 
-	cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
-	while ((reader.empty() || existingDate(reader)) && !cin.eof())
+	cout << "Beginning date (Year / Month / Day): "; getline(cin, begD);
+	while ((begD.empty() || existingDate(begD)) && !cin.eof())
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+		cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, begD);
 	}
 	if (cin.eof())
 		return;
-	trim(reader);
-	begD = reader;
-	// out_stream << reader + "\n";
+	trim(begD);
+	begin = Date (begD);
 
-	cout << "End date (Year / Month / Day): "; getline(cin, reader);
-	while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, begD)) && !cin.eof())
+	cout << "End date (Year / Month / Day): "; getline(cin, endD);
+	while ((endD.empty() || existingDate(endD) || endLaterThenBeg(endD, begD)) && !cin.eof())
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
+		cout << endl << "End date (Year / Month / Day): "; getline(cin, endD);
 	}
 	if (cin.eof())
 		return;
-	trim(reader);
-	// out_stream << reader + "\n";
+	trim(endD);
+	end = Date(endD);
 
 	cout << "Price per person: ";
 	while (!(cin >> price) && !cin.eof())
@@ -250,7 +259,8 @@ Packet Packet::packetCreation(string explorer)
 	}
 	if (cin.eof())
 		return;
-	// out_stream << rd << "\n";
+	pricePerPerson = price;
+	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
 
 	cout << "Max Lotation: ";
 	while (!(cin >> tMax) && !cin.eof())
@@ -265,13 +275,12 @@ Packet Packet::packetCreation(string explorer)
 	}
 	if (cin.eof())
 		return;
-	/*out_stream << q << "\n";
-	out_stream << q << "\n";
-	out_stream << "::::::::::\n";
-	out_stream.close();*/
+	maxPersons = tMax;
+	id = 1;
 
-	cout << endl << "Your data was successfully inserted!" << endl << endl;
-	system("pause");
+	// Construction PACKET
+	// Date TemporaryBegin(begD), TemporaryEnd(endD);
+	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
 }
 
 // shows a packet content 

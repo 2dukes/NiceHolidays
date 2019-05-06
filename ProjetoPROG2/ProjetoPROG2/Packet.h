@@ -22,17 +22,17 @@ class Packet{
   
  public:
   Packet(vector<string> sites, Date begin, Date end, double pricePerPerson, unsigned maxPersons);
-
+  Packet();
   // GET methods
   unsigned getId() const;
-  vector<string> getSites() const;
+  string getSites() const; // Return sites in a string format
   Date getBeginDate() const;
   Date getEndDate() const;
   double getPricePerPerson() const;
   unsigned getMaxPersons() const;
 
   // SET methods
-  void setId(unsigned id);  // to set negatve if "deprecated"
+  void setId(unsigned id);  // to set negative if "deprecated"
   void setSites(vector<string> sites);
   void setBeginDate(Date begin);
   void setEndDate(Date end);
@@ -40,10 +40,10 @@ class Packet{
   void setMaxPersons(unsigned maxPersons);
 
   // other methods
-  bool sitesFormat(string sitesStr);
-  vector<string> sitesNormalization(string sitesStr);
-  bool existingDate(string dt);
-  bool endLaterThenBeg(string endD, string begD);
-  Packet packetCreation(string explorer);
+  bool sitesFormat(string &sitesStr);
+  vector<string> sitesNormalization(string &sitesStr);
+  bool existingDate(string &dt);
+  bool endLaterThenBeg(string &endD, string &begD);
+  void packetCreation(string &explorer);
   friend ostream& operator<<(ostream& out, const Packet & packet);
 };
