@@ -78,6 +78,6 @@ void Date::setYear(unsigned year) {
  // disply a Date in a nice format
 ostream& operator<<(ostream& out, const Date & date) {
 
-	out << date.day << " / " << date.month << " / " << date.year;
+	out << date.year << "/" << date.month << "/" << date.day;
 	return out;
 }

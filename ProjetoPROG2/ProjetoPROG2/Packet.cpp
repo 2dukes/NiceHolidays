@@ -17,6 +17,7 @@ Packet::Packet(vector<string> sites, Date inicio, Date fim, double precoPessoa, 
 Packet::Packet() // Irregular packet
 {
 	id = 0;
+	currentPersons = 0;
 }
 // metodos GET
 
@@ -133,21 +134,22 @@ vector<string> Packet::sitesNormalization(string &sitesStr)
 	vector<string> tSites;
 	string mainPlace;
 	getline(iS, mainPlace, '-');
+	trim(mainPlace);
+	tSites.push_back(mainPlace);
+	// cout << mainPlace << endl;
 	if (iS.eof())
-	{
-		tSites.push_back(mainPlace);
 		return tSites;
-	}
 	else
 	{
 		while (getline(iS, mainPlace, ','))
 		{
-			if (mainPlace != "")
+			trim(mainPlace);
+			// cout << mainPlace << endl;
+			if (mainPlace != "" && mainPlace.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos)
 				tSites.push_back(mainPlace);
-		}
-		if (mainPlace.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos)
-			tSites.push_back(mainPlace);
+		}	
 	}
+	// system("pause");
 	return tSites;
 }
 
@@ -265,7 +267,6 @@ void Packet::packetCreation(string &explorer)
 	if (cin.eof())
 		return;
 	pricePerPerson = price;
-	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
 
 	cout << "Max Lotation: ";
 	while (!(cin >> tMax) && !cin.eof())
@@ -281,7 +282,6 @@ void Packet::packetCreation(string &explorer)
 	if (cin.eof())
 		return;
 	maxPersons = tMax;
-	id = 1;
 
 	// Construction PACKET
 	// Date TemporaryBegin(begD), TemporaryEnd(endD);

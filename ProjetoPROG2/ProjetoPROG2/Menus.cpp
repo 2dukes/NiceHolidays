@@ -93,16 +93,18 @@ void mainMenu(Agency &agency) {
 							Packet cPacket;
 							string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 							cPacket.packetCreation(auxiliarExplorer);
-							if (cPacket.getId() == 0)
+							if (cin.eof())
 							{ 
 								cin.clear();
 								break;
 							}
-
+							int pId = agency.getPacketsId() + 1;
+							cPacket.setId(pId);
+							agency.setPacketsId(pId);
 							agency.setPacket(cPacket);
-							/*// Update packets.txt file . . .
+							// Update packets.txt file . . .
 
-							ofstream out_stream(, std::ios_base::app);
+							/*ofstream out_stream("packets.txt", std::ios_base::app);
 							if (out_stream.is_open())
 							{
 								int pId = agency.getPacketsId() + 1;
@@ -120,11 +122,11 @@ void mainMenu(Agency &agency) {
 							}
 							else
 								cerr << "An error occurred during the process...";
-							system("pause");
-							//packsCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-							// Update vpacks
-							//readWritePackSt();
-							*/
+							system("pause");*/
+							//packscreation(mainchoices.at(mainmenu - 1) + " | " + managechoices.at(option1 - 1) + " | " + managesecundarychoices.at(option2 - 1));
+							// update vpacks
+							//readwritepackst();
+							
 							break;
 						}
 						break;

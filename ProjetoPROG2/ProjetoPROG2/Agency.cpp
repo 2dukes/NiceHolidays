@@ -38,9 +38,7 @@ Agency::Agency(string fileName)
 		getline(in_stream, this->URL); // URL
 		getline(in_stream, fileInput);
 		address = Address(fileInput); // To Do: Default Address constructor 
-		getline(in_stream, this->clientsFilename);
-		getline(in_stream, this->packetsFilename);
-		//packetsId = 1; // For test purposes...
+		packetsId = 1; // For test purposes...
 
 	}
 	else
@@ -122,7 +120,7 @@ void Agency::setClients(vector<Client> &clients) {
 }
 void Agency::setPacket(Packet &packet) {
 
-	(this->packets).push_back(packet);
+	packets.push_back(packet);
 }
 
 void Agency::setPacketsId(unsigned id)
@@ -135,30 +133,31 @@ void Agency::setPacketsId(unsigned id)
 
 void Agency::readPackets()
 {
-	ifstream pkts(packetsFilename);
-	Packet currentPacket;
+	ifstream in_stream("packets.txt");
 	string auxString;
 	string separator; // separador "::::::::::"
-	getline(pkts, auxString);
-	packetsId = stoi(auxString);
-	/*while (!pkts.eof())
+	if (getline(in_stream, auxString))
+		packetsId = stoi(auxString);
+	while (getline(in_stream, auxString))
 	{
-		getline(pkts, auxString);
+		Packet currentPacket; // New Packet each time it iterates
 		currentPacket.setId(stoi(auxString));
-		getline(pkts, auxString);
-		currentPacket.sitesNormalization(auxString);
-		getline(pkts, auxString);
+		getline(in_stream, auxString);
+		currentPacket.setSites(currentPacket.sitesNormalization(auxString));
+		getline(in_stream, auxString);
 		currentPacket.setBeginDate(Date(auxString));
-		getline(pkts, auxString);
+		getline(in_stream, auxString);
 		currentPacket.setEndDate(Date(auxString));
-		getline(pkts, auxString);
+		getline(in_stream, auxString);
 		currentPacket.setPricePerPerson(stoi(auxString));
-		getline(pkts, auxString);
+		getline(in_stream, auxString);
 		currentPacket.setMaxPersons(stoi(auxString));
-		getline(pkts, auxString);
-		getline(pkts, separator);
-		packets.push_back(currentPacket); //store packet in agency packets vector
-	}*/
+		getline(in_stream, auxString);
+		currentPacket.setCurrentPersons(stoi(auxString));
+		getline(in_stream, separator);
+		packets.push_back(currentPacket); // Store packet in vector<Packet> packets
+	}
+	in_stream.close();
 }
 
 
@@ -172,8 +171,6 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	string reader;
 	int VAT; // It's a temporary variable too
 	bool flag = true;
-
-	string agencyName, aUrl, adr; // Temp. variables
 
 	system("cls");
 	cout << explorer << endl << endl;
@@ -190,7 +187,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	if (cin.eof())
 		return name;
 	trim(reader);
-	agencyName = reader;
+	setName(reader);
 	// out_stream << reader + "\n";
 	do
 	{
@@ -210,7 +207,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		}	
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	} while (flag);
-	
+	setVATnumber(VAT);
 	// out_stream << VAT << "\n";
 
 	cout << "URL: "; getline(cin, reader);
@@ -222,7 +219,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	if (cin.eof())
 		return name;
 	trim(reader);
-	aUrl = reader;
+	setURL(reader);
 	// out_stream << reader + "\n";
 
 	cout << "Address (Street / Door Number / Floor / Zip Code / Location): "; getline(cin, reader);
@@ -234,13 +231,11 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	if (cin.eof())
 		return name;
 	trim(reader);
-	adr = reader;
+	Address NewAdress(reader);
+	setAddress(NewAdress);
 		
-	setName(agencyName);
-	setVATnumber(VAT);
-	setURL(aUrl);
-	setAddress(adr);
-
+	cout << endl << "Your data was successfully changed!" << endl << endl;
+	system("pause");
 	/*
 	// File agency.txt flush
 	ofstream out_stream(AGENCY_FILE_NAME);
@@ -260,7 +255,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		cerr << "An error occurred during the process...";		
 	system("pause");
 	*/
-	return agencyName;
+	return name;
 }
 
  // mostra o conteudo de uma agencia
