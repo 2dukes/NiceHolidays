@@ -22,8 +22,8 @@ private:
 	vector<Client> clients; // vector to store the existing clients
 	vector<Packet> packets; // vector to store the existing packets
 	unsigned int packetsId; // Last inserted ID in packets.txt
-	/*string clientsFilename;
-	string packetsFilename;*/
+	string clientsFilename; // clients file name 
+	string packetsFilename; // packets file name
 
 	bool clientsInfoHasChanged; // flag that is set to "true" if at least one client has been changed/added/deleted
 	bool packetsInfoHasChanged; // flag that is set to "true" if at least one packet has been changed/added/deleted
@@ -45,12 +45,14 @@ public:
 
 	// methods SET
 	void readPackets();
+	void readClients();
 	void setName(string name);
 	void setVATnumber(unsigned VATnumber);
 	void setAddress(Address address);
 	void setURL(string url);
+	void setClient(Client &client);
 	void setClients(vector<Client> & clients);
-	void setPacket(Packet &packet);
+	void setPacket(Packet packet);
 	void setPacketsId(unsigned id);
 
 	// other methods */
@@ -58,6 +60,11 @@ public:
 	void clientCreation(string &explorer, Agency &agency);
 	string UpdateAgencyInfo(string &explorer);
 	void viewAllPackets() const;
+	void viewPacketByDestination() const;
+	void viewPacketByDate() const;
+	void viewPacketByDateAndDest() const;
+	void removePacket();
 	void viewAllClients() const;
+	void viewSpecificClient() const;
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };

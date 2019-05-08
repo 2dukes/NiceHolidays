@@ -21,7 +21,7 @@ Packet::Packet() // Irregular packet
 }
 // metodos GET
 
-unsigned Packet::getId() const {
+int Packet::getId() const {
 
 	return id;
 }
@@ -46,6 +46,11 @@ string Packet::getSites() const {
 	return places;
 }
 
+vector<string> Packet::getSitesVector() const
+{
+	return sites;
+}
+
 Date Packet::getBeginDate() const {
 
 	return begin;
@@ -68,7 +73,7 @@ unsigned Packet::getMaxPersons() const {
 
 // metodos SET
 
-void Packet::setId(unsigned id) {
+void Packet::setId(int id) {
 
 	this->id = id;
 }
@@ -153,57 +158,6 @@ vector<string> Packet::sitesNormalization(string &sitesStr)
 	return tSites;
 }
 
-bool Packet::existingDate(string &dt)
-{
-	istringstream iS(dt);
-	int year, month, day, maxDays;
-	char delimiter; // Slash
-	iS >> year;
-	iS >> delimiter;
-	if (delimiter != '/')
-		return true;
-	iS >> month;
-	iS >> delimiter;
-	if (delimiter != '/')
-		return true;
-	iS >> day;
-	if (year >= 0 && (month >= 1 && month <= 12))
-	{
-		maxDays = days(year, month);
-		if (day >= 1 && day <= maxDays)
-			return false;
-	}
-	return true;
-}
-
-bool Packet::endLaterThenBeg(string &endD, string &begD)
-{
-	istringstream iS(endD);
-	int endYear, endMonth, endDay;
-	char delimiter; // Slash
-	iS >> endYear;
-	iS >> delimiter;
-	iS >> endMonth;
-	iS >> delimiter;
-	iS >> endDay;
-
-	iS.clear();
-	iS.str(begD);
-	int begYear, begMonth, begDay;
-	iS >> begYear;
-	iS >> delimiter;
-	iS >> begMonth;
-	iS >> delimiter;
-	iS >> begDay;
-
-	if (endYear < begYear)
-		return true;
-	else if (endMonth < begMonth && endMonth == begYear)
-		return true;
-	else if (endDay <= begDay && endMonth == begMonth && endYear == begYear)
-		return true;
-	return false;
-}
 
 void Packet::packetCreation(string &explorer)
 {
@@ -291,7 +245,8 @@ void Packet::packetCreation(string &explorer)
 // shows a packet content 
 ostream& operator<<(ostream& out, const Packet & packet) {
 
-	out << packet.id << endl;
+	out << "ID: " << packet.id << endl
+		<< "Sites visited: ";
 	for (size_t i = 0; i < packet.sites.size(); i++)
 	{
 		if (i == 0)
@@ -305,9 +260,10 @@ ostream& operator<<(ostream& out, const Packet & packet) {
 		}
 	}
 	out << endl
-		<< packet.begin << endl
-		<< packet.end << endl
-		<< packet.pricePerPerson << endl
-		<< packet.maxPersons << endl;
+		<< "Beggining date: " << packet.begin << endl
+		<< "End date: " << packet.end << endl
+		<< "Price per person: " << packet.pricePerPerson << endl
+		<< "Number of initially available tickets: " << packet.maxPersons << endl
+		<< "Bought tickets: " << packet.currentPersons << endl;
 	return out;
 }

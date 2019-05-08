@@ -35,8 +35,9 @@ Agency::Agency(string fileName)
 		getline(in_stream, this->URL); // URL
 		getline(in_stream, fileInput);
 		address = Address(fileInput); // To Do: Default Address constructor 
-		packetsId = 1; // For test purposes...
-
+		//packetsId = 1; // For test purposes...
+		getline(in_stream, clientsFilename);
+		getline(in_stream, packetsFilename);
 	}
 	else
 	{
@@ -99,13 +100,18 @@ void Agency::setURL(string url) {
 
 	this->URL = url; 
 }
+
+void Agency::setClient(Client &client)
+{
+	clients.push_back(client);
+}
+
 void Agency::setClients(vector<Client> &clients) {
 
 	//  IMPLEMENTATION REQUIRED 
 }
-void Agency::setPacket(Packet &packet) 
+void Agency::setPacket(Packet packet) 
 {
-
 	packets.push_back(packet);
 }
 void Agency::setPacketsId(unsigned id)
@@ -118,7 +124,7 @@ void Agency::setPacketsId(unsigned id)
 
 void Agency::readPackets()
 {
-	ifstream in_stream("packets.txt");
+	ifstream in_stream(packetsFilename);
 	string auxString;
 	string separator; // separador "::::::::::"
 	if (getline(in_stream, auxString))
@@ -140,7 +146,32 @@ void Agency::readPackets()
 		getline(in_stream, auxString);
 		currentPacket.setCurrentPersons(stoi(auxString));
 		getline(in_stream, separator);
-		packets.push_back(currentPacket); // Store packet in vector<Packet> packets
+		setPacket(currentPacket); // Store packet in vector<Packet> packets
+	}
+	in_stream.close();
+}
+
+void Agency::readClients()
+{
+	ifstream in_stream(clientsFilename);
+	string auxString;
+	string separator; // separador "::::::::::"
+	while (getline(in_stream, auxString))
+	{
+		Client currentClient; // New Packet each time it iterates
+		currentClient.setName(auxString);
+		getline(in_stream, auxString);
+		currentClient.setVATnumber(stoi(auxString));
+		getline(in_stream, auxString);
+		currentClient.setFamilySize(stoi(auxString));
+		getline(in_stream, auxString);
+		currentClient.setAddress(Address(auxString));
+		getline(in_stream, auxString);
+		currentClient.setPacketListIds(auxString);
+		getline(in_stream, auxString);
+		currentClient.setTotalPurchased(stoi(auxString));
+		setClient(currentClient); // Store packet in vector<Packet> packets
+		getline(in_stream, separator);
 	}
 	in_stream.close();
 }
@@ -338,24 +369,234 @@ string Agency::UpdateAgencyInfo(string &explorer)
 void Agency::viewAllPackets() const
 {
 	int size = packets.size();
+	cout << endl;
 	for (size_t i = 0; i < size; i++)
 	{
-		cout << packets.at(i);
-		if (i < (size - 1))
-			cout << "::::::::::\n";
+		if (packets.at(i).getId() >= 0)
+		{
+			cout << packets.at(i);
+			if (i < (size - 1))
+				cout << "::::::::::\n";
+		}
+	}
+	cout << endl;
+}
+
+void Agency::viewPacketByDestination() const
+{
+	int toggle = 0;
+	while (toggle == 0)
+	{
+		string locationPack;
+		int index = 0, confirm = 0;
+		cout << endl << "Destination of the pack: "; cin.ignore(); getline(cin, locationPack); trim(locationPack);
+		vector<int> idx;
+		for (unsigned int i = 0; i < size(packets); i++)
+		{
+			if (packets.at(i).getSitesVector().at(0) == locationPack)
+			{
+				idx.push_back(i);
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+		{
+			cout << "There is no pack with destination '" << locationPack << "'!"
+				<< endl << endl;
+		}
+		else
+		{
+			for (unsigned int i = 0; i < size(idx); i++)
+			{
+				int index = idx.at(i);
+				if (packets.at(index).getId() >= 0)
+					cout << packets.at(index);
+			}
+		}
+		int option;
+		cout << endl << "1. See another pack by destination\n0. Back\n\n"; cin >> option;
+		if (option == 0)
+			toggle = 1;
 	}
 }
 
+void Agency::viewPacketByDate() const
+{
+	int toggle = 0;
+	while (toggle == 0)
+	{
+		int confirm = 0;
+		vector<int> idx;
+		idx.clear();
+		string date1, date2;
+		cout << "Beginning date (Year / Month / Day): "; cin.ignore(); getline(cin, date1);
+		while ((date1.empty() || existingDate(date1)) && !cin.eof())
+		{
+			cerr << "Invalid Option! Please enter a valid input." << endl;
+			cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, date1);
+		}
+		cout << "End date (Year / Month / Day): "; getline(cin, date2);
+		while ((date2.empty() || existingDate(date2) || endLaterThenBeg(date2, date1)) && !cin.eof())
+		{
+			cerr << "Invalid Option! Please enter a valid input." << endl;
+			cout << endl << "End date (Year / Month / Day): "; getline(cin, date2);
+		}
+		for (unsigned int i = 0; i < size(packets); i++)
+		{
+			if (checkBetweenDates(date1, date2, packets.at(i).getBeginDate())
+				&& checkBetweenDates(date1, date2, packets.at(i).getEndDate()))
+			{
+				idx.push_back(i);
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+		{
+			cout << "There is no pack within those dates!"
+				<< endl << endl;
+		}
+		else
+		{
+			for (unsigned int i = 0; i < size(idx); i++)
+			{
+				int index = idx.at(i);
+				if (packets.at(index).getId() >= 0)
+				{
+					cout << packets.at(index) << endl;
+				}
+			}
+		}
+		int option;
+		cout << "1. See another pack by date\n0. Back\n\n"; cin >> option;
+		if (option == 0)
+			toggle = 1;
+	}
+	cout << endl;
+}
+
+void Agency::removePacket()
+{
+	int toggle = 0;
+	char answer;
+	while (toggle == 0)
+	{
+		int packId = 0;
+		int index = 0, confirm = 0;
+		string destinations, date;
+		cout << "ID of the pack: "; packId = checkInt();
+		for (unsigned int i = 0; i < size(packets); i++)
+		{
+			if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
+			{
+				index = i;
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+		{
+			cout << "There is no registered available pack with ID '" << packId << "'!"
+				<< endl << endl;
+		}
+		else
+		{
+			cout << endl << packets.at(index) << endl
+				 << "Are you sure you want to remove this pack?(y/n) "; cin >> answer;
+			if (answer == 'y')
+			{
+				packets.at(index).setId(-packId);
+				cout << "\nPack removed!" << endl;
+			}
+			else
+			{
+				cout << "\nPack not removed!"
+					 << endl << endl;
+			}
+		}
+		int option;
+		cout << "1. Remove another pack\n0. Main Menu\n\n"; cin >> option;
+		if (option == 0)
+			toggle = 1;
+		else
+			cout << endl;
+	}
+}
+
+//CLIENT FUNCTIONS
 void Agency::viewAllClients() const
 {
-	int size = clients.size();
+	size_t size = clients.size();
 	for (size_t i = 0; i < size; i++)
 	{
 		cout << clients.at(i);
 		if (i < (size - 1))
 			cout << "::::::::::\n";
 	}
+	cout << endl;
 }
+
+void Agency::viewSpecificClient() const
+{
+	int toggle = 0;
+	while (toggle == 0)
+	{
+		string clientName;
+		int clientVAT;
+		int index = 0, confirm = 0;
+		cin.ignore();
+		cout << endl << "Name of the Client: "; getline(cin, clientName);
+		for (unsigned int i = 0; i < size(clients); i++)
+		{
+			if (clients.at(i).getName() == clientName)
+			{
+				index = i;
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+		{
+			cout << "There is no registered client named '" << clientName << "'!"
+				<< endl << endl;
+		}
+		else
+		{
+			int confirmNif = 0;
+			if (confirm > 1)
+			{
+				cout << "\nThere are " << confirm << " clients with that name.\nPlease refer the client's NIF: ";
+				bool valid;
+				do
+				{
+					cin >> clientVAT;
+					valid = VATConfirm(clientVAT);
+					if (!valid)
+						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
+				} while (!valid);
+
+				for (unsigned int i = 0; i < size(clients); i++)
+				{
+					if (clients.at(i).getVATnumber() == clientVAT)
+					{
+						index = i;
+						confirmNif++;
+					}
+				}
+			}
+			if (confirmNif != 0 || confirm == 1)
+				cout << clients.at(index) << endl;
+			else
+			{
+				cout << "\nFound no user with NIF " << clientVAT
+					 << endl << endl;
+			}
+		}
+		int option;
+		cout << "1. See another client\n0. Main Menu\n\n"; cin >> option;
+		if (option == 0)
+			toggle = 1;
+	}
+	cout << "\n----------\n";
+}
+
 
 /*********************************
  * Mostrar Loja

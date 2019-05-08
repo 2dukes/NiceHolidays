@@ -178,6 +178,7 @@ void mainMenu(Agency &agency) {
 							//vectorToFile_Packs();
 							//system("pause");
 							//readWritePackSt();
+							agency.removePacket();
 							break;
 						default:
 							break;
@@ -193,17 +194,20 @@ void mainMenu(Agency &agency) {
 		case 3:
 			// View Specific client
 			//viewSpecificClient(mainChoices.at(mainMenu - 1));
+			agency.viewSpecificClient();
 			break;
 		case 4:
 			// View All Clients
 			system("cls");
+			/*
 			cout << mainChoices.at(mainMenu - 1) << endl << endl;
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "[Go Back] CTRL+Z" << endl << endl;
 			for (const auto &x : agency.getClients())
 				cout << x;
+			system("pause");*/
+			agency.viewAllClients();
 			system("pause");
-			//viewAllClients();
 			break;
 		case 5:
 			option = displays(viewAvailablePackChoices, mainChoices.at(mainMenu - 1), agencyName);
@@ -219,14 +223,17 @@ void mainMenu(Agency &agency) {
 			case 2:
 				// View Available Packs according to Destination
 				//viewADestination(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
+				agency.viewPacketByDestination();
 				break;
 			case 3:
 				// View Available Packs according to 2 Dates
 				//viewADate(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
+				agency.viewPacketByDate();
 				break;
 			case 4:
 				// View Available Packs according to 2 Dates & Destination
 				//viewDateDest(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
+				//agency.viewPacketByDateAndDest();
 				break;
 			default:
 				break;
