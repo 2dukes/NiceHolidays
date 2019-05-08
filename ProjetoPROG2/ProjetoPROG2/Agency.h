@@ -38,10 +38,9 @@ public:
 	unsigned getVATnumber() const;
 	Address getAddress() const;
 	string getURL() const;
-	vector<Client> getClients() const;
-	vector<Packet> getPackets() const;
+	const vector<Client>& getClients() const;
+	const vector<Packet>& getPackets() const;
 	unsigned getPacketsId() const;
-	void viewAllPackets() const;
 
 
 	// methods SET
@@ -55,7 +54,10 @@ public:
 	void setPacketsId(unsigned id);
 
 	// other methods */
-	
+	bool verifyVATExistence(unsigned &VAT) const;
+	void clientCreation(string &explorer, Agency &agency);
 	string UpdateAgencyInfo(string &explorer);
+	void viewAllPackets() const;
+	void viewAllClients() const;
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };

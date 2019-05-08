@@ -6,9 +6,6 @@
 #include "Agency.h"
 #include "GeneralFunctions.h"
 
-
-
-
 Agency::Agency(string fileName)
 {
 	/*ifstream agencyfile;
@@ -49,63 +46,51 @@ Agency::Agency(string fileName)
 	}
 }
 
-// metodos GET
-string Agency::getName() const {
+// GET Methods
+string Agency::getName() const 
+{
 
 	return name;
 }
-
-unsigned Agency::getVATnumber() const {
+unsigned Agency::getVATnumber() const 
+{
 
 	return VATnumber;
 }
-
-Address Agency::getAddress() const {
+Address Agency::getAddress() const 
+{
 
 	return address;
 }
-
-string Agency::getURL() const {
+string Agency::getURL() const 
+{
 
 	return URL;
 }
-
-vector<Client> Agency::getClients() const {
-
+const vector<Client>& Agency::getClients() const 
+{
 	return clients;
 }
-
-vector<Packet> Agency::getPackets() const {
-
+const vector<Packet>& Agency::getPackets() const 
+{
 	return packets;
 }
-
 unsigned Agency::getPacketsId() const
 {
 	return packetsId;
 }
 
-void Agency::viewAllPackets() const
-{
-	for (size_t i = 0; i < packets.size(); i++)
-	{
-		cout << packets.at(i);
-		if (i < (packets.size() - 1))
-			cout << "::::::::::\n";
-	}
-}
 // SET Methods
-
-void Agency::setName(string name) {
+void Agency::setName(string name) 
+{
 
 	this->name = name;
 }
-
-void Agency::setVATnumber(unsigned VATnumber) {
+void Agency::setVATnumber(unsigned VATnumber) 
+{
 
 	this->VATnumber = VATnumber;
 }
-
 void Agency::setAddress(Address address) {
 
 	this->address = address;
@@ -118,11 +103,11 @@ void Agency::setClients(vector<Client> &clients) {
 
 	//  IMPLEMENTATION REQUIRED 
 }
-void Agency::setPacket(Packet &packet) {
+void Agency::setPacket(Packet &packet) 
+{
 
 	packets.push_back(packet);
 }
-
 void Agency::setPacketsId(unsigned id)
 {
 	packetsId = id;
@@ -160,11 +145,103 @@ void Agency::readPackets()
 	in_stream.close();
 }
 
+bool Agency::verifyVATExistence(unsigned &VAT) const
+{
+	for (const auto &client : clients)
+	{
+		if (client.getVATnumber() == VAT)
+			return false;
+	}
+	return true;
+}
 
+void Agency::clientCreation(string &explorer, Agency &agency)
+{
+	Client cClient;
+	string reader;
+	int VAT, house;
+	bool vatNDigits = true, vatExistence = true, packetflag = true;
 
-/*********************************
- * Mostrar Loja
- ********************************/
+	system("cls");
+	cout << explorer << endl << endl;
+	// ofstream out_stream("clients.txt", std::ios_base::app);
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	cout << "-> CTRL+Z to leave..." << endl << endl;
+	cout << "Client name: "; getline(cin, reader);
+	while (reader.empty() && !cin.eof())
+	{
+		cerr << "Invalid Option! Please enter a valid input." << endl;
+		cout << endl << "Client name: "; getline(cin, reader);
+	}
+	if (cin.eof())
+		return;
+	trim(reader);
+	cClient.setName(reader);
+	// out_stream << reader + "\n";
+
+	do
+	{
+		cout << "VAT Number: "; cin >> VAT;
+		if (cin.eof())
+			return;
+		if (cin.fail())
+		{
+			cin.clear();
+			cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+		}
+		else
+		{
+			vatNDigits = VATConfirm(VAT);
+			if (vatNDigits)
+				cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+			unsigned Aux = VAT;
+			vatExistence = agency.verifyVATExistence(Aux);
+			if (!vatExistence)
+				cerr << "This VAT already exists..." << endl << endl;
+		}
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	} while (vatNDigits || !vatExistence);
+	cClient.setVATnumber(VAT);
+
+	cout << "Number of people in household: ";
+	while (!(cin >> house) && !cin.eof())
+	{
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+		cout << endl << "Number of people in household: ";
+	}
+	if (cin.eof())
+		return;
+	cClient.setFamilySize(house);
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	cout << "Address (Street / Door Number / Floor / Zip Code / Location): "; getline(cin, reader);
+	while ((reader.empty() || adrConfirm(reader)) && !cin.eof())
+	{
+		cerr << "Invalid Option! Please enter a valid input." << endl;
+		cout << endl << "Address (Street / Door Number / Floor / Zip Code / Location): "; getline(cin, reader);
+	}
+	if (cin.eof())
+		return;
+	trim(reader);
+	Address NewAdress(reader);
+	cClient.setAddress(NewAdress);
+	// out_stream << reader + "\n";
+	// out_stream << reader + "\n";
+	// out_stream << reader + "\n";
+	// out_stream << "::::::::::\n";
+
+	// out_stream.close();
+	clients.push_back(cClient); // Push_Back new client to vector<string> clients
+	cout << endl << "Your data was successfully inserted!" << endl << endl;
+	system("pause");
+
+}
 
 string Agency::UpdateAgencyInfo(string &explorer)
 {
@@ -177,7 +254,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	// ofstream out_stream(AGENCY_FILE_NAME);
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	cout << "-> CTRL+Z to leave..." << endl << endl;
+	cout << "[Go Back] CTRL+Z" << endl << endl;
 	cout << "New agency name: "; getline(cin, reader);
 	while (reader.empty() && !cin.eof())
 	{
@@ -258,7 +335,31 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	return name;
 }
 
- // mostra o conteudo de uma agencia
+void Agency::viewAllPackets() const
+{
+	int size = packets.size();
+	for (size_t i = 0; i < size; i++)
+	{
+		cout << packets.at(i);
+		if (i < (size - 1))
+			cout << "::::::::::\n";
+	}
+}
+
+void Agency::viewAllClients() const
+{
+	int size = clients.size();
+	for (size_t i = 0; i < size; i++)
+	{
+		cout << clients.at(i);
+		if (i < (size - 1))
+			cout << "::::::::::\n";
+	}
+}
+
+/*********************************
+ * Mostrar Loja
+ ********************************/
 ostream& operator<<(ostream& out, const Agency & agency) {
 
 	out << agency.name << "\n"

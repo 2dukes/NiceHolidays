@@ -79,55 +79,66 @@ void mainMenu(Agency &agency) {
 					case 1:
 						switch (option2)
 						{
-						case 1:
-							// Create | Client
+							case 1:
+							{
+								// Create | Client
+								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								agency.clientCreation(auxiliarExplorer, agency);
+								if (cin.eof())
+								{
+									cin.clear();
+									break;
+								}
 
-							//clientCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-							// Update packs.txt
-							//vectorToFile_Packs();
-							// Update vclients
-							//readWriteClientSt();
-							break;
-						case 2:
-							// Create | Packs
-							Packet cPacket;
-							string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
-							cPacket.packetCreation(auxiliarExplorer);
-							if (cin.eof())
-							{ 
-								cin.clear();
+								//clientCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
+								// Update packs.txt
+								//vectorToFile_Packs();
+								// Update vclients
+								//readWriteClientSt();
 								break;
 							}
-							int pId = agency.getPacketsId() + 1;
-							cPacket.setId(pId);
-							agency.setPacketsId(pId);
-							agency.setPacket(cPacket);
-							// Update packets.txt file . . .
-
-							/*ofstream out_stream("packets.txt", std::ios_base::app);
-							if (out_stream.is_open())
+							case 2:
 							{
+								// Create | Packs
+								Packet cPacket;
+								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								cPacket.packetCreation(auxiliarExplorer);
+								if (cin.eof())
+								{
+									cin.clear();
+									break;
+								}
 								int pId = agency.getPacketsId() + 1;
-								agency.setPacketsId(pId);
 								cPacket.setId(pId);
-								out_stream << pId << "\n";
-								out_stream << cPacket.getSites() + "\n";
-								out_stream << cPacket.getBeginDate().getDate() + "\n";
-								out_stream << cPacket.getEndDate().getDate() + "\n";
-								out_stream << cPacket.getPricePerPerson() << "\n";
-								out_stream << cPacket.getMaxPersons() << "\n";
-								out_stream << "::::::::::\n";
-								out_stream.close();
-								cout << endl << "Your data was successfully inserted!" << endl << endl;
+								agency.setPacketsId(pId);
+								agency.setPacket(cPacket);
+								// Update packets.txt file . . .
+
+								/*ofstream out_stream("packets.txt", std::ios_base::app);
+								if (out_stream.is_open())
+								{
+									int pId = agency.getPacketsId() + 1;
+									agency.setPacketsId(pId);
+									cPacket.setId(pId);
+									out_stream << pId << "\n";
+									out_stream << cPacket.getSites() + "\n";
+									out_stream << cPacket.getBeginDate().getDate() + "\n";
+									out_stream << cPacket.getEndDate().getDate() + "\n";
+									out_stream << cPacket.getPricePerPerson() << "\n";
+									out_stream << cPacket.getMaxPersons() << "\n";
+									out_stream << "::::::::::\n";
+									out_stream.close();
+									cout << endl << "Your data was successfully inserted!" << endl << endl;
+								}
+								else
+									cerr << "An error occurred during the process...";
+								system("pause");*/
+								//packscreation(mainchoices.at(mainmenu - 1) + " | " + managechoices.at(option1 - 1) + " | " + managesecundarychoices.at(option2 - 1));
+								// update vpacks
+								//readwritepackst();
+
+								break;
 							}
-							else
-								cerr << "An error occurred during the process...";
-							system("pause");*/
-							//packscreation(mainchoices.at(mainmenu - 1) + " | " + managechoices.at(option1 - 1) + " | " + managesecundarychoices.at(option2 - 1));
-							// update vpacks
-							//readwritepackst();
-							
-							break;
 						}
 						break;
 					case 2:
@@ -185,7 +196,14 @@ void mainMenu(Agency &agency) {
 			break;
 		case 4:
 			// View All Clients
-			//viewAllClients(mainChoices.at(mainMenu - 1));
+			system("cls");
+			cout << mainChoices.at(mainMenu - 1) << endl << endl;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "[Go Back] CTRL+Z" << endl << endl;
+			for (const auto &x : agency.getClients())
+				cout << x;
+			system("pause");
+			//viewAllClients();
 			break;
 		case 5:
 			option = displays(viewAvailablePackChoices, mainChoices.at(mainMenu - 1), agencyName);

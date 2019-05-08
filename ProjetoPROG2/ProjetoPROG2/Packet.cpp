@@ -207,7 +207,7 @@ bool Packet::endLaterThenBeg(string &endD, string &begD)
 
 void Packet::packetCreation(string &explorer)
 {
-	string reader, begD, endD, places;
+	string reader;
 	double price;
 	int tMax;
 	bool flag;
@@ -218,66 +218,66 @@ void Packet::packetCreation(string &explorer)
 
 	cout << "-> CTRL+Z to leave..." << endl << endl;
 
-	cout << "Places to visit: "; getline(cin, places); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
+	cout << "Places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
 
-	while ((places.empty() || sitesFormat(places)) && !cin.eof()) // Overload sitesFormat
+	while ((reader.empty() || sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Places to visit: "; getline(cin, places);
-
+		cout << endl << "Places to visit: "; getline(cin, reader);
 	}
 	if (cin.eof())
 		return;
-	trim(places);
-	sites = sitesNormalization(places);
+	trim(reader);
+	sites = sitesNormalization(reader);
 
-	cout << "Beginning date (Year / Month / Day): "; getline(cin, begD);
-	while ((begD.empty() || existingDate(begD)) && !cin.eof())
+	cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+	while ((reader.empty() || existingDate(reader)) && !cin.eof())
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, begD);
+		cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
 	}
 	if (cin.eof())
 		return;
-	trim(begD);
-	begin = Date(begD);
+	trim(reader);
+	begin = Date(reader);
 
-	cout << "End date (Year / Month / Day): "; getline(cin, endD);
-	while ((endD.empty() || existingDate(endD) || endLaterThenBeg(endD, begD)) && !cin.eof())
+	cout << "End date (Year / Month / Day): "; getline(cin, reader);
+	while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, reader)) && !cin.eof())
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "End date (Year / Month / Day): "; getline(cin, endD);
+		cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
 	}
 	if (cin.eof())
 		return;
-	trim(endD);
-	end = Date(endD);
+	trim(reader);
+	end = Date(reader);
 
 	cout << "Price per person: ";
 	while (!(cin >> price) && !cin.eof())
 	{
-		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Price per person: ";
 		if (cin.fail())
 		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
+		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+		cout << endl << "Price per person: ";
 	}
 	if (cin.eof())
 		return;
 	pricePerPerson = price;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	cout << "Max Lotation: ";
 	while (!(cin >> tMax) && !cin.eof())
 	{
-		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Max Lotation: ";
 		if (cin.fail())
-		{
+		{ 
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
+		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+		cout << endl << "Max Lotation: ";
 	}
 	if (cin.eof())
 		return;

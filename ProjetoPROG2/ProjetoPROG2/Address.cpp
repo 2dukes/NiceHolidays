@@ -95,7 +95,7 @@ void Address::setLocation(string  location) {
  // discplyes an address in a nice format
 ostream& operator<<(ostream& out, const Address & address) {
 
-	out << address.street << " / " << address.doorNumber << " / " << address.floor
-		<< address.postalCode << address.location;
+	out << address.street << " / " << address.doorNumber << " / " << address.floor << " / "
+		<< address.postalCode << " / " << address.location;
 	return out;
 }
