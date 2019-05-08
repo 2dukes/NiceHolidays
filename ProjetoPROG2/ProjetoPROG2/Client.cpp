@@ -83,6 +83,12 @@ void Client::setPacketList(vector<Packet> & packets){
 	// this->packets = packets;
 	// Maybe we'll work with pointers...
 }
+
+void Client::setPacketListIds(string idsString)
+{
+	decomposeToInt(idsString, ids, ';');
+}
+
 void Client::setTotalPurchased(unsigned totalPurchased){
   
 	this->totalPurchased = totalPurchased;
@@ -93,10 +99,11 @@ void Client::setTotalPurchased(unsigned totalPurchased){
 
 ostream& operator<<(ostream& out, const Client & client){
 
-	out << client.name << endl
-		<< client.VATnumber << endl
-		<< client.familySize << endl
-		<< client.address << endl;
+	out << "Name: " << client.name << endl
+		<< "VAT number: " << client.VATnumber << endl
+		<< "Family Size: " << client.familySize << endl
+		<< "Address: " << client.address << endl
+		<< "Purchased packets: ";
 	if (client.packets.size() > 0)
 	{
 		for (const auto &x : client.packets)
@@ -104,7 +111,7 @@ ostream& operator<<(ostream& out, const Client & client){
 	}
 	else out << "0" << endl;
 	
-	out << client.totalPurchased << endl;
+	out << "Total amount spent: " << client.totalPurchased << endl;
 	//string name; // name of the client
 	//unsigned VATnumber; // VAT number of client
 	//unsigned short familySize;  // number of family members

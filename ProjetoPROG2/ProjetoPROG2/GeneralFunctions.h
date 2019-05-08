@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Date.h"
 
 void trim(std::string &s); // Removes extra spaces
 
@@ -18,3 +18,15 @@ bool adrConfirm(std::string &reader);
 bool leapYear(int year);
 
 int days(int year, int month);
+ 
+bool existingDate(string &dt);
+
+bool endLaterThenBeg(string &endD, string &begD);
+
+bool checkBetweenDates(std::string date1, std::string date2, Date date);
+
+bool checkInt2(std::string s);
+
+int checkInt();
+
+void decomposeToInt(std::string s, std::vector<int> &elements, char sep);

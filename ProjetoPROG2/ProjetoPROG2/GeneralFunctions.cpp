@@ -120,3 +120,122 @@ int days(int year, int month)
 	else
 		return d[month - 1];
 }
+
+bool existingDate(string &dt)
+{
+	istringstream iS(dt);
+	int year, month, day, maxDays;
+	char delimiter; // Slash
+	iS >> year;
+	iS >> delimiter;
+	if (delimiter != '/')
+		return true;
+	iS >> month;
+	iS >> delimiter;
+	if (delimiter != '/')
+		return true;
+	iS >> day;
+	if (year >= 0 && (month >= 1 && month <= 12))
+	{
+		maxDays = days(year, month);
+		if (day >= 1 && day <= maxDays)
+			return false;
+	}
+	return true;
+}
+
+bool endLaterThenBeg(string &endD, string &begD)
+{
+	istringstream iS(endD);
+	int endYear, endMonth, endDay;
+	char delimiter; // Slash
+	iS >> endYear;
+	iS >> delimiter;
+	iS >> endMonth;
+	iS >> delimiter;
+	iS >> endDay;
+
+	iS.clear();
+	iS.str(begD);
+	int begYear, begMonth, begDay;
+	iS >> begYear;
+	iS >> delimiter;
+	iS >> begMonth;
+	iS >> delimiter;
+	iS >> begDay;
+
+	if (endYear < begYear)
+		return true;
+	else if (endMonth < begMonth && endMonth == begYear)
+		return true;
+	else if (endDay <= begDay && endMonth == begMonth && endYear == begYear)
+		return true;
+	return false;
+}
+
+bool checkBetweenDates(string date1, string date2, Date date)
+{
+	int date1day, date1month, date1year, date2day, date2month, date2year;
+	istringstream iSdate1(date1), iSdate2(date2);
+	char s;
+	iSdate1 >> date1year >> s >> date1month >> s >>date1day;
+	iSdate2 >> date2year >> s >> date2month >> s >> date2day;
+	int entryDate = (date.getYear() * 10000) + (date.getMonth() * 100) + date.getDay();
+	int startDate = (date1year * 10000) + (date1month * 100) + date1day;
+	int endDate = (date2year * 10000) + (date2month * 100) + date2year;
+
+	if (entryDate >= startDate && entryDate <= endDate)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool checkInt2(string s)
+{
+	bool confirm = true;
+	for (char &c : s)
+	{
+		if (!isdigit(c))
+		{
+			confirm = false;
+			break;
+		}
+	}
+	return confirm;
+} //check if a string is a int
+
+int checkInt()
+{
+	string n;
+	while (true)
+	{
+		cin >> n;
+		if (checkInt2(n))
+			return stoi(n);
+		else
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Invalid input, try again\n";
+		}
+	}
+}//ask for a string and check if its integer before returning
+
+void decomposeToInt(string s, vector<int> &elements, char sep)
+{
+	size_t pos = s.find(sep);
+	while (pos != string::npos)
+	{
+		string elem = s.substr(0, pos);
+		trim(elem);
+		elements.push_back(stoi(elem));
+		s.erase(0, pos + 1);
+		pos = s.find(sep);
+	}
+	trim(s);
+	elements.push_back(stoi(s));
+}

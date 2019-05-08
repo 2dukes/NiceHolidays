@@ -12,6 +12,7 @@ int main() {
 	system("pause");*/
 	Agency agency(AGENCY_FILE_NAME);   // create the agency
 	agency.readPackets();
+	agency.readClients();
 	mainMenu(agency); // initial menu inicial with the major options of the application
 
 	return 0;

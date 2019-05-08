@@ -12,7 +12,7 @@ using namespace std;
 
 class Packet{
  private:
-  unsigned id; // packet unique identifier
+  int id; // packet unique identifier
   vector<string> sites; // touristic sites to visit
   Date begin;  // begin date
   Date end;  // end date
@@ -24,15 +24,16 @@ class Packet{
   Packet(vector<string> sites, Date begin, Date end, double pricePerPerson, unsigned maxPersons);
   Packet();
   // GET methods
-  unsigned getId() const;
+  int getId() const;
   string getSites() const; // Return sites in a string format
+  vector<string> getSitesVector() const; // Return sites in a vector of strings
   Date getBeginDate() const;
   Date getEndDate() const;
   double getPricePerPerson() const;
   unsigned getMaxPersons() const;
 
   // SET methods
-  void setId(unsigned id);  // to set negative if "deprecated"
+  void setId(int id);  // to set negative if "deprecated"
   void setSites(vector<string> sites);
   void setBeginDate(Date begin);
   void setEndDate(Date end);
@@ -43,8 +44,6 @@ class Packet{
   // other methods
   bool sitesFormat(string &sitesStr);
   vector<string> sitesNormalization(string &sitesStr);
-  bool existingDate(string &dt);
-  bool endLaterThenBeg(string &endD, string &begD);
   void packetCreation(string &explorer);
   friend ostream& operator<<(ostream& out, const Packet & packet);
 };

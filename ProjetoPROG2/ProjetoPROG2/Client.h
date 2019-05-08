@@ -19,6 +19,7 @@ class Client{
   Address address; // client's address  
   vector<Packet*> packets; // vector to store client's packets bought
   unsigned totalPurchased; // total value spent by the client
+  vector<int> ids; //ids of the packets the client bought
 
  public:
   Client(); // Default Constructor
@@ -40,6 +41,7 @@ class Client{
   void setVATnumber(unsigned VATnumber);
   void setFamilySize(unsigned short familySize);
   void setAddress(Address address);
+  void setPacketListIds(string idsString);
   void setPacketList(vector<Packet> & packets);
   void setTotalPurchased(unsigned totalPurchased);
   
