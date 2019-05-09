@@ -53,6 +53,11 @@ Address Client::getAddress() const{
 //	// return packets; // -> Could be changed
 //}
 
+vector<int> Client::getPacketListIds() const
+{
+	return ids;
+}
+
 unsigned Client::getTotalPurchased() const{
   
 	return totalPurchased;
@@ -89,6 +94,11 @@ void Client::setPacketListIds(string idsString)
 	decomposeToInt(idsString, ids, ';');
 }
 
+void Client::addPacketListIds(unsigned id)
+{
+	ids.push_back(id);
+}
+
 void Client::setTotalPurchased(unsigned totalPurchased){
   
 	this->totalPurchased = totalPurchased;
@@ -104,11 +114,25 @@ ostream& operator<<(ostream& out, const Client & client){
 		<< "Family Size: " << client.familySize << endl
 		<< "Address: " << client.address << endl
 		<< "Purchased packets: ";
+	vector<int> ids = client.ids;
+	if (client.ids.size() > 0)
+	{
+		for (size_t i = 0; i < ids.size(); i++)
+		{
+			if (i < (ids.size() - 1))
+				out << ids.at(i) << " ; ";
+			else
+				out << ids.at(i);
+		}
+		out << endl;
+	}
+	/*
 	if (client.packets.size() > 0)
 	{
 		for (const auto &x : client.packets)
 			out << x->getId();
 	}
+	*/
 	else out << "0" << endl;
 	
 	out << "Total amount spent: " << client.totalPurchased << endl;

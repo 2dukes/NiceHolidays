@@ -71,6 +71,11 @@ unsigned Packet::getMaxPersons() const {
 	return maxPersons;
 }
 
+unsigned Packet::getCurrentPersons() const
+{
+	return currentPersons;
+}
+
 // metodos SET
 
 void Packet::setId(int id) {
@@ -107,7 +112,6 @@ void Packet::setCurrentPersons(unsigned takenTickets)
 {
 	this->currentPersons = takenTickets;
 }
-
 
 /*********************************
  * Show Packet information

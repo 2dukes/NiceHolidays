@@ -48,31 +48,31 @@ Agency::Agency(string fileName)
 }
 
 // GET Methods
-string Agency::getName() const 
+string Agency::getName() const
 {
 
 	return name;
 }
-unsigned Agency::getVATnumber() const 
+unsigned Agency::getVATnumber() const
 {
 
 	return VATnumber;
 }
-Address Agency::getAddress() const 
+Address Agency::getAddress() const
 {
 
 	return address;
 }
-string Agency::getURL() const 
+string Agency::getURL() const
 {
 
 	return URL;
 }
-const vector<Client>& Agency::getClients() const 
+const vector<Client>& Agency::getClients() const
 {
 	return clients;
 }
-const vector<Packet>& Agency::getPackets() const 
+const vector<Packet>& Agency::getPackets() const
 {
 	return packets;
 }
@@ -81,13 +81,23 @@ unsigned Agency::getPacketsId() const
 	return packetsId;
 }
 
+unsigned Agency::getSoldPacksNumber() const
+{
+	return soldPacksNumber;
+}
+
+unsigned Agency::getTotalValue() const
+{
+	return totalValue;
+}
+
 // SET Methods
-void Agency::setName(string name) 
+void Agency::setName(string name)
 {
 
 	this->name = name;
 }
-void Agency::setVATnumber(unsigned VATnumber) 
+void Agency::setVATnumber(unsigned VATnumber)
 {
 
 	this->VATnumber = VATnumber;
@@ -98,7 +108,7 @@ void Agency::setAddress(Address address) {
 }
 void Agency::setURL(string url) {
 
-	this->URL = url; 
+	this->URL = url;
 }
 
 void Agency::setClient(Client &client)
@@ -110,13 +120,34 @@ void Agency::setClients(vector<Client> &clients) {
 
 	//  IMPLEMENTATION REQUIRED 
 }
-void Agency::setPacket(Packet packet) 
+void Agency::setPacket(Packet packet)
 {
 	packets.push_back(packet);
 }
 void Agency::setPacketsId(unsigned id)
 {
 	packetsId = id;
+}
+
+void Agency::setTotalValueAndNumber()
+{
+	totalValue = 0;
+	soldPacksNumber = 0;
+	for (size_t i = 0; i < packets.size(); i++)
+	{
+		for (size_t j = 0; j < clients.size(); j++)
+		{
+			for (size_t k = 0; k < clients.at(j).getPacketListIds().size(); k++)
+			{
+				if (clients.at(j).getPacketListIds().at(k) == packets.at(i).getId())
+				{
+					totalValue += (packets.at(i).getPricePerPerson() * clients.at(j).getFamilySize());
+					soldPacksNumber += clients.at(j).getFamilySize();
+					break;
+				}
+			}
+		}
+	}
 }
 
 
@@ -306,13 +337,13 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		{
 			cin.clear();
 			cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
-		}	
+		}
 		else
 		{
 			flag = VATConfirm(VAT);
 			if (flag)
 				cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
-		}	
+		}
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	} while (flag);
 	setVATnumber(VAT);
@@ -341,7 +372,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	trim(reader);
 	Address NewAdress(reader);
 	setAddress(NewAdress);
-		
+
 	cout << endl << "Your data was successfully changed!" << endl << endl;
 	system("pause");
 	/*
@@ -360,7 +391,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		cout << endl << "Your data was successfully inserted!" << endl << endl;
 	}
 	else
-		cerr << "An error occurred during the process...";		
+		cerr << "An error occurred during the process...";
 	system("pause");
 	*/
 	return name;
@@ -482,7 +513,6 @@ void Agency::removePacket()
 	{
 		int packId = 0;
 		int index = 0, confirm = 0;
-		string destinations, date;
 		cout << "ID of the pack: "; packId = checkInt();
 		for (unsigned int i = 0; i < size(packets); i++)
 		{
@@ -500,7 +530,7 @@ void Agency::removePacket()
 		else
 		{
 			cout << endl << packets.at(index) << endl
-				 << "Are you sure you want to remove this pack?(y/n) "; cin >> answer;
+				<< "Are you sure you want to remove this pack?(y/n) "; cin >> answer;
 			if (answer == 'y')
 			{
 				packets.at(index).setId(-packId);
@@ -509,7 +539,7 @@ void Agency::removePacket()
 			else
 			{
 				cout << "\nPack not removed!"
-					 << endl << endl;
+					<< endl << endl;
 			}
 		}
 		int option;
@@ -541,14 +571,14 @@ void Agency::viewSpecificClient() const
 	{
 		string clientName;
 		int clientVAT;
-		int index = 0, confirm = 0;
+		int indexClient = 0, confirm = 0;
 		cin.ignore();
 		cout << endl << "Name of the Client: "; getline(cin, clientName);
 		for (unsigned int i = 0; i < size(clients); i++)
 		{
 			if (clients.at(i).getName() == clientName)
 			{
-				index = i;
+				indexClient = i;
 				confirm++;
 			}
 		}
@@ -576,17 +606,17 @@ void Agency::viewSpecificClient() const
 				{
 					if (clients.at(i).getVATnumber() == clientVAT)
 					{
-						index = i;
+						indexClient = i;
 						confirmNif++;
 					}
 				}
 			}
 			if (confirmNif != 0 || confirm == 1)
-				cout << clients.at(index) << endl;
+				cout << clients.at(indexClient) << endl;
 			else
 			{
 				cout << "\nFound no user with NIF " << clientVAT
-					 << endl << endl;
+					<< endl << endl;
 			}
 		}
 		int option;
@@ -594,7 +624,279 @@ void Agency::viewSpecificClient() const
 		if (option == 0)
 			toggle = 1;
 	}
-	cout << "\n----------\n";
+	cout << endl;
+}
+
+void Agency::alterClient()
+{
+	int toggle = 0;
+	while (toggle == 0)
+	{
+		string clientName;
+		int clientVAT;
+		int indexClient = 0, confirm = 0;
+		cin.ignore();
+		cout << "Name of the Client: "; getline(cin, clientName);
+		for (size_t i = 0; i < clients.size(); i++)
+		{
+			if (clients.at(i).getName() == clientName)
+			{
+				indexClient = i;
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+		{
+			cout << "There is no registered client named '" << clientName << "'!"
+				<< endl << endl;
+		}
+		else
+		{
+			int confirmNif = 0;
+			if (confirm > 1)
+			{
+				cout << "\nThere are " << confirm << " clients with that name.\nPlease refer the client's NIF: ";
+				bool valid;
+				do
+				{
+					cin >> clientVAT;
+					valid = VATConfirm(clientVAT);
+					if (!valid)
+						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
+				} while (!valid);
+
+				for (unsigned int i = 0; i < size(clients); i++)
+				{
+					if (clients.at(i).getVATnumber() == clientVAT)
+					{
+						indexClient = i;
+						confirmNif++;
+					}
+				}
+			}
+			if (confirmNif != 0 || confirm == 1)
+			{
+				cout << endl << clients.at(indexClient) << endl;
+				int toggle2 = 0;
+				int repetition = 0;
+				string reader;
+				int VAT;
+				bool vatNDigits = true, vatExistence = true;
+				while (toggle2 == 0)
+				{
+					if (repetition == 0)
+					{
+						cout << endl << "What do you want to change?\n";
+						repetition++;
+					}
+					else
+						cout << "Do you want to change anything else?\n";
+					cout << "1. Name\n2. VAT number\n" << /*3) Family\n*/ "3. Adress\n0. Back\n\n";
+					int option;
+					cin >> option; cin.ignore();
+					cout << endl;
+					switch (option)
+					{
+					case 0:
+						toggle2 = 1;
+						break;
+					case 1:
+						cout << "New name: "; getline(cin, reader);
+						while (reader.empty() && !cin.eof())
+						{
+							cerr << "Invalid Option! Please enter a valid input." << endl;
+							cout << endl << "Client name: "; getline(cin, reader);
+						}
+						if (cin.eof())
+							return;
+						trim(reader);
+						clients.at(indexClient).setName(reader);
+						cout << endl;
+						break;
+					case 2:
+						
+						do
+						{
+							cout << "New VAT Number: "; cin >> VAT;
+							if (cin.eof())
+								return;
+							if (cin.fail())
+							{
+								cin.clear();
+								cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+							}
+							else
+							{
+								vatNDigits = VATConfirm(VAT);
+								if (vatNDigits)
+									cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+								unsigned Aux = VAT;
+								vatExistence = verifyVATExistence(Aux);
+								if (!vatExistence)
+									cerr << "This VAT already exists..." << endl << endl;
+							}
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						} while (vatNDigits || !vatExistence);
+						clients.at(indexClient).setVATnumber(VAT);
+						cout << endl;
+						break;
+					/*case 3:
+						cout << "New family: "; clients.at(index).nFamily = to_string(checkInt());
+						cout << endl;
+						break;*/
+					case 3:
+						cout << " New Address (Street / Door Number / Floor / Zip Code / Location): "; getline(cin, reader);
+						while ((reader.empty() || adrConfirm(reader)) && !cin.eof())
+						{
+							cerr << "Invalid Option! Please enter a valid input." << endl;
+							cout << endl << "Address (Street / Door Number / Floor / Zip Code / Location): "; getline(cin, reader);
+						}
+						if (cin.eof())
+							return;
+						trim(reader);
+						Address NewAdress(reader);
+						clients.at(indexClient).setAddress(NewAdress);
+						break;
+					}
+					if (toggle2 == 0)
+					{
+						cout << endl << "Client altered successfuly!" << endl << endl;
+					}
+				}
+			}
+			else
+			{
+				cout << "\nFound no user with NIF " << clientVAT
+					<< " !" << endl << endl;
+			}
+		}
+		int option;
+		cout << "1. Change another client\n0. Main Menu\n\n"; cin >> option;
+		if (option == 0)
+			toggle = 1;
+		else
+			cout << endl;
+	}
+	cout << endl;
+}
+
+void Agency::removeClient()
+{
+
+}
+
+void Agency::buyPacket()
+{
+	int toggle = 0;
+	while (toggle == 0)
+	{
+		string clientName;
+		int clientVAT;
+		int indexClient = 0, confirm = 0;
+		cin.ignore();
+		cout << endl << "Name of the Client: "; getline(cin, clientName);
+		for (unsigned int i = 0; i < size(clients); i++)
+		{
+			if (clients.at(i).getName() == clientName)
+			{
+				indexClient = i;
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+		{
+			cout << "There is no registered client named '" << clientName << "'!"
+				<< endl << endl;
+		}
+		else
+		{
+			int confirmNif = 0;
+			if (confirm > 1)
+			{
+				cout << "\nThere are " << confirm << " clients with that name.\nPlease refer the client's NIF: ";
+				bool valid;
+				do
+				{
+					cin >> clientVAT;
+					valid = VATConfirm(clientVAT);
+					if (!valid)
+						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
+				} while (!valid);
+
+				for (unsigned int i = 0; i < size(clients); i++)
+				{
+					if (clients.at(i).getVATnumber() == clientVAT)
+					{
+						indexClient = i;
+						confirmNif++;
+					}
+				}
+			}
+			if (confirmNif != 0 || confirm == 1)
+			{
+				int confirm = 0, packId = 0, indexPack;
+				while (confirm == 0)
+				{
+					cout << "ID of the pack: "; packId = checkInt();
+					for (unsigned int i = 0; i < size(packets); i++)
+					{
+						if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
+						{
+							indexPack = i;
+							confirm++;
+						}
+					}
+					if (confirm == 0)
+					cout << "There is no registered available pack with ID '" << packId << "'!"
+					<< endl << endl;
+				}
+				if ((packets.at(indexPack).getMaxPersons() - packets.at(indexPack).getCurrentPersons()) >= clients.at(indexClient).getFamilySize())
+				{
+					bool alreadyBought = false;
+					for (size_t k = 0; k < clients.at(indexClient).getPacketListIds().size(); k++)
+					{
+						if (clients.at(indexClient).getPacketListIds().at(k) == packId)
+						{
+							alreadyBought = true;
+							break;
+						}
+					}
+					if (!alreadyBought)
+					{
+						packets.at(indexPack).setCurrentPersons(packets.at(indexPack).getCurrentPersons() + clients.at(indexClient).getFamilySize());
+						clients.at(indexClient).addPacketListIds(packId);
+						clients.at(indexClient).setTotalPurchased(clients.at(indexClient).getTotalPurchased() + clients.at(indexClient).getFamilySize() *
+							packets.at(indexPack).getPricePerPerson());
+						if ((packets.at(indexPack).getMaxPersons() == packets.at(indexPack).getCurrentPersons()))
+							packets.at(indexPack).setId(-packId);
+						cout << "\nPack successfuly bought!"
+							<< endl << endl;
+					}
+					else
+					{
+						cout << "This client already bought this Pack!"
+							<< endl << endl;
+					}
+				}
+				else
+				{
+					cout << "\nNot enough spots available for this client"
+						<< " !\n----------\n" << endl;
+				}
+
+			}
+			else
+			{
+				cout << "\nFound no user with NIF " << clientVAT
+					<< endl << endl;
+			}
+		}
+		int option;
+		cout << "1. See another client\n0. Main Menu\n\n"; cin >> option;
+		if (option == 0)
+			toggle = 1;
+	}
+	cout << endl;
 }
 
 
@@ -604,7 +906,7 @@ void Agency::viewSpecificClient() const
 ostream& operator<<(ostream& out, const Agency & agency) {
 
 	out << agency.name << "\n"
-		<< agency.VATnumber<< "\n"
+		<< agency.VATnumber << "\n"
 		<< agency.URL << "\n"
 		<< agency.address << "\n";
 	return out;

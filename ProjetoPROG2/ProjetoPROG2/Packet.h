@@ -31,6 +31,7 @@ class Packet{
   Date getEndDate() const;
   double getPricePerPerson() const;
   unsigned getMaxPersons() const;
+  unsigned getCurrentPersons() const;
 
   // SET methods
   void setId(int id);  // to set negative if "deprecated"

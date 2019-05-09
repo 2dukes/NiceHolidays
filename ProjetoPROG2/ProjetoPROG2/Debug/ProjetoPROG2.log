@@ -1,4 +1,6 @@
-﻿  Menus.cpp
-c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\menus.cpp(16): warning C4018: '<=': signed/unsigned mismatch
-c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\menus.cpp(52): warning C4018: '<=': signed/unsigned mismatch
+﻿  Agency.cpp
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(144): warning C4244: '+=': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(404): warning C4018: '<': signed/unsigned mismatch
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(409): warning C4018: '<': signed/unsigned mismatch
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(863): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
   ProjetoPROG2.vcxproj -> C:\Users\vidin\OneDrive\Documentos\1Ano\2S\PROG\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

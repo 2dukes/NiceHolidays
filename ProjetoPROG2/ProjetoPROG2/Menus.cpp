@@ -151,6 +151,7 @@ void mainMenu(Agency &agency) {
 							//vectorToFile_Packs();
 							// Update clients.txt
 							//vectorToFile_Clients();
+							agency.alterClient();
 							break;
 						case 2:
 							// Alter | Pack
@@ -260,6 +261,7 @@ void mainMenu(Agency &agency) {
 			//vectorToFile_Packs();
 			// Update clients.txt
 			//vectorToFile_Clients();
+			agency.buyPacket();
 			break;
 		case 8:
 			//amountAndNumberOfSoldPacks(mainChoices.at(mainMenu - 1));

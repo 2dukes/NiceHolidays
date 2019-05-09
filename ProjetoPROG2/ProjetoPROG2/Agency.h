@@ -24,6 +24,8 @@ private:
 	unsigned int packetsId; // Last inserted ID in packets.txt
 	string clientsFilename; // clients file name 
 	string packetsFilename; // packets file name
+	unsigned int totalValue;
+	unsigned int soldPacksNumber;
 
 	bool clientsInfoHasChanged; // flag that is set to "true" if at least one client has been changed/added/deleted
 	bool packetsInfoHasChanged; // flag that is set to "true" if at least one packet has been changed/added/deleted
@@ -41,6 +43,8 @@ public:
 	const vector<Client>& getClients() const;
 	const vector<Packet>& getPackets() const;
 	unsigned getPacketsId() const;
+	unsigned getSoldPacksNumber() const;
+	unsigned getTotalValue() const;
 
 
 	// methods SET
@@ -54,6 +58,7 @@ public:
 	void setClients(vector<Client> & clients);
 	void setPacket(Packet packet);
 	void setPacketsId(unsigned id);
+	void setTotalValueAndNumber();
 
 	// other methods */
 	bool verifyVATExistence(unsigned &VAT) const;
@@ -66,5 +71,8 @@ public:
 	void removePacket();
 	void viewAllClients() const;
 	void viewSpecificClient() const;
+	void alterClient();
+	void removeClient();
+	void buyPacket();
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };
