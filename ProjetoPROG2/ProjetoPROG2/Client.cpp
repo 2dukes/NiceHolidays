@@ -48,14 +48,9 @@ Address Client::getAddress() const{
 	return address;
 }
 
-//vector<Packet> Client::getPacketList() const{
-//  
-//	// return packets; // -> Could be changed
-//}
-
-vector<int> Client::getPacketListIds() const
+vector<Packet*>& Client::getPacketList() 
 {
-	return ids;
+	return packets;
 }
 
 unsigned Client::getTotalPurchased() const{
@@ -83,21 +78,43 @@ void Client::setAddress(Address address){
   
 	this->address = address;
 }
-void Client::setPacketList(vector<Packet> & packets){
-  
-	// this->packets = packets;
-	// Maybe we'll work with pointers...
+int Client::setPacketList(string ids, vector<Packet> &packets)
+{
+	size_t pos = ids.find(';');
+	int auxInt;
+	int count = 0;
+	cout << this->packets.size() << endl;
+	while (pos != string::npos)
+	{
+		string elem = ids.substr(0, pos);
+		auxInt = stoi(elem);
+		for (size_t i = 0; i < packets.size(); i++)
+		{
+			if (abs(packets.at(i).getId()) == auxInt)
+			{ 
+				this->packets.push_back(&packets.at(i)); // POINTER ON!
+				count++;
+			}
+		}
+		ids.erase(0, pos + 1);
+		pos = ids.find(';');
+	}
+	auxInt = stoi(ids);
+	for (size_t i = 0; i < packets.size(); i++)
+	{
+		if (abs(packets.at(i).getId()) == auxInt)
+		{ 
+			this->packets.push_back(&packets.at(i)); // POINTER ON!
+			count++;	
+		}
+	}
+	return count;
 }
 
-void Client::setPacketListIds(string idsString)
-{
-	decomposeToInt(idsString, ids, ';');
-}
-
-void Client::addPacketListIds(unsigned id)
-{
-	ids.push_back(id);
-}
+//void Client::addPacketListIds(unsigned id)
+//{
+//	ids.push_back(id);
+//}
 
 void Client::setTotalPurchased(unsigned totalPurchased){
   
@@ -114,7 +131,7 @@ ostream& operator<<(ostream& out, const Client & client){
 		<< "Family Size: " << client.familySize << endl
 		<< "Address: " << client.address << endl
 		<< "Purchased packets: ";
-	vector<int> ids = client.ids;
+	/*vector<int> ids = client.ids;
 	if (client.ids.size() > 0)
 	{
 		for (size_t i = 0; i < ids.size(); i++)
@@ -125,14 +142,17 @@ ostream& operator<<(ostream& out, const Client & client){
 				out << ids.at(i);
 		}
 		out << endl;
-	}
-	/*
+	}*/
 	if (client.packets.size() > 0)
 	{
-		for (const auto &x : client.packets)
-			out << x->getId();
+		for (size_t i = 0; i < client.packets.size(); i++)
+		{
+			if (i < (client.packets.size() - 1))
+				out << client.packets.at(i)->getId() << " ; ";
+			else
+				out << client.packets.at(i)->getId() << endl;
+		}
 	}
-	*/
 	else out << "0" << endl;
 	
 	out << "Total amount spent: " << client.totalPurchased << endl;

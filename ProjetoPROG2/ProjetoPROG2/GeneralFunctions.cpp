@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 
+#include "Packet.h"
 #include "GeneralFunctions.h"
 
 using namespace std;
@@ -185,19 +186,15 @@ bool checkBetweenDates(string date1, string date2, Date date)
 	int endDate = (date2year * 10000) + (date2month * 100) + date2year;
 
 	if (entryDate >= startDate && entryDate <= endDate)
-	{
 		return true;
-	}
 	else
-	{
 		return false;
-	}
 }
 
 bool checkInt2(string s)
 {
 	bool confirm = true;
-	for (char &c : s)
+	for (const auto &c : s)
 	{
 		if (!isdigit(c))
 		{
@@ -208,34 +205,22 @@ bool checkInt2(string s)
 	return confirm;
 } //check if a string is a int
 
-int checkInt()
+int checkInt(string sentence)
 {
 	string n;
 	while (true)
-	{
+	{ 
+		cout << endl << sentence;
 		cin >> n;
+		if (cin.eof())
+			return -1;
 		if (checkInt2(n))
 			return stoi(n);
 		else
 		{
 			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << "Invalid input, try again\n";
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid input, try again.\n";
 		}
 	}
 }//ask for a string and check if its integer before returning
-
-void decomposeToInt(string s, vector<int> &elements, char sep)
-{
-	size_t pos = s.find(sep);
-	while (pos != string::npos)
-	{
-		string elem = s.substr(0, pos);
-		trim(elem);
-		elements.push_back(stoi(elem));
-		s.erase(0, pos + 1);
-		pos = s.find(sep);
-	}
-	trim(s);
-	elements.push_back(stoi(s));
-}

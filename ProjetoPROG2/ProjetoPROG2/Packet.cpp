@@ -174,7 +174,7 @@ void Packet::packetCreation(string &explorer)
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	cout << "-> CTRL+Z to leave..." << endl << endl;
+	cout << "[Go Back] CTRL+Z" << endl << endl;
 
 	cout << "Places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
 

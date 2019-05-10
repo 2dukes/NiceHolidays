@@ -1,6 +1,15 @@
 ﻿  Agency.cpp
-c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(144): warning C4244: '+=': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(404): warning C4018: '<': signed/unsigned mismatch
-c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(409): warning C4018: '<': signed/unsigned mismatch
-c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(863): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-  ProjetoPROG2.vcxproj -> C:\Users\vidin\OneDrive\Documentos\1Ano\2S\PROG\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(94): warning C4244: 'return': conversion from 'const double' to 'unsigned int', possible loss of data
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(388): warning C4018: '<': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(393): warning C4018: '<': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(905): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+  Client.cpp
+  GeneralFunctions.cpp
+  Menus.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(16): warning C4018: '<=': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(55): warning C4018: '<=': signed/unsigned mismatch
+  Packet.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\packet.cpp(171): warning C4101: 'flag': unreferenced local variable
+  main.cpp
+  Generating Code...
+  ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

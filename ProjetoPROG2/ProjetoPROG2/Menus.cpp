@@ -42,6 +42,9 @@ void mainMenu(Agency &agency) {
 
 	do
 	{
+		if (cin.eof())
+			cin.clear();
+
 		system("cls");
 		cout << agencyName << endl << endl << endl;
 		for (size_t i = 0; i < mainChoices.size(); i++)
@@ -84,11 +87,6 @@ void mainMenu(Agency &agency) {
 								// Create | Client
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								agency.clientCreation(auxiliarExplorer, agency);
-								if (cin.eof())
-								{
-									cin.clear();
-									break;
-								}
 
 								//clientCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
 								// Update packs.txt
@@ -103,11 +101,7 @@ void mainMenu(Agency &agency) {
 								Packet cPacket;
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								cPacket.packetCreation(auxiliarExplorer);
-								if (cin.eof())
-								{
-									cin.clear();
-									break;
-								}
+
 								int pId = agency.getPacketsId() + 1;
 								cPacket.setId(pId);
 								agency.setPacketsId(pId);

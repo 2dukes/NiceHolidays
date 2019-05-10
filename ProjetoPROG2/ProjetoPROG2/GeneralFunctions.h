@@ -27,6 +27,4 @@ bool checkBetweenDates(std::string date1, std::string date2, Date date);
 
 bool checkInt2(std::string s);
 
-int checkInt();
-
-void decomposeToInt(std::string s, std::vector<int> &elements, char sep);
+int checkInt(string sentence);
