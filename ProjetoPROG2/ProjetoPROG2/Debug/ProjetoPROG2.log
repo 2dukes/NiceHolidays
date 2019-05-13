@@ -1,7 +1,1 @@
-﻿  Agency.cpp
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(94): warning C4244: 'return': conversion from 'const double' to 'unsigned int', possible loss of data
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(388): warning C4018: '<': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(393): warning C4018: '<': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1003): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1058): warning C4101: 'answer': unreferenced local variable
-  ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe
+﻿  ProjetoPROG2.vcxproj -> C:\Users\vidin\OneDrive\Documentos\1Ano\2S\PROG\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

@@ -1,4 +1,4 @@
-3
+6
 1
 Madeira - Funchal, Porto Santo
 2019/08/01
@@ -17,8 +17,32 @@ Veneza
 ::::::::::
 3
 Douro vinhateiro - Porto, Régua, Pinhão, Vila Real
-2019/09/21
+2019/09/215
 2019/09/22
 100
 120
 62
+::::::::::
+4
+Acores - Ponta Delgada, Angra do Heroismo
+2019/10/10
+2019/10/20
+400
+124
+53
+::::::::::
+-5
+Porto - Foz, Gaia
+2019/07/30
+2019/08/01
+100
+250
+32
+::::::::::
+6
+Londres
+2019/08/02
+2019/08/23
+1500
+200
+42

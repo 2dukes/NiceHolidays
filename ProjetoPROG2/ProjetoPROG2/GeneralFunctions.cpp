@@ -224,3 +224,22 @@ int checkInt(string sentence)
 		}
 	}
 }//ask for a string and check if its integer before returning
+
+vector<int> vectorIntersec(vector<int> vector1, vector<int> vector2)
+{
+	vector<int> finalVector;
+	for (size_t i = 0; i < vector1.size(); i++)
+	{
+		for (size_t j = 0; j < vector2.size(); j++)
+		{
+			if (vector1.at(i) == vector2.at(j))
+			{
+				if (find(finalVector.begin(), finalVector.end(), vector1.at(i)) != finalVector.end())
+					continue;
+				else
+					finalVector.push_back(vector1.at(i));
+			}
+		}
+	}
+	return finalVector;
+}

@@ -44,7 +44,7 @@ public:
 	const vector<Packet>& getPackets() const;
 	unsigned getPacketsId() const;
 	unsigned getSoldPacksNumber() const;
-	unsigned getTotalValue() const;
+	double getTotalValue() const;
 
 
 	// methods SET
@@ -63,16 +63,23 @@ public:
 	bool verifyVATExistence(unsigned &VAT) const;
 	void clientCreation(string &explorer, Agency &agency);
 	string UpdateAgencyInfo(string &explorer);
+	void viewTotalSold() const;
+	void viewMoreVisited();
+
+	//Packets
 	void viewAllPackets() const;
 	void viewPacketByDestination() const;
 	void viewPacketByDate() const;
 	void viewPacketByDateAndDest() const;
+	void alterPack(string &explorer);
 	void removePacket();
+
+	//Clients
 	void viewAllClients() const;
 	void viewSpecificClient() const;
 	void alterClient();
 	void removeClient(string &explorer);
 	void buyPacket();
-	void alterPack(string &explorer);
+	
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };

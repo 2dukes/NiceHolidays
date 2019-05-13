@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <map>
 #include "Agency.h"
 #include "GeneralFunctions.h"
 
@@ -89,7 +90,7 @@ unsigned Agency::getSoldPacksNumber() const
 	return soldPacksNumber;
 }
 
-unsigned Agency::getTotalValue() const
+double Agency::getTotalValue() const
 {
 	return totalValue;
 }
@@ -381,16 +382,48 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	return name;
 }
 
+void Agency::viewTotalSold() const
+{
+	cout << endl << "Number of packs sold: " << soldPacksNumber
+		<< endl << "Total value: " << totalValue << endl << endl;
+	unsigned int option;
+	cout << "0. Main Menu\n";
+	while (!(cin >> option) || !(option == 0))
+	{
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		cout << endl << "0. Main Menu\n\n";
+	}
+}
+
+
+void Agency::viewMoreVisited()
+{
+	map<int, int> sites;
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		for (size_t j = 0; j < clients.at(i).getPacketList().size(); j++)
+		{
+			for (size_t k = 1; k < clients.at(i).getPacketList().at(j)->getSitesVector().size(); k++)
+			{
+				// A IMPLEMENTAR
+			}
+		}
+	}
+}
+
 void Agency::viewAllPackets() const
 {
-	int size = packets.size();
 	cout << endl;
-	for (size_t i = 0; i < size; i++)
+	for (size_t i = 0; i < packets.size(); i++)
 	{
 		if (packets.at(i).getId() >= 0)
 		{
 			cout << packets.at(i);
-			if (i < (size - 1))
+			if (i < (packets.size() - 1))
 				cout << "::::::::::\n";
 		}
 	}
@@ -417,7 +450,7 @@ void Agency::viewPacketByDestination() const
 				string auxiliar = x;
 				transform(auxiliar.begin(), auxiliar.end(), auxiliar.begin(), toupper);
 				if (auxiliar == locationPack)
-				{ 
+				{
 					if (packets.at(i).getId() > 0)
 					{
 						cout << packets.at(i);
@@ -429,7 +462,7 @@ void Agency::viewPacketByDestination() const
 		if (confirm)
 			cout << "There is no pack with destination '" << locationPack << "'!" << endl << endl;
 		int option;
-		cout << endl << "1. See another pack by destination\n0. Back\n\n"; 
+		cout << endl << "1. See another pack by destination\n0. Back\n\n";
 		while ((!(cin >> option) || !(option == 0 || option == 1)))
 		{
 			if (cin.fail())
@@ -440,7 +473,7 @@ void Agency::viewPacketByDestination() const
 			cout << endl << "1. See another pack by destination\n0. Back\n\n";
 		}
 		if (option == 0)
-			toggle = false;		
+			toggle = false;
 	}
 }
 
@@ -497,6 +530,277 @@ void Agency::viewPacketByDate() const
 	}
 }
 
+void Agency::viewPacketByDateAndDest() const
+{
+	int toggle = 0;
+	cin.ignore();
+	while (toggle == 0)
+	{
+		string locationPack;
+		int index = 0, confirmLocation = 0;
+		cout << endl << endl << "Destination of the pack: "; getline(cin, locationPack); trim(locationPack);
+		vector<int> idxLocation;
+		idxLocation.clear();
+		for (size_t i = 0; i < packets.size(); i++)
+		{
+			if (packets.at(i).getSitesVector().at(0) == locationPack)
+			{
+				idxLocation.push_back(i);
+				confirmLocation++;
+			}
+		}
+		if (confirmLocation == 0)
+		{
+			cout << "There is no pack with destination '" << locationPack << "'!"
+				<< endl << endl;
+		}
+		else
+		{
+			string date1, date2;
+			int confirmDate = 0;
+			cout << "Beginning date (Year / Month / Day): "; //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			getline(cin, date1);
+			while ((date1.empty() || existingDate(date1)) && !cin.eof())
+			{
+				cerr << "Invalid Option! Please enter a valid input." << endl;
+				cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, date1);
+			}
+			if (cin.eof())
+				return;
+			cout << "End date (Year / Month / Day): "; getline(cin, date2);
+			while ((date2.empty() || existingDate(date2) || endLaterThenBeg(date2, date1)) && !cin.eof())
+			{
+				cerr << "Invalid Option! Please enter a valid input." << endl;
+				cout << endl << "End date (Year / Month / Day): "; getline(cin, date2);
+			}
+			if (cin.eof())
+				return;
+			vector <int> idxDate;
+			idxDate.clear();
+			for (size_t i = 0; i < packets.size(); i++)
+			{
+				if (checkBetweenDates(date1, date2, packets.at(i).getBeginDate())
+					&& checkBetweenDates(date1, date2, packets.at(i).getEndDate()))
+				{
+					idxDate.push_back(i);
+					confirmDate++;
+				}
+			}
+			if (confirmDate == 0)
+			{
+				cout << "There is no pack within those dates!"
+					<< endl << endl;
+			}
+			else
+			{
+				vector<int> idxs;
+				idxs.clear();
+				idxs = vectorIntersec(idxLocation, idxDate);
+				for (size_t s = 0; s < idxs.size(); s++)
+				{
+					cout << idxs.at(s) << endl;
+				}
+				
+				if (idxs.size() != 0)
+				{
+					for (size_t i = 0; i < idxs.size(); i++)
+					{
+						int index = idxs.at(i);
+						
+						if (packets.at(index).getId() >= 0)
+						{
+							cout << endl << endl << "ID: " << packets.at(index).getId() << endl
+								<< "Destination: " << packets.at(index).getSites() << endl
+								<< "Beginning date: " << packets.at(index).getBeginDate() << endl
+								<< "End date: " << packets.at(index).getEndDate() << endl
+								<< "Price per person: " << packets.at(index).getPricePerPerson() << endl
+								<< "Spots initially available: " << packets.at(index).getMaxPersons() << endl
+								<< "Spots purchased: " << packets.at(index).getCurrentPersons() << endl;
+							cout << endl;
+						}
+						else
+							cout << endl << "\nNo packs to show for that location and between those dates\n" << endl << endl;
+						
+					}
+				}
+				else
+					cout << endl << "\nNo packs to show for that location and between those dates\n" << endl << endl;
+			}
+			int option;
+			cout << "1. See another pack by date and destination\n0. Back\n\n"; cin >> option;
+			if (option == 0)
+				toggle = 1;
+		}
+	}
+	cout << endl;
+}
+
+
+void Agency::alterPack(string &explorer)
+{
+	bool toggle = true, confirm;
+	int packId;
+	int index;
+	while (toggle)
+	{
+		system("cls");
+		cout << explorer << endl << endl;
+		packId = 0;
+		index = 0;
+		confirm = true;
+		cout << "[Go Back] CTRL+Z" << endl << endl;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		packId = checkInt("ID of the pack: ");
+		if (cin.eof())
+			return;
+		for (size_t i = 0; i < packets.size(); i++)
+		{
+			if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
+			{
+				index = i;
+				confirm = false;
+			}
+		}
+		if (confirm)
+			cout << "There is no registered available pack with ID '" << packId << "'!" << endl << endl;
+		else
+		{
+			cout << endl << packets.at(index) << endl;
+			bool toggle2 = true;
+			int repetition = 0;
+			string reader;
+			Packet &refPacket = packets.at(index);
+			while (toggle2)
+			{
+				if (repetition == 0)
+				{
+					cout << endl << "What do you want to change?\n";
+					repetition++;
+				}
+				else
+					cout << "Do you want to change anything else?\n";
+				cout << "1. Places to visit\n2. Beginning date\n3. End date\n4. Price per Person\n5. Max Lotation\n0. Back\n\n";
+				int option;
+				cin >> option; cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << endl;
+
+				switch (option)
+				{
+				case 0:
+				{
+					toggle2 = false;
+					break;
+				}
+				case 1:
+				{
+					cout << "New places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
+
+					while ((reader.empty() || refPacket.sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
+					{
+						cerr << "Invalid Option! Please enter a valid input." << endl;
+						cout << endl << "New places to visit: "; getline(cin, reader);
+					}
+					if (cin.eof())
+						return;
+					trim(reader);
+					refPacket.setSites(refPacket.sitesNormalization(reader));
+					break;
+				}
+				case 2:
+				{
+					cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+					string auxEDate = refPacket.getEndDate().getDate();
+					while ((reader.empty() || existingDate(reader)) || endLaterThenBeg(auxEDate, reader) && !cin.eof())
+					{
+						cerr << "Invalid Option! Please enter a valid input." << endl;
+						cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+					}
+					if (cin.eof())
+						return;
+					trim(reader);
+					refPacket.setBeginDate(Date(reader));
+					break;
+				}
+				case 3:
+				{
+					cout << "End date (Year / Month / Day): "; getline(cin, reader);
+					string auxBDate = refPacket.getBeginDate().getDate();
+					while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, auxBDate)) && !cin.eof())
+					{
+						cerr << "Invalid Option! Please enter a valid input." << endl;
+						cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
+					}
+					if (cin.eof())
+						return;
+					trim(reader);
+					refPacket.setEndDate(Date(reader));
+					break;
+				}
+				case 4:
+				{
+					cout << "Price per person: ";
+					int price;
+					while (!(cin >> price) && !cin.eof())
+					{
+						if (cin.fail())
+						{
+							cin.clear();
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						}
+						cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+						cout << endl << "Price per person: ";
+					}
+					if (cin.eof())
+						return;
+					refPacket.setPricePerPerson(price);
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					break;
+				}
+				case 5:
+				{
+					int tMax = -1;
+					cout << "Max Lotation: ";
+					int curPersons = refPacket.getCurrentPersons();
+					while (!(cin >> tMax) || !(tMax >= curPersons) && !cin.eof())
+					{
+						if (cin.fail())
+						{
+							cin.clear();
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						}
+						cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+						cout << endl << "Max Lotation: ";
+					}
+					if (cin.eof())
+						return;
+					refPacket.setMaxPersons(tMax);
+					break;
+				}
+				}
+				if (toggle2)
+					cout << endl << "Client successfully altered!" << endl << endl;
+			}
+			if (refPacket.getCurrentPersons() == refPacket.getMaxPersons())
+				refPacket.setId(-packId);
+		}
+		int option;
+		cout << "1. Alter another pack\n0. Main Menu\n\n";
+		while ((!(cin >> option) || !(option == 0 || option == 1)))
+		{
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			cout << endl << "1. Alter another pack\n0. Main Menu\n\n";
+		}
+		if (option == 0)
+			toggle = false;
+		else
+			cout << endl;
+	}
+}
+
 void Agency::removePacket()
 {
 	bool toggle = true;
@@ -508,7 +812,7 @@ void Agency::removePacket()
 		bool confirm = true;
 		cout << "[Go Back] CTRL+Z" << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	    packId = checkInt("ID of the pack: ");
+		packId = checkInt("ID of the pack: ");
 		if (cin.eof())
 			return;
 		for (unsigned int i = 0; i < size(packets); i++)
@@ -622,7 +926,7 @@ void Agency::viewSpecificClient() const
 				}
 			}
 			if (confirmNif != 0 || confirm == 1)
-				cout << clients.at(indexClient) << endl;
+				cout << endl << clients.at(indexClient) << endl;
 			else
 				cout << "\nFound no user with VAT: " << clientVAT << endl << endl;
 		}
@@ -794,7 +1098,7 @@ void Agency::alterClient()
 				cout << "\nFound no user with VAT: " << clientVAT << " !" << endl << endl;
 		}
 		int option;
-		cout << "1. Change another client\n0. Main Menu\n\n"; 
+		cout << "1. Change another client\n0. Main Menu\n\n";
 		while ((!(cin >> option) || !(option == 0 || option == 1)))
 		{
 			if (cin.fail())
@@ -882,7 +1186,7 @@ void Agency::removeClient(string &explorer)
 				{
 					auxiliarID = clients.at(indexClient).getPacketList().at(i)->getId();
 					if (auxiliarID > 0)
-					{ 
+					{
 						totalValue -= clients.at(indexClient).getPacketList().at(i)->getPricePerPerson();
 						soldPacksNumber--;
 						cout << clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() << endl;
@@ -976,26 +1280,36 @@ void Agency::buyPacket()
 			}
 			if (confirmNif != 0 || confirm == 1)
 			{
-				int confirm = 0, packId = 0, indexPack;
-				while (confirm == 0)
-				{
-					packId = checkInt("ID of the pack: ");
-					if (cin.eof())
-						return;
-					for (size_t i = 0; i < size(packets); i++)
-					{
-						if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
-						{
-							indexPack = i;
-							confirm++;
-						}
-					}
-					if (confirm == 0)
-						cout << "There are no registered available pack with ID '" << packId << "'!" << endl << endl;
-				}
 				do
 				{
-					if ((packets.at(indexPack).getMaxPersons() - packets.at(indexPack).getCurrentPersons()) >= 1)
+					int confirm = 0, packId = 0, indexPack;
+					while (confirm == 0)
+					{
+						packId = checkInt("ID of the pack: ");
+						if (cin.eof())
+							return;
+						for (size_t i = 0; i < size(packets); i++)
+						{
+							if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
+							{
+								indexPack = i;
+								confirm++;
+							}
+						}
+						if (confirm == 0)
+							cout << "There are no registered available pack with ID '" << packId << "'!" << endl << endl;
+					}
+					bool alreadyBought = false;
+					for (size_t i = 0; i < clients.at(indexClient).getPacketList().size(); i++)
+					{
+						if (clients.at(indexClient).getPacketList().at(i)->getId() == packId || clients.at(indexClient).getPacketList().at(i)->getId() == -packId)
+						{
+							alreadyBought = true;
+							break;
+						}
+					}
+
+					if (((packets.at(indexPack).getMaxPersons() - packets.at(indexPack).getCurrentPersons()) >= 1) && !alreadyBought)
 					{
 						clients.at(indexClient).getPacketList().push_back(&packets.at(indexPack));
 						packets.at(indexPack).setCurrentPersons(packets.at(indexPack).getCurrentPersons() + 1);
@@ -1008,12 +1322,19 @@ void Agency::buyPacket()
 						cout << "\nPack successfully bought!" << endl << endl;
 					}
 					else
-					{ 
-						cout << "\nNot enough spots available for this packet." << " !\n----------\n" << endl;
-						break;
+					{
+						if (alreadyBought)
+						{
+							cout << "\nThis client has already bought this pack!\n" << endl;
+						}
+						else
+						{
+							cout << "\nNot enough spots available for this packet." << " !\n----------\n" << endl;
+							break;
+						}
 					}
-				
-					cout << "1. Buy another pack\n2. See another client\n0. Main Menu\n\n";
+
+					cout << "1. Buy another pack\n2. Buy pack for another client\n0. Main Menu\n\n";
 					while ((!(cin >> option) || !(option == 0 || option == 1 || option == 2)))
 					{
 						if (cin.fail())
@@ -1021,7 +1342,7 @@ void Agency::buyPacket()
 							cin.clear();
 							cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						}
-						cout << endl << "1. Buy another pack\n2. See another client\n0. Main Menu\n\n";
+						cout << endl << "1. Buy another pack\n2. Buy pack for another client\n0. Main Menu\n\n";
 					}
 				} while (option == 1);
 			}
@@ -1031,8 +1352,8 @@ void Agency::buyPacket()
 					<< endl << endl;
 			}
 		}
-		if(option != 0 && option != 2)
-		{ 
+		if (option != 0 && option != 2)
+		{
 			cout << "1. Buy pack for other client\n0. Main Menu\n\n";
 			while ((!(cin >> option) || !(option == 0 || option == 1)))
 			{
@@ -1050,171 +1371,6 @@ void Agency::buyPacket()
 	cout << endl;
 }
 
-void Agency::alterPack(string &explorer)
-{
-	bool toggle = true, confirm;
-	int packId;
-	int index;
-	char answer;
-	while (toggle)
-	{
-		system("cls");
-		cout << explorer << endl << endl;
-		packId = 0;
-		index = 0;
-		confirm = true;
-		cout << "[Go Back] CTRL+Z" << endl << endl;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		packId = checkInt("ID of the pack: ");
-		if (cin.eof())
-			return;
-		for (size_t i = 0; i < packets.size(); i++)
-		{
-			if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
-			{
-				index = i;
-				confirm = false;
-			}
-		}
-		if (confirm)
-			cout << "There is no registered available pack with ID '" << packId << "'!" << endl << endl;
-		else
-		{
-			cout << endl << packets.at(index) << endl;
-			bool toggle2 = true;
-			int repetition = 0;
-			string reader;
-			Packet &refPacket = packets.at(index);
-			while (toggle2)
-			{
-				if (repetition == 0)
-				{
-					cout << endl << "What do you want to change?\n";
-					repetition++;
-				}
-				else
-					cout << "Do you want to change anything else?\n";
-				cout << "1. Places to visit\n2. Beginning date\n3. End date\n4. Price per Person\n5. Max Lotation\n0. Back\n\n";
-				int option;
-				cin >> option; cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << endl;
-
-				switch (option)
-				{
-					case 0:
-					{
-						toggle2 = false;
-						break;
-					}
-					case 1:
-					{
-						cout << "New places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
-					
-						while ((reader.empty() || refPacket.sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
-						{
-							cerr << "Invalid Option! Please enter a valid input." << endl;
-							cout << endl << "New places to visit: "; getline(cin, reader);
-						}
-						if (cin.eof())
-							return;
-						trim(reader);
-						refPacket.setSites(refPacket.sitesNormalization(reader));
-						break;
-					}
-					case 2:
-					{
-						cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
-						string auxEDate = refPacket.getEndDate().getDate();
-						while ((reader.empty() || existingDate(reader)) || endLaterThenBeg(auxEDate, reader) && !cin.eof())
-						{
-							cerr << "Invalid Option! Please enter a valid input." << endl;
-							cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
-						}
-						if (cin.eof())
-							return;
-						trim(reader);
-						refPacket.setBeginDate(Date(reader));
-						break;
-					}
-					case 3:
-					{
-						cout << "End date (Year / Month / Day): "; getline(cin, reader);
-						string auxBDate = refPacket.getBeginDate().getDate();
-						while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, auxBDate)) && !cin.eof())
-						{
-							cerr << "Invalid Option! Please enter a valid input." << endl;
-							cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
-						}
-						if (cin.eof())
-							return;
-						trim(reader);
-						refPacket.setEndDate(Date(reader));
-						break;
-					}
-					case 4:
-					{
-						cout << "Price per person: ";
-						int price;
-						while (!(cin >> price) && !cin.eof())
-						{
-							if (cin.fail())
-							{
-								cin.clear();
-								cin.ignore(numeric_limits<streamsize>::max(), '\n');
-							}
-							cerr << "Invalid Option! Please enter a valid input." << endl << endl;
-							cout << endl << "Price per person: ";
-						}
-						if (cin.eof())
-							return;
-						refPacket.setPricePerPerson(price);
-						cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						break;
-					}
-					case 5:
-					{
-						int tMax = -1;
-						cout << "Max Lotation: ";
-						int curPersons = refPacket.getCurrentPersons();
-						while (!(cin >> tMax) || !(tMax >= curPersons) && !cin.eof())
-						{
-							if (cin.fail())
-							{
-								cin.clear();
-								cin.ignore(numeric_limits<streamsize>::max(), '\n');
-							}
-							cerr << "Invalid Option! Please enter a valid input." << endl << endl;
-							cout << endl << "Max Lotation: ";
-						}
-						if (cin.eof())
-							return;
-						refPacket.setMaxPersons(tMax);
-						break;
-					}
-				}
-				if (toggle2)
-					cout << endl << "Client successfully altered!" << endl << endl;
-			}
-			if (refPacket.getCurrentPersons() == refPacket.getMaxPersons())
-				refPacket.setId(-packId);
-		}
-		int option;
-		cout << "1. Alter another pack\n0. Main Menu\n\n";
-		while ((!(cin >> option) || !(option == 0 || option == 1)))
-		{
-			if (cin.fail())
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			}
-			cout << endl << "1. Alter another pack\n0. Main Menu\n\n";
-		}
-		if (option == 0)
-			toggle = false;
-		else
-			cout << endl;
-	}
-}
 
 /*********************************
  * Mostrar Loja

@@ -242,7 +242,7 @@ void mainMenu(Agency &agency) {
 			case 4:
 				// View Available Packs according to 2 Dates & Destination
 				//viewDateDest(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
-				//agency.viewPacketByDateAndDest();
+				agency.viewPacketByDateAndDest();
 				break;
 			default:
 				break;
@@ -273,6 +273,7 @@ void mainMenu(Agency &agency) {
 			break;
 		case 8:
 			//amountAndNumberOfSoldPacks(mainChoices.at(mainMenu - 1));
+			agency.viewTotalSold();
 			break;
 		case 9:
 			break;

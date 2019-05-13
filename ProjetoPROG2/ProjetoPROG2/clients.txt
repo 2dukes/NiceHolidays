@@ -2,15 +2,15 @@ Rui Manuel
 234987156
 4
 Rua Sem Fim / 200 / 5Esq /1200-001 / Lisboa
-10 ; 36 ; 2
-504
+2 ; 4 ; 6
+8800
 ::::::::::
 Belmiro Miguel
 111987666
 2
 Avenida dos Grilos / 100 / - /2300-101 / Coimbra
-100 ; 136 ; 20
-1300
+6 ; 5
+3200
 ::::::::::
 Avelino Magalhaes
 313123444
@@ -23,5 +23,5 @@ Joaquim Almeida
 232312442
 3
 Travessa do Infinito / 323 / 43 / 3151-151 / Nowhere
-1; 3
+1 ; 3
 1200 

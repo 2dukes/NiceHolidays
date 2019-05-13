@@ -198,9 +198,10 @@ void Packet::packetCreation(string &explorer)
 		return;
 	trim(reader);
 	begin = Date(reader);
+	string beggining = reader;
 
 	cout << "End date (Year / Month / Day): "; getline(cin, reader);
-	while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, reader)) && !cin.eof())
+	while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, beggining)) && !cin.eof())
 	{
 		cerr << "Invalid Option! Please enter a valid input." << endl;
 		cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
