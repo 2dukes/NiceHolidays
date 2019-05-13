@@ -721,7 +721,7 @@ void Agency::alterClient()
 						cout << "Do you want to change anything else?\n";
 					cout << "1. Name\n2. VAT number\n3. Household\n4. Address\n0. Back\n\n";
 					int option;
-					cin >> option; cin.ignore();
+					cin >> option; cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					cout << endl;
 
 					switch (option)
@@ -1052,7 +1052,168 @@ void Agency::buyPacket()
 
 void Agency::alterPack(string &explorer)
 {
+	bool toggle = true, confirm;
+	int packId;
+	int index;
+	char answer;
+	while (toggle)
+	{
+		system("cls");
+		cout << explorer << endl << endl;
+		packId = 0;
+		index = 0;
+		confirm = true;
+		cout << "[Go Back] CTRL+Z" << endl << endl;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		packId = checkInt("ID of the pack: ");
+		if (cin.eof())
+			return;
+		for (size_t i = 0; i < packets.size(); i++)
+		{
+			if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
+			{
+				index = i;
+				confirm = false;
+			}
+		}
+		if (confirm)
+			cout << "There is no registered available pack with ID '" << packId << "'!" << endl << endl;
+		else
+		{
+			cout << endl << packets.at(index) << endl;
+			bool toggle2 = true;
+			int repetition = 0;
+			string reader;
+			Packet &refPacket = packets.at(index);
+			while (toggle2)
+			{
+				if (repetition == 0)
+				{
+					cout << endl << "What do you want to change?\n";
+					repetition++;
+				}
+				else
+					cout << "Do you want to change anything else?\n";
+				cout << "1. Places to visit\n2. Beginning date\n3. End date\n4. Price per Person\n5. Max Lotation\n0. Back\n\n";
+				int option;
+				cin >> option; cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << endl;
 
+				switch (option)
+				{
+					case 0:
+					{
+						toggle2 = false;
+						break;
+					}
+					case 1:
+					{
+						cout << "New places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
+					
+						while ((reader.empty() || refPacket.sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
+						{
+							cerr << "Invalid Option! Please enter a valid input." << endl;
+							cout << endl << "New places to visit: "; getline(cin, reader);
+						}
+						if (cin.eof())
+							return;
+						trim(reader);
+						refPacket.setSites(refPacket.sitesNormalization(reader));
+						break;
+					}
+					case 2:
+					{
+						cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+						string auxEDate = refPacket.getEndDate().getDate();
+						while ((reader.empty() || existingDate(reader)) || endLaterThenBeg(auxEDate, reader) && !cin.eof())
+						{
+							cerr << "Invalid Option! Please enter a valid input." << endl;
+							cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+						}
+						if (cin.eof())
+							return;
+						trim(reader);
+						refPacket.setBeginDate(Date(reader));
+						break;
+					}
+					case 3:
+					{
+						cout << "End date (Year / Month / Day): "; getline(cin, reader);
+						string auxBDate = refPacket.getBeginDate().getDate();
+						while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, auxBDate)) && !cin.eof())
+						{
+							cerr << "Invalid Option! Please enter a valid input." << endl;
+							cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
+						}
+						if (cin.eof())
+							return;
+						trim(reader);
+						refPacket.setEndDate(Date(reader));
+						break;
+					}
+					case 4:
+					{
+						cout << "Price per person: ";
+						int price;
+						while (!(cin >> price) && !cin.eof())
+						{
+							if (cin.fail())
+							{
+								cin.clear();
+								cin.ignore(numeric_limits<streamsize>::max(), '\n');
+							}
+							cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+							cout << endl << "Price per person: ";
+						}
+						if (cin.eof())
+							return;
+						refPacket.setPricePerPerson(price);
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+						break;
+					}
+					case 5:
+					{
+						int tMax = -1;
+						cout << "Max Lotation: ";
+						int curPersons = refPacket.getCurrentPersons();
+						while (!(cin >> tMax) || !(tMax >= curPersons) && !cin.eof())
+						{
+							if (cin.fail())
+							{
+								cin.clear();
+								cin.ignore(numeric_limits<streamsize>::max(), '\n');
+							}
+							cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+							cout << endl << "Max Lotation: ";
+						}
+						if (cin.eof())
+							return;
+						refPacket.setMaxPersons(tMax);
+						break;
+					}
+				}
+				if (toggle2)
+					cout << endl << "Client successfully altered!" << endl << endl;
+			}
+			if (refPacket.getCurrentPersons() == refPacket.getMaxPersons())
+				refPacket.setId(-packId);
+		}
+		int option;
+		cout << "1. Alter another pack\n0. Main Menu\n\n";
+		while ((!(cin >> option) || !(option == 0 || option == 1)))
+		{
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			cout << endl << "1. Alter another pack\n0. Main Menu\n\n";
+		}
+		if (option == 0)
+			toggle = false;
+		else
+			cout << endl;
+	}
 }
 
 /*********************************
