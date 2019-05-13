@@ -138,45 +138,59 @@ void mainMenu(Agency &agency) {
 					case 2:
 						switch (option2)
 						{
-						case 1:
-							// Alter | Client
-							//clientAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-							// Update packs.txt
-							//vectorToFile_Packs();
-							// Update clients.txt
-							//vectorToFile_Clients();
-							agency.alterClient();
-							break;
-						case 2:
-							// Alter | Pack
-							//packAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-							// Update packs.txt
-							// vectorToFile_Packs();
-							break;
-						default:
-							break;
+							case 1:
+							{
+								// Alter | Client
+								//clientAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
+								// Update packs.txt
+								//vectorToFile_Packs();
+								// Update clients.txt
+								//vectorToFile_Clients();
+								agency.alterClient();
+								break;
+							}
+							case 2:
+							{
+								// Alter | Pack
+								//packAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
+								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								agency.alterPack(auxiliarExplorer);
+								// Update packs.txt
+								// vectorToFile_Packs();
+								system("pause");
+								break;
+							}
+							default:
+								break;
 						}
 						break;
 					case 3:
 						switch (option2)
 						{
-						case 1:
-							// Remove | Client
-							//clientRemove(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-							// Update clients.txt
-							//vectorToFile_Clients();
-							break;
-						case 2:
-							// Remove | Pack
-							//packRemove(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-							// Update packs.txt
-							//vectorToFile_Packs();
-							//system("pause");
-							//readWritePackSt();
-							agency.removePacket();
-							break;
-						default:
-							break;
+							case 1:
+							{
+								// Remove | Client
+								//clientRemove(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
+								// Update clients.txt
+								//vectorToFile_Clients();
+								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								agency.removeClient(auxiliarExplorer);
+								system("pause");
+								break;
+							}
+							case 2:
+							{
+								// Remove | Pack
+								//packRemove(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
+								// Update packs.txt
+								//vectorToFile_Packs();
+								//system("pause");
+								//readWritePackSt();
+								agency.removePacket();
+								break;
+							}
+							default:
+								break;
 						}
 						break;
 					default:

@@ -71,7 +71,8 @@ public:
 	void viewAllClients() const;
 	void viewSpecificClient() const;
 	void alterClient();
-	void removeClient();
+	void removeClient(string &explorer);
 	void buyPacket();
+	void alterPack(string &explorer);
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };

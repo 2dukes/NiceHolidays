@@ -812,9 +812,107 @@ void Agency::alterClient()
 	cout << endl;
 }
 
-void Agency::removeClient()
+void Agency::removeClient(string &explorer)
 {
+	bool toggle = true;
+	string clientName;
+	int clientVAT;
+	int indexClient, confirm;
+	while (toggle)
+	{
+		system("cls");
+		cout << explorer << endl << endl;
+		indexClient = 0;
+		confirm = 0;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Name of the Client: "; getline(cin, clientName);
+		if (cin.eof())
+			return;
+		transform(clientName.begin(), clientName.end(), clientName.begin(), toupper);
+		for (size_t i = 0; i < clients.size(); i++)
+		{
+			string auxiliar = clients.at(i).getName();
+			transform(auxiliar.begin(), auxiliar.end(), auxiliar.begin(), toupper);
+			if (auxiliar == clientName)
+			{
+				indexClient = i;
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+			cout << "There is no registered client named " << clientName << "!" << endl << endl;
+		else
+		{
+			int confirmNif = 0;
+			if (confirm > 1)
+			{
+				cout << "\nThere are " << confirm << " clients with that name.\nPlease refer the client's NIF: ";
+				bool valid;
+				do
+				{
+					cin >> clientVAT;
+					if (cin.eof())
+						return;
+					if (cin.fail())
+					{
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					}
+					valid = VATConfirm(clientVAT);
+					if (!valid)
+						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
+				} while (!valid);
 
+				for (size_t i = 0; i < clients.size(); i++)
+				{
+					if (clients.at(i).getVATnumber() == clientVAT)
+					{
+						indexClient = i;
+						confirmNif++;
+					}
+				}
+			}
+			if (confirmNif != 0 || confirm == 1)
+			{
+				cout << endl << clients.at(indexClient) << endl;
+				bool toggle2 = true;
+				int auxiliarID;
+
+				for (size_t i = 0; i < clients.at(indexClient).getPacketList().size(); i++)
+				{
+					auxiliarID = clients.at(indexClient).getPacketList().at(i)->getId();
+					if (auxiliarID > 0)
+					{ 
+						totalValue -= clients.at(indexClient).getPacketList().at(i)->getPricePerPerson();
+						soldPacksNumber--;
+						cout << clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() << endl;
+						clients.at(indexClient).getPacketList().at(i)->setCurrentPersons(clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() - 1);
+						cout << clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() << endl;
+					}
+				}
+				clients.erase(clients.begin() + indexClient, clients.begin() + indexClient + 1);
+				cout << endl << "Client successfully deleted!" << endl << endl;
+			}
+			else
+				cout << "\nFound no user with VAT: " << clientVAT << " !" << endl << endl;
+		}
+		int option;
+		cout << "1. Remove another client\n0. Main Menu\n\n";
+		while ((!(cin >> option) || !(option == 0 || option == 1)))
+		{
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			cout << endl << "1. Remove another client\n0. Main Menu\n\n";
+		}
+		if (option == 0)
+			toggle = false;
+		else
+			cout << endl;
+	}
+	cout << endl;
 }
 
 void Agency::buyPacket()
@@ -952,6 +1050,10 @@ void Agency::buyPacket()
 	cout << endl;
 }
 
+void Agency::alterPack(string &explorer)
+{
+
+}
 
 /*********************************
  * Mostrar Loja

@@ -83,7 +83,7 @@ int Client::setPacketList(string ids, vector<Packet> &packets)
 	size_t pos = ids.find(';');
 	int auxInt;
 	int count = 0;
-	cout << this->packets.size() << endl;
+	// cout << this->packets.size() << endl;
 	while (pos != string::npos)
 	{
 		string elem = ids.substr(0, pos);
