@@ -283,7 +283,11 @@ void Agency::clientCreation(string &explorer, Agency &agency)
 	// out_stream.close();
 	clients.push_back(cClient); // Push_Back new client to vector<string> clients
 	cout << endl << "Your data was successfully inserted!" << endl << endl;
-	system("pause");
+	if (cin.peek() != EOF)
+		cin.ignore(100, '\n');
+	cin.get();
+	fflush(stdin);
+	return;
 
 }
 
@@ -356,7 +360,10 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	setAddress(NewAdress);
 
 	cout << endl << "Your data was successfully changed!" << endl << endl;
-	system("pause");
+	if (cin.peek() != EOF)
+		cin.ignore(100, '\n');
+	cin.get();
+	fflush(stdin);
 	/*
 	// File agency.txt flush
 	ofstream out_stream(AGENCY_FILE_NAME);
@@ -421,7 +428,7 @@ void Agency::viewMoreVisited()
 		cout << "There aren't as many places as you referred... Please select another number." << endl;
 		N = checkInt("Number of Nth most visited packets: ");
 	}
-		
+
 	multimap<int, string, greater<int>> orderedSites; // greater<int> is a COMPARE
 	for (iT = sites.begin(); iT != sites.end(); iT++)
 		orderedSites.insert(pair<int, string>(iT->second, iT->first));
@@ -437,7 +444,11 @@ void Agency::viewMoreVisited()
 	}
 
 	cout << endl << endl;
-	system("pause");
+	if (cin.peek() != EOF)
+		cin.ignore(100, '\n');
+	cin.get();
+	fflush(stdin);
+	return;
 }
 
 void Agency::viewMoreVisitedForClient()
@@ -462,7 +473,9 @@ void Agency::viewMoreVisitedForClient()
 	multimap<int, string, greater<int>> orderedSites; // greater<int> is a COMPARE
 	for (iT = sites.begin(); iT != sites.end(); iT++)
 		orderedSites.insert(pair<int, string>(iT->second, iT->first));
-	cout << endl << endl << setw(25) << "PLACE" << setw(25) << "TRIPS" << endl << endl;
+
+
+	cout << endl << endl << setw(25) << "CLIENT" << setw(25) << "RECOMMENDED PACK" << endl << endl;
 
 	multimap<int, string, greater<int>>::iterator mI;
 
@@ -476,20 +489,24 @@ void Agency::viewMoreVisitedForClient()
 				for (mI = orderedSitesAux.begin(); mI != orderedSitesAux.end(); mI++)
 				{
 					if (w == mI->second)
-					{ 
+					{
 						orderedSitesAux.erase(mI);
 						break;
 					}
 				}
-			}	
+			}
 		}
-		cout << x << endl << "-------------------------------------------------------------";
+		cout << setw(25) << x.getName();// << endl << "-------------------------------------------------------------";
 		mI = orderedSitesAux.begin();
-		cout << mI->second << endl;
+		cout << setw(25) << mI->second << endl << "-------------------------------------------------------------" << endl;
 	}
 
 	cout << endl << endl;
-	system("pause");
+	if (cin.peek() != EOF)
+		cin.ignore(100, '\n');
+	cin.get();
+	fflush(stdin);
+	return;
 }
 
 void Agency::viewAllPackets() const
@@ -505,6 +522,11 @@ void Agency::viewAllPackets() const
 		}
 	}
 	cout << endl;
+	if (cin.peek() != EOF)
+		cin.ignore(100, '\n');
+	cin.get();
+	fflush(stdin);
+	return;
 }
 
 void Agency::viewPacketByDestination() const
@@ -625,9 +647,10 @@ void Agency::viewPacketByDateAndDest() const
 		idxLocation.clear();
 		for (size_t i = 0; i < packets.size(); i++)
 		{
-			for (size_t j = 0; j < packets.at(i).getSitesVector().size(); j++)
+			vector<string> sitesVector = packets.at(i).getSitesVector();
+			for (size_t j = 0; j < sitesVector.size(); j++)
 			{
-				string auxiliar = packets.at(i).getSitesVector().at(j);
+				string auxiliar = sitesVector.at(j);
 				transform(auxiliar.begin(), auxiliar.end(), auxiliar.begin(), toupper);
 				if (auxiliar == locationPack)
 				{
@@ -683,12 +706,12 @@ void Agency::viewPacketByDateAndDest() const
 					for (size_t i = 0; i < idxs.size(); i++)
 					{
 						int index = idxs.at(i);
-						
+
 						if (packets.at(index).getId() >= 0)
 							cout << packets.at(index);
 						else
 							cout << endl << "\nNo packs to show for that location and between those dates\n" << endl << endl;
-						
+
 					}
 				}
 				else
@@ -1354,7 +1377,7 @@ void Agency::buyPacket()
 						packId = checkInt("ID of the pack: ");
 						if (cin.eof())
 							return;
-						for (size_t i = 0; i < size(packets); i++)
+						for (size_t i = 0; i < packets.size(); i++)
 						{
 							if (packets.at(i).getId() == packId && packets.at(i).getId() > 0)
 							{
@@ -1366,9 +1389,10 @@ void Agency::buyPacket()
 							cout << "There are no registered available pack with ID '" << packId << "'!" << endl << endl;
 					}
 					bool alreadyBought = false;
-					for (size_t i = 0; i < clients.at(indexClient).getPacketList().size(); i++)
+					vector<Packet*> packetList = clients.at(indexClient).getPacketList();
+					for (size_t i = 0; i < packetList.size(); i++)
 					{
-						if (abs(clients.at(indexClient).getPacketList().at(i)->getId()) == abs(packId))
+						if (abs(packetList.at(i)->getId()) == abs(packId))
 						{
 							alreadyBought = true;
 							break;
@@ -1443,9 +1467,9 @@ void Agency::buyPacket()
  ********************************/
 ostream& operator<<(ostream& out, const Agency & agency) {
 
-	out << agency.name << "\n"
-		<< agency.VATnumber << "\n"
-		<< agency.URL << "\n"
-		<< agency.address << "\n";
+	out << "Name: " <<  agency.name << "\n"
+		<< "VAT Number: " << agency.VATnumber << "\n"
+		<< "URL: " << agency.URL << "\n"
+		<< "Address: " << agency.address << "\n";
 	return out;
 }

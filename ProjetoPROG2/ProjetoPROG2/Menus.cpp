@@ -34,7 +34,7 @@ void mainMenu(Agency &agency) {
 	verifyPackValidity();
 */ 
 	system("cls");
-	vector<string> mainChoices = { "1. Update Agency Info", "2. Manage", "3. View client", "4. View All Clients", "5. View Available Travel Pack(s)", "6. View Sold Travel Pack(s)", "7. Buy Travel Pack", "8. View Total Amount and Number of Sold Travel Packs","9. Show most visited destinations","10. Temp", "0. Exit" };
+	vector<string> mainChoices = { "1. Display Agency Info", "2. Update Agency Info", "3. Manage", "4. View client", "5. View All Clients", "6. View Available Travel Pack(s)", "7. View Sold Travel Pack(s)", "8. Buy Travel Pack", "9. View Total Amount and Number of Sold Travel Packs","10. Show most visited destinations","11. Temp", "0. Exit" };
 	vector<string> manageChoices = { "1. Create", "2. Alter", "3. Remove", "0. Main Menu" };
 	vector<string> manageSecundaryChoices = { "1. Client(s)", "2. Travel Pack(s)", "0. Previous Menu" };
 	vector<string> viewAvailablePackChoices = { "1. All", "2. Acording to Destination", "3. Between 2 Dates", "4. Acording to Destination and 2 Dates", "0. Main Menu" };
@@ -63,10 +63,23 @@ void mainMenu(Agency &agency) {
 		switch (mainMenu)
 		{
 		case 1:
-			agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
+			//agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
+			cout << endl << agency;
+			if (cin.peek() != EOF)
+				cin.ignore(100, '\n');
+			cin.get();
+			fflush(stdin);
 			cin.clear();
 			break;
 		case 2:
+			agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
+			if (cin.peek() != EOF)
+				cin.ignore(100, '\n');
+			cin.get();
+			fflush(stdin);
+			cin.clear();
+			break;
+		case 3:
 			while (true)
 			{
 				option1 = displays(manageChoices, mainChoices.at(mainMenu - 1), agencyName);
@@ -157,7 +170,10 @@ void mainMenu(Agency &agency) {
 								agency.alterPack(auxiliarExplorer);
 								// Update packs.txt
 								// vectorToFile_Packs();
-								system("pause");
+								if (cin.peek() != EOF)
+									cin.ignore(100, '\n');
+								cin.get();
+								fflush(stdin);
 								break;
 							}
 							default:
@@ -175,7 +191,10 @@ void mainMenu(Agency &agency) {
 								//vectorToFile_Clients();
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								agency.removeClient(auxiliarExplorer);
-								system("pause");
+								if (cin.peek() != EOF)
+									cin.ignore(100, '\n');
+								cin.get();
+								fflush(stdin);
 								break;
 							}
 							case 2:
@@ -200,12 +219,12 @@ void mainMenu(Agency &agency) {
 				}
 			}
 			break;
-		case 3:
+		case 4:
 			// View Specific client
 			//viewSpecificClient(mainChoices.at(mainMenu - 1));
 			agency.viewSpecificClient();
 			break;
-		case 4:
+		case 5:
 			// View All Clients
 			system("cls");
 			/*
@@ -216,9 +235,12 @@ void mainMenu(Agency &agency) {
 				cout << x;
 			system("pause");*/
 			agency.viewAllClients();
-			system("pause");
+			if (cin.peek() != EOF)
+				cin.ignore(100, '\n');
+			cin.get();
+			fflush(stdin);
 			break;
-		case 5:
+		case 6:
 			option = displays(viewAvailablePackChoices, mainChoices.at(mainMenu - 1), agencyName);
 			switch (option)
 			{
@@ -227,7 +249,10 @@ void mainMenu(Agency &agency) {
 				//viewall(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
 				
 				agency.viewAllPackets();
-				system("pause");
+				if (cin.peek() != EOF)
+					cin.ignore(100, '\n');
+				cin.get();
+				fflush(stdin);
 				break;
 			case 2:
 				// View Available Packs according to Destination
@@ -248,7 +273,7 @@ void mainMenu(Agency &agency) {
 				break;
 			}
 			break;
-		case 6:
+		case 7:
 			option = displays(viewSoldPackChoices, mainChoices.at(mainMenu - 1), agencyName);
 			switch (option)
 			{
@@ -263,7 +288,7 @@ void mainMenu(Agency &agency) {
 				break;
 			}
 			break;
-		case 7:
+		case 8:
 			//buypacket(mainChoices.at(mainMenu - 1));
 			// Update packs.txt
 			//vectorToFile_Packs();
@@ -271,14 +296,14 @@ void mainMenu(Agency &agency) {
 			//vectorToFile_Clients();
 			agency.buyPacket();
 			break;
-		case 8:
+		case 9:
 			//amountAndNumberOfSoldPacks(mainChoices.at(mainMenu - 1));
 			agency.viewTotalSold();
 			break;
-		case 9:
+		case 10:
 			agency.viewMoreVisited();
 			break;
-		case 10:
+		case 11:
 			agency.viewMoreVisitedForClient();
 			break;
 		default:
