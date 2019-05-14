@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <map>
+#include <iomanip>
 #include "Agency.h"
 #include "GeneralFunctions.h"
 
@@ -54,22 +55,18 @@ Agency::Agency(string fileName)
 // GET Methods
 string Agency::getName() const
 {
-
 	return name;
 }
 unsigned Agency::getVATnumber() const
 {
-
 	return VATnumber;
 }
 Address Agency::getAddress() const
 {
-
 	return address;
 }
 string Agency::getURL() const
 {
-
 	return URL;
 }
 const vector<Client>& Agency::getClients() const
@@ -402,17 +399,97 @@ void Agency::viewTotalSold() const
 
 void Agency::viewMoreVisited()
 {
-	map<int, int> sites;
-	for (size_t i = 0; i < clients.size(); i++)
+	cout << endl;
+	int N;
+	map<string, int> sites;
+	map<string, int>::iterator iT;
+	for (const auto &x : packets)
 	{
-		for (size_t j = 0; j < clients.at(i).getPacketList().size(); j++)
+		int currP = x.getCurrentPersons();
+		for (const auto &y : x.getSitesVector())
 		{
-			for (size_t k = 1; k < clients.at(i).getPacketList().at(j)->getSitesVector().size(); k++)
-			{
-				// A IMPLEMENTAR
-			}
+			iT = sites.find(y);
+			if (iT == sites.end())
+				sites.insert(pair<string, int>(y, currP));
+			else
+				iT->second += currP;
 		}
 	}
+	N = checkInt("Number of Nth most visited packets: ");
+	while (N > sites.size())
+	{
+		cout << "There aren't as many places as you referred... Please select another number." << endl;
+		N = checkInt("Number of Nth most visited packets: ");
+	}
+		
+	multimap<int, string, greater<int>> orderedSites; // greater<int> is a COMPARE
+	for (iT = sites.begin(); iT != sites.end(); iT++)
+		orderedSites.insert(pair<int, string>(iT->second, iT->first));
+	cout << endl << endl << setw(25) << "PLACE" << setw(25) << "TRIPS" << endl << endl;
+
+	multimap<int, string, greater<int>>::const_iterator mI = orderedSites.begin();
+	int count = 0;
+	while (count < N)
+	{
+		cout << setw(25) << mI->second << setw(25) << mI->first << endl;
+		count++;
+		mI++;
+	}
+
+	cout << endl << endl;
+	system("pause");
+}
+
+void Agency::viewMoreVisitedForClient()
+{
+	cout << endl;
+
+	map<string, int> sites;
+	map<string, int>::iterator iT;
+	for (const auto &x : packets)
+	{
+		int currP = x.getCurrentPersons();
+		for (const auto &y : x.getSitesVector())
+		{
+			iT = sites.find(y);
+			if (iT == sites.end())
+				sites.insert(pair<string, int>(y, currP));
+			else
+				iT->second += currP;
+		}
+	}
+
+	multimap<int, string, greater<int>> orderedSites; // greater<int> is a COMPARE
+	for (iT = sites.begin(); iT != sites.end(); iT++)
+		orderedSites.insert(pair<int, string>(iT->second, iT->first));
+	cout << endl << endl << setw(25) << "PLACE" << setw(25) << "TRIPS" << endl << endl;
+
+	multimap<int, string, greater<int>>::iterator mI;
+
+	for (auto &x : clients)
+	{
+		multimap<int, string, greater<int>> orderedSitesAux = orderedSites;
+		for (const auto &y : x.getPacketList())
+		{
+			for (const auto &w : y->getSitesVector())
+			{
+				for (mI = orderedSitesAux.begin(); mI != orderedSitesAux.end(); mI++)
+				{
+					if (w == mI->second)
+					{ 
+						orderedSitesAux.erase(mI);
+						break;
+					}
+				}
+			}	
+		}
+		cout << x << endl << "-------------------------------------------------------------";
+		mI = orderedSitesAux.begin();
+		cout << mI->second << endl;
+	}
+
+	cout << endl << endl;
+	system("pause");
 }
 
 void Agency::viewAllPackets() const
@@ -532,28 +609,36 @@ void Agency::viewPacketByDate() const
 
 void Agency::viewPacketByDateAndDest() const
 {
-	int toggle = 0;
-	cin.ignore();
-	while (toggle == 0)
+	bool toggle = true;
+	int index, confirmLocation;
+	while (toggle)
 	{
 		string locationPack;
-		int index = 0, confirmLocation = 0;
+		index = 0;
+		confirmLocation = 0;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << endl << endl << "Destination of the pack: "; getline(cin, locationPack); trim(locationPack);
+		if (cin.eof())
+			return;
+		transform(locationPack.begin(), locationPack.end(), locationPack.begin(), toupper);
 		vector<int> idxLocation;
 		idxLocation.clear();
 		for (size_t i = 0; i < packets.size(); i++)
 		{
-			if (packets.at(i).getSitesVector().at(0) == locationPack)
+			for (size_t j = 0; j < packets.at(i).getSitesVector().size(); j++)
 			{
-				idxLocation.push_back(i);
-				confirmLocation++;
+				string auxiliar = packets.at(i).getSitesVector().at(j);
+				transform(auxiliar.begin(), auxiliar.end(), auxiliar.begin(), toupper);
+				if (auxiliar == locationPack)
+				{
+					idxLocation.push_back(i);
+					confirmLocation++;
+					break;
+				}
 			}
 		}
 		if (confirmLocation == 0)
-		{
-			cout << "There is no pack with destination '" << locationPack << "'!"
-				<< endl << endl;
-		}
+			cout << "There is no pack with destination: '" << locationPack << "'!" << endl << endl;
 		else
 		{
 			string date1, date2;
@@ -587,20 +672,12 @@ void Agency::viewPacketByDateAndDest() const
 				}
 			}
 			if (confirmDate == 0)
-			{
-				cout << "There is no pack within those dates!"
-					<< endl << endl;
-			}
+				cout << "There are no packets within those dates!" << endl << endl;
 			else
 			{
 				vector<int> idxs;
 				idxs.clear();
 				idxs = vectorIntersec(idxLocation, idxDate);
-				for (size_t s = 0; s < idxs.size(); s++)
-				{
-					cout << idxs.at(s) << endl;
-				}
-				
 				if (idxs.size() != 0)
 				{
 					for (size_t i = 0; i < idxs.size(); i++)
@@ -608,16 +685,7 @@ void Agency::viewPacketByDateAndDest() const
 						int index = idxs.at(i);
 						
 						if (packets.at(index).getId() >= 0)
-						{
-							cout << endl << endl << "ID: " << packets.at(index).getId() << endl
-								<< "Destination: " << packets.at(index).getSites() << endl
-								<< "Beginning date: " << packets.at(index).getBeginDate() << endl
-								<< "End date: " << packets.at(index).getEndDate() << endl
-								<< "Price per person: " << packets.at(index).getPricePerPerson() << endl
-								<< "Spots initially available: " << packets.at(index).getMaxPersons() << endl
-								<< "Spots purchased: " << packets.at(index).getCurrentPersons() << endl;
-							cout << endl;
-						}
+							cout << packets.at(index);
 						else
 							cout << endl << "\nNo packs to show for that location and between those dates\n" << endl << endl;
 						
@@ -626,11 +694,11 @@ void Agency::viewPacketByDateAndDest() const
 				else
 					cout << endl << "\nNo packs to show for that location and between those dates\n" << endl << endl;
 			}
-			int option;
-			cout << "1. See another pack by date and destination\n0. Back\n\n"; cin >> option;
-			if (option == 0)
-				toggle = 1;
 		}
+		int option;
+		cout << "1. See another pack by date and destination\n0. Back\n\n"; cin >> option;
+		if (option == 0)
+			toggle = false;
 	}
 	cout << endl;
 }
@@ -761,7 +829,7 @@ void Agency::alterPack(string &explorer)
 					int tMax = -1;
 					cout << "Max Lotation: ";
 					int curPersons = refPacket.getCurrentPersons();
-					while (!(cin >> tMax) || !(tMax >= curPersons) && !cin.eof())
+					while ((!(cin >> tMax) || !(tMax >= curPersons)) && !cin.eof())
 					{
 						if (cin.fail())
 						{
@@ -1187,11 +1255,9 @@ void Agency::removeClient(string &explorer)
 					auxiliarID = clients.at(indexClient).getPacketList().at(i)->getId();
 					if (auxiliarID > 0)
 					{
-						totalValue -= clients.at(indexClient).getPacketList().at(i)->getPricePerPerson();
-						soldPacksNumber--;
-						cout << clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() << endl;
-						clients.at(indexClient).getPacketList().at(i)->setCurrentPersons(clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() - 1);
-						cout << clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() << endl;
+						totalValue -= clients.at(indexClient).getPacketList().at(i)->getPricePerPerson() * clients.at(indexClient).getFamilySize();
+						soldPacksNumber -= clients.at(indexClient).getFamilySize();
+						clients.at(indexClient).getPacketList().at(i)->setCurrentPersons(clients.at(indexClient).getPacketList().at(i)->getCurrentPersons() - clients.at(indexClient).getFamilySize());
 					}
 				}
 				clients.erase(clients.begin() + indexClient, clients.begin() + indexClient + 1);
@@ -1302,21 +1368,21 @@ void Agency::buyPacket()
 					bool alreadyBought = false;
 					for (size_t i = 0; i < clients.at(indexClient).getPacketList().size(); i++)
 					{
-						if (clients.at(indexClient).getPacketList().at(i)->getId() == packId || clients.at(indexClient).getPacketList().at(i)->getId() == -packId)
+						if (abs(clients.at(indexClient).getPacketList().at(i)->getId()) == abs(packId))
 						{
 							alreadyBought = true;
 							break;
 						}
 					}
 
-					if (((packets.at(indexPack).getMaxPersons() - packets.at(indexPack).getCurrentPersons()) >= 1) && !alreadyBought)
+					if (((packets.at(indexPack).getMaxPersons() - packets.at(indexPack).getCurrentPersons()) >= clients.at(indexClient).getFamilySize()) && !alreadyBought)
 					{
 						clients.at(indexClient).getPacketList().push_back(&packets.at(indexPack));
-						packets.at(indexPack).setCurrentPersons(packets.at(indexPack).getCurrentPersons() + 1);
+						packets.at(indexPack).setCurrentPersons(packets.at(indexPack).getCurrentPersons() + clients.at(indexClient).getFamilySize());
 						// clients.at(indexClient).addPacketListIds(packId);
-						clients.at(indexClient).setTotalPurchased(clients.at(indexClient).getTotalPurchased() + packets.at(indexPack).getPricePerPerson());
-						totalValue += packets.at(indexPack).getPricePerPerson();
-						soldPacksNumber += 1;
+						clients.at(indexClient).setTotalPurchased(clients.at(indexClient).getTotalPurchased() + (packets.at(indexPack).getPricePerPerson() * clients.at(indexClient).getFamilySize()));
+						totalValue += packets.at(indexPack).getPricePerPerson() * clients.at(indexClient).getFamilySize();
+						soldPacksNumber += clients.at(indexClient).getFamilySize();
 						if ((packets.at(indexPack).getMaxPersons() == packets.at(indexPack).getCurrentPersons()))
 							packets.at(indexPack).setId(-packId);
 						cout << "\nPack successfully bought!" << endl << endl;

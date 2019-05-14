@@ -53,7 +53,7 @@ vector<Packet*>& Client::getPacketList()
 	return packets;
 }
 
-unsigned Client::getTotalPurchased() const{
+double Client::getTotalPurchased() const{
   
 	return totalPurchased;
 }
@@ -90,10 +90,10 @@ int Client::setPacketList(string ids, vector<Packet> &packets)
 		auxInt = stoi(elem);
 		for (size_t i = 0; i < packets.size(); i++)
 		{
-			if (abs(packets.at(i).getId()) == auxInt)
+			if (packets.at(i).getId() == auxInt)
 			{ 
 				this->packets.push_back(&packets.at(i)); // POINTER ON!
-				count++;
+				count += familySize;
 			}
 		}
 		ids.erase(0, pos + 1);
@@ -102,10 +102,10 @@ int Client::setPacketList(string ids, vector<Packet> &packets)
 	auxInt = stoi(ids);
 	for (size_t i = 0; i < packets.size(); i++)
 	{
-		if (abs(packets.at(i).getId()) == auxInt)
+		if (packets.at(i).getId() == auxInt)
 		{ 
 			this->packets.push_back(&packets.at(i)); // POINTER ON!
-			count++;	
+			count += familySize;	
 		}
 	}
 	return count;
@@ -116,7 +116,7 @@ int Client::setPacketList(string ids, vector<Packet> &packets)
 //	ids.push_back(id);
 //}
 
-void Client::setTotalPurchased(unsigned totalPurchased){
+void Client::setTotalPurchased(double totalPurchased){
   
 	this->totalPurchased = totalPurchased;
 }

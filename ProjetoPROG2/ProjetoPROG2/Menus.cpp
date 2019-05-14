@@ -13,7 +13,7 @@ int displays(vector<string> &displays, string explorer, string &agencyName)
 	cout << endl << endl;
 	cout << "Option: "; cin >> option;
 
-	while (cin.fail() || !(option >= 0 && option <= displays.size() - 1))
+	while (cin.fail() || !(option >= 0 && option <= (displays.size() - 1)))
 	{
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -52,7 +52,7 @@ void mainMenu(Agency &agency) {
 		cout << endl << endl;
 		cout << "Option: "; cin >> mainMenu;
 
-		while (cin.fail() || !(mainMenu >= 0 && mainMenu <= mainChoices.size() - 1))
+		while (cin.fail() || !(mainMenu >= 0 && mainMenu <= (mainChoices.size() - 1)))
 		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -276,8 +276,10 @@ void mainMenu(Agency &agency) {
 			agency.viewTotalSold();
 			break;
 		case 9:
+			agency.viewMoreVisited();
 			break;
 		case 10:
+			agency.viewMoreVisitedForClient();
 			break;
 		default:
 			break;

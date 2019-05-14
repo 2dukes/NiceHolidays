@@ -1,1 +1,3 @@
-﻿  ProjetoPROG2.vcxproj -> C:\Users\vidin\OneDrive\Documentos\1Ano\2S\PROG\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe
+﻿  Agency.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(419): warning C4018: '>': signed/unsigned mismatch
+  ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

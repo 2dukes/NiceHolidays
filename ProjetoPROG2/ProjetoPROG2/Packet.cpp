@@ -168,7 +168,6 @@ void Packet::packetCreation(string &explorer)
 	string reader;
 	double price;
 	int tMax;
-	bool flag;
 
 	system("cls");
 	cout << explorer << endl << endl;

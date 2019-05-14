@@ -225,7 +225,7 @@ int checkInt(string sentence)
 	}
 }//ask for a string and check if its integer before returning
 
-vector<int> vectorIntersec(vector<int> vector1, vector<int> vector2)
+vector<int> vectorIntersec(vector<int> &vector1, vector<int> &vector2)
 {
 	vector<int> finalVector;
 	for (size_t i = 0; i < vector1.size(); i++)

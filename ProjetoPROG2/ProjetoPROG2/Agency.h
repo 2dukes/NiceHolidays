@@ -65,6 +65,7 @@ public:
 	string UpdateAgencyInfo(string &explorer);
 	void viewTotalSold() const;
 	void viewMoreVisited();
+	void viewMoreVisitedForClient();
 
 	//Packets
 	void viewAllPackets() const;
