@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "Client.h"
 #include "GeneralFunctions.h"
 
@@ -48,7 +49,7 @@ Address Client::getAddress() const{
 	return address;
 }
 
-vector<Packet*>& Client::getPacketList() 
+vector<Packet*>& Client::getPacketList()
 {
 	return packets;
 }
@@ -126,11 +127,11 @@ void Client::setTotalPurchased(double totalPurchased){
 
 ostream& operator<<(ostream& out, const Client & client){
 
-	out << "Name: " << client.name << endl
-		<< "VAT number: " << client.VATnumber << endl
-		<< "Family Size: " << client.familySize << endl
-		<< "Address: " << client.address << endl
-		<< "Purchased packets: ";
+	out << left << setw(30) << "Name: " << client.name << endl
+		<< left << setw(30) << "VAT number: " << client.VATnumber << endl
+		<< left << setw(30) << "Family Size: " << client.familySize << endl
+		<< left << setw(30) << "Address: " << client.address << endl
+		<< left << setw(30) << "Purchased packets: ";
 	/*vector<int> ids = client.ids;
 	if (client.ids.size() > 0)
 	{
@@ -155,7 +156,7 @@ ostream& operator<<(ostream& out, const Client & client){
 	}
 	else out << "0" << endl;
 	
-	out << "Total amount spent: " << client.totalPurchased << endl;
+	out << left << setw(30) << "Total amount spent: " << client.totalPurchased << endl;
 	//string name; // name of the client
 	//unsigned VATnumber; // VAT number of client
 	//unsigned short familySize;  // number of family members

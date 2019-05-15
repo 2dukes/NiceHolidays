@@ -1,5 +1,6 @@
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 #include "Packet.h"
 #include "GeneralFunctions.h"
 
@@ -240,7 +241,8 @@ void Packet::packetCreation(string &explorer)
 	if (cin.eof())
 		return;
 	maxPersons = tMax;
-
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cout << endl << "Packet successfully created!" << endl;
 	// Construction PACKET
 	// Date TemporaryBegin(begD), TemporaryEnd(endD);
 	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
@@ -249,8 +251,8 @@ void Packet::packetCreation(string &explorer)
 // shows a packet content 
 ostream& operator<<(ostream& out, const Packet & packet) {
 
-	out << "ID: " << packet.id << endl
-		<< "Sites visited: ";
+	out << left << setw(45) << "ID: " << packet.id << endl
+		<< left << setw(45) << "Sites visited: ";
 	for (size_t i = 0; i < packet.sites.size(); i++)
 	{
 		if (i == 0)
@@ -264,10 +266,10 @@ ostream& operator<<(ostream& out, const Packet & packet) {
 		}
 	}
 	out << endl
-		<< "Beggining date: " << packet.begin << endl
-		<< "End date: " << packet.end << endl
-		<< "Price per person: " << packet.pricePerPerson << endl
-		<< "Number of initially available tickets: " << packet.maxPersons << endl
-		<< "Bought tickets: " << packet.currentPersons << endl;
+		<< left << setw(45) << "Beggining date: " << packet.begin << endl
+		<< left << setw(45) << "End date: " << packet.end << endl
+		<< left << setw(45) << "Price per person: " << packet.pricePerPerson << endl
+		<< left << setw(45) << "Number of initially available tickets: " << packet.maxPersons << endl
+		<< left << setw(45) << "Bought tickets: " << packet.currentPersons << endl;
 	return out;
 }

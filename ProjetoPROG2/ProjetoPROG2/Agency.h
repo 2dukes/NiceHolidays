@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 
 #include "defs.h"
@@ -63,24 +64,27 @@ public:
 	bool verifyVATExistence(unsigned &VAT) const;
 	void clientCreation(string &explorer, Agency &agency);
 	string UpdateAgencyInfo(string &explorer);
-	void viewTotalSold() const;
-	void viewMoreVisited();
-	void viewMoreVisitedForClient();
+	void viewTotalSold(string &explorer) const;
+	multimap<int, string, greater<int>> orderedMostVisited();
+	void viewMoreVisited(string &explorer);
+	void viewMoreVisitedForClient(string &explorer);
 
 	//Packets
-	void viewAllPackets() const;
-	void viewPacketByDestination() const;
-	void viewPacketByDate() const;
-	void viewPacketByDateAndDest() const;
+	void viewAllPackets(string &explorer) const;
+	void viewPacketByDestination(string &explorer) const;
+	void viewPacketByDate(string &explorer) const;
+	void viewPacketByDateAndDest(string &explorer) const;
 	void alterPack(string &explorer);
-	void removePacket();
+	void removePacket(string &explorer);
+	void viewSoldPacksAccToSpeClient(string &explorer);
+	void viewSoldPacksAccToAllClients(string &explorer);
 
 	//Clients
-	void viewAllClients() const;
-	void viewSpecificClient() const;
-	void alterClient();
+	void viewAllClients(string &explorer) const;
+	void viewSpecificClient(string &explorer) const;
+	void alterClient(string &explorer);
 	void removeClient(string &explorer);
-	void buyPacket();
+	void buyPacket(string &explorer);
 	
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };

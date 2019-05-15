@@ -29,12 +29,8 @@ void mainMenu(Agency &agency) {
 	int option, mainMenu, option1, option2;
 	string agencyName = agency.getName();
 
-	/*readWriteClientSt();
-	readWritePackSt();
-	verifyPackValidity();
-*/ 
 	system("cls");
-	vector<string> mainChoices = { "1. Display Agency Info", "2. Update Agency Info", "3. Manage", "4. View client", "5. View All Clients", "6. View Available Travel Pack(s)", "7. View Sold Travel Pack(s)", "8. Buy Travel Pack", "9. View Total Amount and Number of Sold Travel Packs","10. Show most visited destinations","11. Temp", "0. Exit" };
+	vector<string> mainChoices = { "1. Display Agency Info", "2. Update Agency Info", "3. Manage", "4. View client", "5. View All Clients", "6. View Available Travel Pack(s)", "7. View Sold Travel Pack(s)", "8. Buy Travel Pack", "9. View Total Amount and Number of Sold Travel Packs","10. Show most visited destinations","11. Recommendend Packets for each Client", "0. Exit" };
 	vector<string> manageChoices = { "1. Create", "2. Alter", "3. Remove", "0. Main Menu" };
 	vector<string> manageSecundaryChoices = { "1. Client(s)", "2. Travel Pack(s)", "0. Previous Menu" };
 	vector<string> viewAvailablePackChoices = { "1. All", "2. Acording to Destination", "3. Between 2 Dates", "4. Acording to Destination and 2 Dates", "0. Main Menu" };
@@ -69,15 +65,9 @@ void mainMenu(Agency &agency) {
 				cin.ignore(100, '\n');
 			cin.get();
 			fflush(stdin);
-			cin.clear();
 			break;
 		case 2:
 			agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
-			if (cin.peek() != EOF)
-				cin.ignore(100, '\n');
-			cin.get();
-			fflush(stdin);
-			cin.clear();
 			break;
 		case 3:
 			while (true)
@@ -100,12 +90,8 @@ void mainMenu(Agency &agency) {
 								// Create | Client
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								agency.clientCreation(auxiliarExplorer, agency);
-
-								//clientCreation(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-								// Update packs.txt
-								//vectorToFile_Packs();
-								// Update vclients
-								//readWriteClientSt();
+								cin.get();
+								fflush(stdin);
 								break;
 							}
 							case 2:
@@ -114,7 +100,8 @@ void mainMenu(Agency &agency) {
 								Packet cPacket;
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								cPacket.packetCreation(auxiliarExplorer);
-
+								cin.get();
+								fflush(stdin);
 								int pId = agency.getPacketsId() + 1;
 								cPacket.setId(pId);
 								agency.setPacketsId(pId);
@@ -154,24 +141,15 @@ void mainMenu(Agency &agency) {
 							case 1:
 							{
 								// Alter | Client
-								//clientAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-								// Update packs.txt
-								//vectorToFile_Packs();
-								// Update clients.txt
-								//vectorToFile_Clients();
-								agency.alterClient();
+								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								agency.alterClient(auxiliarExplorer);
 								break;
 							}
 							case 2:
 							{
 								// Alter | Pack
-								//packAlter(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								agency.alterPack(auxiliarExplorer);
-								// Update packs.txt
-								// vectorToFile_Packs();
-								if (cin.peek() != EOF)
-									cin.ignore(100, '\n');
 								cin.get();
 								fflush(stdin);
 								break;
@@ -186,13 +164,8 @@ void mainMenu(Agency &agency) {
 							case 1:
 							{
 								// Remove | Client
-								//clientRemove(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-								// Update clients.txt
-								//vectorToFile_Clients();
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
 								agency.removeClient(auxiliarExplorer);
-								if (cin.peek() != EOF)
-									cin.ignore(100, '\n');
 								cin.get();
 								fflush(stdin);
 								break;
@@ -200,12 +173,8 @@ void mainMenu(Agency &agency) {
 							case 2:
 							{
 								// Remove | Pack
-								//packRemove(mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1));
-								// Update packs.txt
-								//vectorToFile_Packs();
-								//system("pause");
-								//readWritePackSt();
-								agency.removePacket();
+								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								agency.removePacket(auxiliarExplorer);
 								break;
 							}
 							default:
@@ -220,99 +189,121 @@ void mainMenu(Agency &agency) {
 			}
 			break;
 		case 4:
+		{
 			// View Specific client
-			//viewSpecificClient(mainChoices.at(mainMenu - 1));
-			agency.viewSpecificClient();
+			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
+			agency.viewSpecificClient(auxiliarExplorer);
 			break;
+		}
 		case 5:
+		{
 			// View All Clients
-			system("cls");
-			/*
-			cout << mainChoices.at(mainMenu - 1) << endl << endl;
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "[Go Back] CTRL+Z" << endl << endl;
-			for (const auto &x : agency.getClients())
-				cout << x;
-			system("pause");*/
-			agency.viewAllClients();
+			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
+			agency.viewAllClients(auxiliarExplorer);
 			if (cin.peek() != EOF)
 				cin.ignore(100, '\n');
 			cin.get();
 			fflush(stdin);
 			break;
+		}
 		case 6:
+		{
 			option = displays(viewAvailablePackChoices, mainChoices.at(mainMenu - 1), agencyName);
 			switch (option)
 			{
 			case 1:
+			{
 				// View All Available Packs
-				//viewall(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
-				
-				agency.viewAllPackets();
+				string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1);
+				agency.viewAllPackets(auxiliarExplorer);
 				if (cin.peek() != EOF)
 					cin.ignore(100, '\n');
 				cin.get();
 				fflush(stdin);
 				break;
+			}
 			case 2:
+			{
 				// View Available Packs according to Destination
-				//viewADestination(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
-				agency.viewPacketByDestination();
+				string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1);
+				agency.viewPacketByDestination(auxiliarExplorer);
 				break;
+			}
 			case 3:
+			{
 				// View Available Packs according to 2 Dates
-				//viewADate(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
-				agency.viewPacketByDate();
+				string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1);
+				agency.viewPacketByDate(auxiliarExplorer);
 				break;
+			}
 			case 4:
+			{
 				// View Available Packs according to 2 Dates & Destination
-				//viewDateDest(mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1));
-				agency.viewPacketByDateAndDest();
+				string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + viewAvailablePackChoices.at(option - 1);
+				agency.viewPacketByDateAndDest(auxiliarExplorer);
 				break;
+			}
 			default:
 				break;
 			}
 			break;
+		}
 		case 7:
 			option = displays(viewSoldPackChoices, mainChoices.at(mainMenu - 1), agencyName);
 			switch (option)
 			{
 			case 1:
+			{
 				// View Bought Packs according to a Specific Client
-				//viewSpPack(mainChoices.at(mainMenu - 1) + " | " + viewSoldPackChoices.at(option - 1));
+				string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + viewSoldPackChoices.at(option - 1);
+				agency.viewSoldPacksAccToSpeClient(auxiliarExplorer);
 				break;
+			}
 			case 2:
-				//viewAllBoughtPacks(mainChoices.at(mainMenu - 1) + " | " + viewSoldPackChoices.at(option - 1));
+			{
+				//View Bought Packs according to all clients
+				string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + viewSoldPackChoices.at(option - 1);
+				agency.viewSoldPacksAccToAllClients(auxiliarExplorer);
+				cin.get();
+				fflush(stdin);
 				break;
+			}
 			default:
 				break;
 			}
 			break;
 		case 8:
-			//buypacket(mainChoices.at(mainMenu - 1));
-			// Update packs.txt
-			//vectorToFile_Packs();
-			// Update clients.txt
-			//vectorToFile_Clients();
-			agency.buyPacket();
+		{
+			// Buy Packet
+			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
+			agency.buyPacket(auxiliarExplorer);
 			break;
+		}
 		case 9:
-			//amountAndNumberOfSoldPacks(mainChoices.at(mainMenu - 1));
-			agency.viewTotalSold();
+		{
+			// View Sold Packets and amount of money made
+			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
+			agency.viewTotalSold(auxiliarExplorer);
+			cin.get();
+			fflush(stdin);
 			break;
+		}
 		case 10:
-			agency.viewMoreVisited();
+		{
+			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
+			agency.viewMoreVisited(auxiliarExplorer);
 			break;
+		}
 		case 11:
-			agency.viewMoreVisitedForClient();
+		{
+			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
+			agency.viewMoreVisitedForClient(auxiliarExplorer);
 			break;
+		}
 		default:
 			break;
 		}
 	} while (mainMenu != 0);
-	
-	// A IMPLEMENTAR
-
 	
 }
 
