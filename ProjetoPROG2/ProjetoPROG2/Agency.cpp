@@ -33,6 +33,7 @@ Agency::Agency(string fileName)
 	in_stream.seekg(0, in_stream.end);
 	streamsize fileLen = in_stream.tellg();
 	in_stream.seekg(0, in_stream.beg);
+	packets.reserve(10000);
 	if (in_stream.is_open() && fileLen != 0)
 	{
 		string fileInput;
@@ -1636,7 +1637,7 @@ void Agency::buyPacket(string &explorer)
 					}
 					else
 					{
-						cout << "\nNot enough spots available for this packet." << " !\n----------\n" << endl;
+						cout << "\nNot enough spots available for this packet!" << " \n----------\n" << endl;
 						break;
 					}
 				}
@@ -1795,7 +1796,6 @@ void Agency::packetCreation(string &explorer)
 	string reader;
 	double price;
 	unsigned tMax;
-
 	system("cls");
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');

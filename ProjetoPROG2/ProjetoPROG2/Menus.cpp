@@ -111,7 +111,7 @@ void mainMenu(Agency &agency) {
 								*/
 								agency.packetCreation(auxiliarExplorer);
 								cin.get();
-								fflush(stdin);
+								
 								// Update packets.txt file . . .
 
 								/*ofstream out_stream("packets.txt", std::ios_base::app);
