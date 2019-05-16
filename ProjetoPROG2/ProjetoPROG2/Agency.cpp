@@ -42,7 +42,7 @@ Agency::Agency(string fileName)
 		getline(in_stream, this->URL); // URL
 		getline(in_stream, fileInput);
 		address = Address(fileInput); // To Do: Default Address constructor 
-		packetsId = 1; // For test purposes...
+		packetsId = 0; // For test purposes...
 		getline(in_stream, clientsFilename);
 		getline(in_stream, packetsFilename);
 	}
@@ -94,6 +94,15 @@ double Agency::getTotalValue() const
 	return totalValue;
 }
 
+bool& Agency::getClientsInfoHasChanged() 
+{
+	return clientsInfoHasChanged;
+}
+
+bool& Agency::getPacketsInfoHasChanged()
+{
+	return packetsInfoHasChanged;
+}
 // SET Methods
 void Agency::setName(string name)
 {
@@ -152,7 +161,7 @@ void Agency::readPackets()
 		getline(in_stream, auxString);
 		currentPacket.setEndDate(Date(auxString));
 		getline(in_stream, auxString);
-		currentPacket.setPricePerPerson(stoi(auxString));
+		currentPacket.setPricePerPerson(stod(auxString));
 		getline(in_stream, auxString);
 		currentPacket.setMaxPersons(stoi(auxString));
 		getline(in_stream, auxString);
@@ -183,7 +192,7 @@ void Agency::readClients()
 		getline(in_stream, auxString);
 		soldPacksNumber += currentClient.setPacketList(auxString, packets);
 		getline(in_stream, auxString);
-		currentClient.setTotalPurchased(stoi(auxString));
+		currentClient.setTotalPurchased(stod(auxString));
 		totalValue += stoi(auxString); // Agency variable
 		setClient(currentClient); // Store packet in vector<Packet> packets
 		getline(in_stream, separator);
@@ -285,7 +294,7 @@ void Agency::clientCreation(string &explorer, Agency &agency)
 	// out_stream.close();
 	clients.push_back(cClient); // Push_Back new client to vector<string> clients
 	cout << endl << "Your data was successfully inserted!" << endl << endl;
-
+	clientsInfoHasChanged = true;
 }
 
 string Agency::UpdateAgencyInfo(string &explorer)
@@ -391,28 +400,11 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		}
 		}
 		if (toggle)
+		{ 
 			cout << endl << "Agency successfully altered!" << endl << endl;
+			agencyInfoHasChanged = true;
+		}
 	}
-
-	/*
-	// File agency.txt flush
-	ofstream out_stream(AGENCY_FILE_NAME);
-	if (out_stream.is_open())
-	{
-		out_stream << agencyName + "\n";
-		out_stream << VAT << "\n";
-		out_stream << aUrl + "\n";
-		out_stream << adr + "\n";
-
-		out_stream << clientsFilename << "\n";
-		out_stream << packetsFilename << "\n";
-		out_stream.close();
-		cout << endl << "Your data was successfully inserted!" << endl << endl;
-	}
-	else
-		cerr << "An error occurred during the process...";
-	system("pause");
-	*/
 	return name;
 }
 
@@ -473,7 +465,6 @@ void Agency::viewMoreVisited(string &explorer)
 	int N;
 
 	multimap<int, string, greater<int>> orderedSites = orderedMostVisited(); // greater<int> is a COMPARE
-
 	N = checkInt("Number of Nth most visited packets: ");
 	while (N > orderedSites.size() && !cin.eof())
 	{
@@ -531,44 +522,49 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 				}
 			}
 		}
-		mI = orderedSitesAux.begin();
-		cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
 		
-		string viewP;
-		cout << endl << "View corresponding packet? (Y/N)"; getline(cin, viewP);
-		cout << endl << endl;
-		bool gotOut = false;
-		if (viewP == "y" || viewP == "Y")
+		if (orderedSitesAux.size() > 0)
 		{
-			for (const auto &z : packets)
+			mI = orderedSitesAux.begin();
+			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
+			string viewP;
+			cout << endl << "View corresponding packet? (Y/N)"; getline(cin, viewP);
+			cout << endl << endl;
+			bool gotOut = false;
+			if (viewP == "y" || viewP == "Y")
 			{
-				if (z.getSitesVector().size() > 1)
+				for (const auto &z : packets)
 				{
-					vector<string> auxiliarSites = z.getSitesVector();
-					for (size_t i = 1; i < auxiliarSites.size(); i++)
+					if (z.getSitesVector().size() > 1)
 					{
-						if (auxiliarSites.at(i) == mI->second)
+						vector<string> auxiliarSites = z.getSitesVector();
+						for (size_t i = 1; i < auxiliarSites.size(); i++)
+						{
+							if (auxiliarSites.at(i) == mI->second)
+							{
+								cout << z << endl;
+								gotOut = true;
+								break;
+							}
+
+						}
+						if (gotOut)
+							break;
+					}
+					else
+					{
+						if (z.getSitesVector().at(0) == mI->second)
 						{
 							cout << z << endl;
 							gotOut = true;
 							break;
 						}
-						
-					}
-					if (gotOut)
-						break;
-				}
-				else
-				{
-					if (z.getSitesVector().at(0) == mI->second)
-					{
-						cout << z << endl;
-						gotOut = true;
-						break;
 					}
 				}
 			}
 		}
+		else
+			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;			
 	}
 	cout << endl << endl;
 	cin.get();
@@ -815,6 +811,7 @@ void Agency::alterPack(string &explorer)
 		cout << "[Go Back] CTRL+Z" << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		packId = checkInt("ID of the pack: ");
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		if (cin.eof())
 			return;
 		for (size_t i = 0; i < packets.size(); i++)
@@ -942,7 +939,10 @@ void Agency::alterPack(string &explorer)
 				}
 				}
 				if (toggle2)
-					cout << endl << "Client successfully altered!" << endl << endl;
+				{ 
+					cout << endl << "Packet successfully altered!" << endl << endl;
+					packetsInfoHasChanged = true;
+				}
 			}
 			if (refPacket.getCurrentPersons() == refPacket.getMaxPersons())
 				refPacket.setId(-packId);
@@ -979,6 +979,7 @@ void Agency::removePacket(string &explorer)
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
 		packId = checkInt("ID of the pack: ");
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		if (cin.eof())
 			return;
 		for (unsigned int i = 0; i < size(packets); i++)
@@ -999,6 +1000,7 @@ void Agency::removePacket(string &explorer)
 			{
 				packets.at(index).setId(-packId);
 				cout << "\nPack removed!" << endl;
+				packetsInfoHasChanged = true;
 			}
 			else
 				cout << "\nPack not removed!" << endl << endl;
@@ -1366,6 +1368,7 @@ void Agency::alterClient(string &explorer)
 						break;
 					case 3:
 						clients.at(indexClient).setFamilySize(checkInt("New Household: "));
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 						cout << endl;
 						break;
 					case 4:
@@ -1383,7 +1386,10 @@ void Agency::alterClient(string &explorer)
 						break;
 					}
 					if (toggle2)
+					{ 
 						cout << endl << "Client successfully altered!" << endl << endl;
+						clientsInfoHasChanged = true;
+					}
 				}
 			}
 			else
@@ -1487,6 +1493,7 @@ void Agency::removeClient(string &explorer)
 				}
 				clients.erase(clients.begin() + indexClient, clients.begin() + indexClient + 1);
 				cout << endl << "Client successfully deleted!" << endl << endl;
+				clientsInfoHasChanged = true;
 			}
 			else
 				cout << "\nFound no user with VAT: " << clientVAT << " !" << endl << endl;
@@ -1534,7 +1541,10 @@ void Agency::buyPacket(string &explorer)
 			string auxiliar = clients.at(i).getName();
 			transform(auxiliar.begin(), auxiliar.end(), auxiliar.begin(), toupper);
 			if (auxiliar == clientName)
+			{
 				confirm++;
+				indexClient = i;
+			}
 		}
 		if (confirm == 0)
 			cout << "There is no registered client named '" << clientName << "'!" << endl << endl;
@@ -1579,6 +1589,7 @@ void Agency::buyPacket(string &explorer)
 				while (confirm == 0)
 				{
 					packId = checkInt("ID of the pack: ");
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					if (cin.eof())
 						return;
 					for (size_t i = 0; i < packets.size(); i++)
@@ -1614,6 +1625,8 @@ void Agency::buyPacket(string &explorer)
 					if ((packets.at(indexPack).getMaxPersons() == packets.at(indexPack).getCurrentPersons()))
 						packets.at(indexPack).setId(-packId);
 					cout << "\nPack successfully bought!" << endl << endl;
+					clientsInfoHasChanged = true;
+					packetsInfoHasChanged = false;
 				}
 				else
 				{
@@ -1650,6 +1663,109 @@ void Agency::buyPacket(string &explorer)
 	cout << endl;
 }
 
+Agency::~Agency()
+{
+	string saveReader;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	if (agencyInfoHasChanged)
+	{
+		cout << "Save Agency's changes? (Y/N)"; getline(cin, saveReader);
+		if (saveReader == "Y" || saveReader == "y")
+		{
+			// File agency.txt flush
+			ofstream out_stream(AGENCY_FILE_NAME);
+			if (out_stream.is_open())
+			{
+				out_stream << name + "\n";
+				out_stream << VATnumber << "\n";
+				out_stream << URL + "\n";
+				out_stream << address.getStreet() + " / " + to_string(address.getDoorNumber()) + " / " + address.getFloor() + " / " + address.getPostalCode() + " / " + address.getLocation() + "\n";
+
+				out_stream << clientsFilename << "\n";
+				out_stream << packetsFilename << "\n";
+				out_stream.close();
+				cout << endl << "Agency's info saved!" << endl << endl;
+			}
+			else
+				cerr << "An error occurred during the process...";
+			out_stream.close();
+			system("pause");
+		}
+	}
+	if (clientsInfoHasChanged)
+	{
+		cout << "Save Clients' changes? (Y/N)"; getline(cin, saveReader);
+		if (saveReader == "Y" || saveReader == "y")
+		{
+			// File clients.txt flush
+			ofstream out_stream(clientsFilename);
+			if (out_stream.is_open())
+			{
+				for (size_t j = 0; j < clients.size(); j++)
+				{
+					out_stream << clients.at(j).getName() + "\n";
+					out_stream << clients.at(j).getVATnumber() << "\n";
+					out_stream << clients.at(j).getFamilySize() << "\n";
+					out_stream << clients.at(j).getAddress().getStreet() + " / " + to_string(clients.at(j).getAddress().getDoorNumber()) + " / " + clients.at(j).getAddress().getFloor() + " / " + clients.at(j).getAddress().getPostalCode() + " / " + clients.at(j).getAddress().getLocation() + "\n";
+					string auxiliarIds = "";
+					int listSize = clients.at(j).getPacketList().size();
+					if (listSize > 0)
+					{
+						for (size_t i = 0; i < listSize; i++)
+						{
+							if (i < (listSize - 1))
+								auxiliarIds += to_string(clients.at(j).getPacketList().at(i)->getId()) + " ; ";
+							else
+								auxiliarIds += to_string(clients.at(j).getPacketList().at(i)->getId());
+						}
+					}
+					else
+						auxiliarIds = "0";
+					out_stream << auxiliarIds << "\n";
+					out_stream << clients.at(j).getTotalPurchased() << "\n";
+					if (j < (clients.size() - 1))
+						out_stream << ":::::::::::\n";
+				}
+			}
+			else
+				cerr << "An error occurred during the process...";
+			cout << endl << "Clients' info saved!" << endl << endl;
+			out_stream.close();
+			system("pause");
+		}
+	}
+	if (packetsInfoHasChanged)
+	{
+		cout << "Save Packets' changes? (Y/N)"; getline(cin, saveReader);
+		if (saveReader == "Y" || saveReader == "y")
+		{
+			// File packets.txt flush
+			ofstream out_stream(packetsFilename);
+			if (out_stream.is_open())
+			{
+				out_stream << to_string(packetsId) + "\n";
+				int listSize = packets.size();
+				for (size_t j = 0; j < packets.size(); j++)
+				{
+					out_stream << to_string(packets.at(j).getId()) << "\n";
+					out_stream << packets.at(j).getSites() << "\n";
+					out_stream << to_string(packets.at(j).getBeginDate().getYear()) + "/" + to_string(packets.at(j).getBeginDate().getMonth()) + "/" + to_string(packets.at(j).getBeginDate().getDay()) << "\n";
+					out_stream << to_string(packets.at(j).getEndDate().getYear()) + "/" + to_string(packets.at(j).getEndDate().getMonth()) + "/" + to_string(packets.at(j).getEndDate().getDay()) << "\n";
+					out_stream << to_string(packets.at(j).getPricePerPerson()) << "\n";
+					out_stream << to_string(packets.at(j).getMaxPersons()) << "\n";
+					out_stream << to_string(packets.at(j).getCurrentPersons()) << "\n";
+					if (j < (listSize - 1))
+						out_stream << ":::::::::::\n";
+				}
+			}
+			else
+				cerr << "An error occurred during the process...";
+			out_stream.close();
+			cout << endl << "Packets' info saved!" << endl << endl;
+			system("pause");
+		}
+	}
+}
 
 /*********************************
  * Mostrar Loja

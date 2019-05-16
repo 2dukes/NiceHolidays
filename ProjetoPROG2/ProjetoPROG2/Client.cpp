@@ -148,6 +148,8 @@ ostream& operator<<(ostream& out, const Client & client){
 	{
 		for (size_t i = 0; i < client.packets.size(); i++)
 		{
+			cout << client.packets.at(i)->getId() << endl;
+			system("pause");
 			if (i < (client.packets.size() - 1))
 				out << client.packets.at(i)->getId() << " ; ";
 			else

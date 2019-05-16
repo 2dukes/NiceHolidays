@@ -59,7 +59,6 @@ void mainMenu(Agency &agency) {
 		switch (mainMenu)
 		{
 		case 1:
-			//agencyName = agency.UpdateAgencyInfo(mainChoices.at(mainMenu - 1));
 			cout << endl << agency;
 			if (cin.peek() != EOF)
 				cin.ignore(100, '\n');
@@ -102,10 +101,14 @@ void mainMenu(Agency &agency) {
 								cPacket.packetCreation(auxiliarExplorer);
 								cin.get();
 								fflush(stdin);
-								int pId = agency.getPacketsId() + 1;
-								cPacket.setId(pId);
-								agency.setPacketsId(pId);
-								agency.setPacket(cPacket);
+								if(!cin.eof())
+								{ 
+									int pId = (agency.getPacketsId() + 1);
+									cPacket.setId(pId);
+									agency.setPacketsId(pId);
+									agency.setPacket(cPacket);
+									agency.getPacketsInfoHasChanged() = true;
+								}
 								// Update packets.txt file . . .
 
 								/*ofstream out_stream("packets.txt", std::ios_base::app);
@@ -277,6 +280,8 @@ void mainMenu(Agency &agency) {
 			// Buy Packet
 			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
 			agency.buyPacket(auxiliarExplorer);
+			cin.get();
+			fflush(stdin);
 			break;
 		}
 		case 9:
@@ -288,14 +293,16 @@ void mainMenu(Agency &agency) {
 			fflush(stdin);
 			break;
 		}
-		case 10:
-		{
+		case 10: 
+		{ 
+			// View Most Nth visited places
 			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
 			agency.viewMoreVisited(auxiliarExplorer);
 			break;
 		}
 		case 11:
 		{
+			// Recommended packets according to each client
 			string auxiliarExplorer = mainChoices.at(mainMenu - 1);
 			agency.viewMoreVisitedForClient(auxiliarExplorer);
 			break;
@@ -304,6 +311,5 @@ void mainMenu(Agency &agency) {
 			break;
 		}
 	} while (mainMenu != 0);
-	
 }
 

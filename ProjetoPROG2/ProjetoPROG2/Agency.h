@@ -28,10 +28,9 @@ private:
 	double totalValue;
 	unsigned int soldPacksNumber;
 
+	bool agencyInfoHasChanged;  // flag that is set to "true" if at least one client has been changed/added/deleted
 	bool clientsInfoHasChanged; // flag that is set to "true" if at least one client has been changed/added/deleted
 	bool packetsInfoHasChanged; // flag that is set to "true" if at least one packet has been changed/added/deleted
-	unsigned int maxClientsId; // maximum value among all clients identifiers
-	unsigned int maxPacketsId; // maximum value among all packets identifiers
 
 public:
 	Agency(string fileName);
@@ -46,7 +45,8 @@ public:
 	unsigned getPacketsId() const;
 	unsigned getSoldPacksNumber() const;
 	double getTotalValue() const;
-
+	bool& getClientsInfoHasChanged();
+	bool& getPacketsInfoHasChanged();
 
 	// methods SET
 	void readPackets();
@@ -85,6 +85,8 @@ public:
 	void alterClient(string &explorer);
 	void removeClient(string &explorer);
 	void buyPacket(string &explorer);
+
+	~Agency(); // Destructor
 	
 	friend ostream& operator<<(ostream& out, const Agency & agency);
 };

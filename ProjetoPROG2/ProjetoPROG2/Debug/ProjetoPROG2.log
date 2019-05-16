@@ -1,4 +1,8 @@
-﻿  Menus.cpp
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(16): warning C4018: '<=': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\menus.cpp(55): warning C4018: '<=': signed/unsigned mismatch
+﻿  Agency.cpp
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(469): warning C4018: '>': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1714): warning C4018: '<': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1716): warning C4018: '<': signed/unsigned mismatch
+c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1757): warning C4018: '<': signed/unsigned mismatch
+  Packet.cpp
+  Generating Code...
   ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe
