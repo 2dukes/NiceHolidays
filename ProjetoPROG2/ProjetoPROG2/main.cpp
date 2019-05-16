@@ -10,6 +10,7 @@
 int main() {
 	/*cout << "Hi,..." << endl;
 	system("pause");*/
+	
 	Agency agency(AGENCY_FILE_NAME);   // create the agency
 	agency.readPackets();
 	agency.readClients();

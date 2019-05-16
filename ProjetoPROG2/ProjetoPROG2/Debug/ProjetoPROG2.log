@@ -1,6 +1,6 @@
 ﻿  Agency.cpp
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(470): warning C4018: '>': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1718): warning C4018: '<': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1720): warning C4018: '<': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1764): warning C4018: '<': signed/unsigned mismatch
-  ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(470): warning C4018: '>': signed/unsigned mismatch
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(1896): warning C4018: '<': signed/unsigned mismatch
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(1898): warning C4018: '<': signed/unsigned mismatch
+c:\users\vidin\onedrive\documentos\1ano\2s\prog\niceholidays\projetoprog2\projetoprog2\agency.cpp(1942): warning C4018: '<': signed/unsigned mismatch
+  ProjetoPROG2.vcxproj -> C:\Users\vidin\OneDrive\Documentos\1Ano\2S\PROG\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

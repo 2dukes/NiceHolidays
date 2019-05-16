@@ -68,6 +68,7 @@ public:
 	multimap<int, string, greater<int>> orderedMostVisited();
 	void viewMoreVisited(string &explorer);
 	void viewMoreVisitedForClient(string &explorer);
+	void viewMoreVisitedForSpecificClient(string &explorer);
 
 	//Packets
 	void viewAllPackets(string &explorer) const;

@@ -218,7 +218,7 @@ void Agency::clientCreation(string &explorer)
 	int VAT, house;
 	bool vatNDigits = true, vatExistence = true, packetflag = true;
 
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	// ofstream out_stream("clients.txt", std::ios_base::app);
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -306,7 +306,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 	bool toggle = true;
 	int repetition = 0;
 
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -411,7 +411,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 
 void Agency::viewTotalSold(string &explorer) const
 {
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << endl << left << setw(25) << "Number of packs sold: " << soldPacksNumber << endl << left << setw(25) << "Total value: " << totalValue << endl << endl;
@@ -459,7 +459,7 @@ multimap<int, string, greater<int>> Agency::orderedMostVisited()
 void Agency::viewMoreVisited(string &explorer)
 {
 	cout << endl;
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -497,7 +497,7 @@ void Agency::viewMoreVisited(string &explorer)
 void Agency::viewMoreVisitedForClient(string & explorer)
 {
 	cout << endl;
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -527,7 +527,8 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 		if (orderedSitesAux.size() > 0)
 		{
 			mI = orderedSitesAux.begin();
-			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
+			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+			/*
 			string viewP;
 			cout << endl << "View corresponding packet? (Y/N)"; getline(cin, viewP);
 			cout << endl << endl;
@@ -563,9 +564,42 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 					}
 				}
 			}
+			*/
+			cout << endl << "CORRESPONDING PACK:" << endl << endl;
+			bool gotOut = false;
+
+			for (const auto &z : packets)
+			{
+				if (z.getSitesVector().size() > 1)
+				{
+					vector<string> auxiliarSites = z.getSitesVector();
+					for (size_t i = 1; i < auxiliarSites.size(); i++)
+					{
+						if (auxiliarSites.at(i) == mI->second)
+						{
+							cout << z << endl;
+							gotOut = true;
+							break;
+						}
+
+					}
+					if (gotOut)
+						break;
+				}
+				else
+				{
+					if (z.getSitesVector().at(0) == mI->second)
+					{
+						cout << z << endl;
+						gotOut = true;
+						break;
+					}
+				}
+			}
 		}
 		else
-			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
+			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+		cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 	}
 	cout << endl << endl;
 	cin.get();
@@ -573,10 +607,154 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 	return;
 }
 
+void Agency::viewMoreVisitedForSpecificClient(string &explorer)
+{
+	bool toggle = true;
+	string clientName;
+	int clientVAT;
+	int indexClient, confirm;
+
+	while (toggle)
+	{
+		indexClient = 0;
+		confirm = 0;
+		cout << string(100, '\n');
+		cout << explorer << endl << endl;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "[Go Back] CTRL+Z" << endl << endl;
+		cout << endl << "Name of the Client: "; getline(cin, clientName);
+		if (cin.eof())
+			return;
+		transform(clientName.begin(), clientName.end(), clientName.begin(), toupper);
+		for (size_t i = 0; i < size(clients); i++)
+		{
+			string auxiliar = clients.at(i).getName();
+			transform(auxiliar.begin(), auxiliar.end(), auxiliar.begin(), toupper);
+			if (auxiliar == clientName)
+			{
+				indexClient = i;
+				confirm++;
+			}
+		}
+		if (confirm == 0)
+			cout << "There is no registered client named '" << clientName << "'!" << endl << endl;
+		else
+		{
+			int confirmNif = 0;
+			if (confirm > 1)
+			{
+				cout << "\nThere are " << confirm << " clients with that name.\nPlease refer the client's VAT: ";
+				bool valid;
+				do
+				{
+					cin >> clientVAT;
+					if (cin.eof())
+						return;
+					if (cin.fail())
+					{
+						cin.clear();
+						cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					}
+					valid = VATConfirm(clientVAT);
+					if (!valid)
+						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
+				} while (!valid);
+
+				for (size_t i = 0; i < clients.size(); i++)
+				{
+					if (clients.at(i).getVATnumber() == clientVAT)
+					{
+						indexClient = i;
+						confirmNif++;
+					}
+				}
+			}
+			cout << endl;
+			if (confirmNif != 0 || confirm == 1)
+			{
+				multimap<int, string, greater<int>> orderedSites = orderedMostVisited();
+				multimap<int, string, greater<int>>::iterator mI;
+				multimap<int, string, greater<int>> orderedSitesAux = orderedSites;
+				Client x = clients.at(indexClient);
+				for (const auto &y : x.getPacketList())
+				{
+					for (const auto &w : y->getSitesVector())
+					{
+						for (mI = orderedSitesAux.begin(); mI != orderedSitesAux.end(); mI++)
+						{
+							if (w == mI->second)
+							{
+								orderedSitesAux.erase(mI);
+								break;
+							}
+						}
+					}
+				}
+
+				if (orderedSitesAux.size() > 0)
+				{
+					mI = orderedSitesAux.begin();
+					cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
+					cout << "CORRESPONDING PACK:" << endl << endl;
+					bool gotOut = false;
+
+					for (const auto &z : packets)
+					{
+						if (z.getSitesVector().size() > 1)
+						{
+							vector<string> auxiliarSites = z.getSitesVector();
+							for (size_t i = 1; i < auxiliarSites.size(); i++)
+							{
+								if (auxiliarSites.at(i) == mI->second)
+								{
+									cout << z << endl;
+									gotOut = true;
+									break;
+								}
+
+							}
+							if (gotOut)
+								break;
+						}
+						else
+						{
+							if (z.getSitesVector().at(0) == mI->second)
+							{
+								cout << z << endl;
+								gotOut = true;
+								break;
+							}
+						}
+					}
+				}
+				else
+					cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
+			}
+			else
+				cout << "\nFound no user with VAT: " << clientVAT << endl << endl;
+		}
+		int option;
+		cout << "1. See for another client\n0. Main Menu\n\n";
+		while ((!(cin >> option) || !(option == 0 || option == 1)))
+		{
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			cout << endl << "1. See for another client\n0. Main Menu\n\n";
+		}
+		if (option == 0)
+			toggle = false;
+	}
+	cout << endl;
+
+}
+
 void Agency::viewAllPackets(string &explorer) const
 {
 	cout << endl;
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	for (size_t i = 0; i < packets.size(); i++)
 	{
@@ -597,7 +775,7 @@ void Agency::viewPacketByDestination(string &explorer) const
 	{
 		string locationPack;
 		bool confirm = true;
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -649,7 +827,7 @@ void Agency::viewPacketByDate(string &explorer) const
 		bool confirm = true;
 		string date1, date2;
 
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -707,7 +885,7 @@ void Agency::viewPacketByDateAndDest(string &explorer) const
 		string locationPack;
 		index = 0;
 		confirmLocation = 0;
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -804,7 +982,7 @@ void Agency::alterPack(string &explorer)
 	int index;
 	while (toggle)
 	{
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		packId = 0;
 		index = 0;
@@ -975,7 +1153,7 @@ void Agency::removePacket(string &explorer)
 		int packId = 0;
 		int index = 0;
 		bool confirm = true;
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1034,7 +1212,7 @@ void Agency::viewSoldPacksAccToSpeClient(string &explorer)
 	{
 		indexClient = 0;
 		confirm = 0;
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1114,7 +1292,7 @@ void Agency::viewSoldPacksAccToSpeClient(string &explorer)
 void Agency::viewSoldPacksAccToAllClients(string &explorer)
 {
 	string viewP;
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1144,7 +1322,7 @@ void Agency::viewSoldPacksAccToAllClients(string &explorer)
 //CLIENT FUNCTIONS
 void Agency::viewAllClients(string &explorer) const
 {
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	size_t size = clients.size();
 	for (size_t i = 0; i < size; i++)
@@ -1164,7 +1342,7 @@ void Agency::viewSpecificClient(string &explorer) const
 		string clientName;
 		int clientVAT;
 		int indexClient = 0, confirm = 0;
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1246,7 +1424,7 @@ void Agency::alterClient(string &explorer)
 		int clientVAT;
 		int indexClient = 0, confirm = 0;
 
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1423,7 +1601,7 @@ void Agency::removeClient(string &explorer)
 	int indexClient, confirm;
 	while (toggle)
 	{
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1529,7 +1707,7 @@ void Agency::buyPacket(string &explorer)
 		string clientName;
 		int clientVAT;
 		int indexClient = 0, confirm = 0;
-		system("cls");
+		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "[Go Back] CTRL+Z" << endl << endl;
@@ -1796,7 +1974,7 @@ void Agency::packetCreation(string &explorer)
 	string reader;
 	double price;
 	unsigned tMax;
-	system("cls");
+	cout << string(100, '\n');
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
