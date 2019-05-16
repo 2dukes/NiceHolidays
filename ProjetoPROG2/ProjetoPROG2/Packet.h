@@ -44,7 +44,6 @@ class Packet{
 
   // other methods
   bool sitesFormat(string &sitesStr);
-  vector<string> sitesNormalization(string &sitesStr);
   void packetCreation(string &explorer);
   friend ostream& operator<<(ostream& out, const Packet & packet);
 };

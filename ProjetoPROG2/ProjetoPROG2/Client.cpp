@@ -144,16 +144,18 @@ ostream& operator<<(ostream& out, const Client & client){
 		}
 		out << endl;
 	}*/
-	if (client.packets.size() > 0)
+	vector<Packet*> clientPackets = client.packets;
+	int size = clientPackets.size();
+	if (size > 0)
 	{
-		for (size_t i = 0; i < client.packets.size(); i++)
+		for (size_t i = 0; i < size; i++)
 		{
-			cout << client.packets.at(i)->getId() << endl;
-			system("pause");
-			if (i < (client.packets.size() - 1))
-				out << client.packets.at(i)->getId() << " ; ";
+			/*cout << client.packets.at(i)->getId() << endl;
+			system("pause");*/
+			if (i < (size - 1))
+				out << clientPackets.at(i)->getId() << " ; ";
 			else
-				out << client.packets.at(i)->getId() << endl;
+				out << clientPackets.at(i)->getId() << endl;
 		}
 	}
 	else out << "0" << endl;

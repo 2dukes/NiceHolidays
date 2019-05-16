@@ -243,3 +243,28 @@ vector<int> vectorIntersec(vector<int> &vector1, vector<int> &vector2)
 	}
 	return finalVector;
 }
+
+vector<string> sitesNormalization(string &sitesStr)
+{
+	istringstream iS(sitesStr);
+	vector<string> tSites;
+	string mainPlace;
+	getline(iS, mainPlace, '-');
+	trim(mainPlace);
+	tSites.push_back(mainPlace);
+	// cout << mainPlace << endl;
+	if (iS.eof())
+		return tSites;
+	else
+	{
+		while (getline(iS, mainPlace, ','))
+		{
+			trim(mainPlace);
+			// cout << mainPlace << endl;
+			if (mainPlace != "" && mainPlace.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos)
+				tSites.push_back(mainPlace);
+		}	
+	}
+	// system("pause");
+	return tSites;
+}

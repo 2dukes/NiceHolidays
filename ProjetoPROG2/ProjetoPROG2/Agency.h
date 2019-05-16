@@ -22,7 +22,7 @@ private:
 	string URL; // URL of the agency Web site
 	vector<Client> clients; // vector to store the existing clients
 	vector<Packet> packets; // vector to store the existing packets
-	unsigned int packetsId; // Last inserted ID in packets.txt
+	int packetsId; // Last inserted ID in packets.txt
 	string clientsFilename; // clients file name 
 	string packetsFilename; // packets file name
 	double totalValue;
@@ -42,7 +42,7 @@ public:
 	string getURL() const;
 	const vector<Client>& getClients() const;
 	const vector<Packet>& getPackets() const;
-	unsigned getPacketsId() const;
+	int getPacketsId() const;
 	unsigned getSoldPacksNumber() const;
 	double getTotalValue() const;
 	bool& getClientsInfoHasChanged();
@@ -58,11 +58,11 @@ public:
 	void setClient(Client &client);
 	void setClients(vector<Client> & clients);
 	void setPacket(Packet &packet);
-	void setPacketsId(unsigned id);
+	void setPacketsId(int id);
 
 	// other methods */
 	bool verifyVATExistence(unsigned &VAT) const;
-	void clientCreation(string &explorer, Agency &agency);
+	void clientCreation(string &explorer);
 	string UpdateAgencyInfo(string &explorer);
 	void viewTotalSold(string &explorer) const;
 	multimap<int, string, greater<int>> orderedMostVisited();
@@ -89,4 +89,5 @@ public:
 	~Agency(); // Destructor
 	
 	friend ostream& operator<<(ostream& out, const Agency & agency);
+	void packetCreation(string &explorer);
 };

@@ -79,7 +79,7 @@ const vector<Packet>& Agency::getPackets() const
 {
 	return packets;
 }
-unsigned Agency::getPacketsId() const
+int Agency::getPacketsId() const
 {
 	return packetsId;
 }
@@ -94,7 +94,7 @@ double Agency::getTotalValue() const
 	return totalValue;
 }
 
-bool& Agency::getClientsInfoHasChanged() 
+bool& Agency::getClientsInfoHasChanged()
 {
 	return clientsInfoHasChanged;
 }
@@ -136,7 +136,7 @@ void Agency::setPacket(Packet &packet)
 {
 	packets.push_back(packet);
 }
-void Agency::setPacketsId(unsigned id)
+void Agency::setPacketsId(int id)
 {
 	packetsId = id;
 }
@@ -155,7 +155,7 @@ void Agency::readPackets()
 		Packet currentPacket; // New Packet each time it iterates
 		currentPacket.setId(stoi(auxString));
 		getline(in_stream, auxString);
-		currentPacket.setSites(currentPacket.sitesNormalization(auxString));
+		currentPacket.setSites(sitesNormalization(auxString));
 		getline(in_stream, auxString);
 		currentPacket.setBeginDate(Date(auxString));
 		getline(in_stream, auxString);
@@ -210,7 +210,7 @@ bool Agency::verifyVATExistence(unsigned &VAT) const
 	return true;
 }
 
-void Agency::clientCreation(string &explorer, Agency &agency)
+void Agency::clientCreation(string &explorer)
 {
 	Client cClient;
 	string reader;
@@ -251,7 +251,7 @@ void Agency::clientCreation(string &explorer, Agency &agency)
 			if (vatNDigits)
 				cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
 			unsigned Aux = VAT;
-			vatExistence = agency.verifyVATExistence(Aux);
+			vatExistence = verifyVATExistence(Aux);
 			if (!vatExistence)
 				cerr << "This VAT already exists..." << endl << endl;
 		}
@@ -400,7 +400,7 @@ string Agency::UpdateAgencyInfo(string &explorer)
 		}
 		}
 		if (toggle)
-		{ 
+		{
 			cout << endl << "Agency successfully altered!" << endl << endl;
 			agencyInfoHasChanged = true;
 		}
@@ -473,7 +473,7 @@ void Agency::viewMoreVisited(string &explorer)
 	}
 	if (cin.eof())
 		return;
-	
+
 	cout << endl << endl << "\t\t\t" << left << setw(35) << "PLACE" << left << setw(35) << "TRIPS" << endl << endl;
 
 	multimap<int, string, greater<int>>::const_iterator mI = orderedSites.begin();
@@ -522,7 +522,7 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 				}
 			}
 		}
-		
+
 		if (orderedSitesAux.size() > 0)
 		{
 			mI = orderedSitesAux.begin();
@@ -564,7 +564,7 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 			}
 		}
 		else
-			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;			
+			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
 	}
 	cout << endl << endl;
 	cin.get();
@@ -864,14 +864,14 @@ void Agency::alterPack(string &explorer)
 					if (cin.eof())
 						return;
 					trim(reader);
-					refPacket.setSites(refPacket.sitesNormalization(reader));
+					refPacket.setSites(sitesNormalization(reader));
 					break;
 				}
 				case 2:
 				{
 					cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
 					string auxEDate = refPacket.getEndDate().getDate();
-					while ((reader.empty() || existingDate(reader)) || endLaterThenBeg(auxEDate, reader) && !cin.eof())
+					while (((reader.empty() || existingDate(reader)) || endLaterThenBeg(auxEDate, reader)) && !cin.eof())
 					{
 						cerr << "Invalid Option! Please enter a valid input." << endl;
 						cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
@@ -900,8 +900,8 @@ void Agency::alterPack(string &explorer)
 				case 4:
 				{
 					cout << "Price per person: ";
-					int price;
-					while (!(cin >> price) && !cin.eof())
+					double price;
+					while ((!(cin >> price) || (price < 0)) && !cin.eof())
 					{
 						if (cin.fail())
 						{
@@ -939,7 +939,7 @@ void Agency::alterPack(string &explorer)
 				}
 				}
 				if (toggle2)
-				{ 
+				{
 					cout << endl << "Packet successfully altered!" << endl << endl;
 					packetsInfoHasChanged = true;
 				}
@@ -1386,7 +1386,7 @@ void Agency::alterClient(string &explorer)
 						break;
 					}
 					if (toggle2)
-					{ 
+					{
 						cout << endl << "Client successfully altered!" << endl << endl;
 						clientsInfoHasChanged = true;
 					}
@@ -1689,7 +1689,10 @@ Agency::~Agency()
 			else
 				cerr << "An error occurred during the process...";
 			out_stream.close();
-			system("pause");
+			if (cin.peek() != EOF)
+				cin.ignore(100, '\n');
+			cin.get();
+			fflush(stdin);
 		}
 	}
 	if (clientsInfoHasChanged)
@@ -1731,7 +1734,10 @@ Agency::~Agency()
 				cerr << "An error occurred during the process...";
 			cout << endl << "Clients' info saved!" << endl << endl;
 			out_stream.close();
-			system("pause");
+			if (cin.peek() != EOF)
+				cin.ignore(100, '\n');
+			cin.get();
+			fflush(stdin);
 		}
 	}
 	if (packetsInfoHasChanged)
@@ -1762,7 +1768,10 @@ Agency::~Agency()
 				cerr << "An error occurred during the process...";
 			out_stream.close();
 			cout << endl << "Packets' info saved!" << endl << endl;
-			system("pause");
+			if (cin.peek() != EOF)
+				cin.ignore(100, '\n');
+			cin.get();
+			fflush(stdin);
 		}
 	}
 }
@@ -1777,4 +1786,96 @@ ostream& operator<<(ostream& out, const Agency & agency) {
 		<< "\t\t\t\tURL: " << agency.URL << "\n"
 		<< "\t\t\t\tAddress: " << agency.address << "\n";
 	return out;
+}
+
+
+void Agency::packetCreation(string &explorer)
+{
+	Packet cPacket;
+	string reader;
+	double price;
+	unsigned tMax;
+
+	system("cls");
+	cout << explorer << endl << endl;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	cout << "[Go Back] CTRL+Z" << endl << endl;
+
+	cout << "Places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
+
+	while ((reader.empty() || cPacket.sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
+	{
+		cerr << "Invalid Option! Please enter a valid input." << endl;
+		cout << endl << "Places to visit: "; getline(cin, reader);
+	}
+	if (cin.eof())
+		return;
+	trim(reader);
+	cPacket.setSites(sitesNormalization(reader));
+
+	cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+	while ((reader.empty() || existingDate(reader)) && !cin.eof())
+	{
+		cerr << "Invalid Option! Please enter a valid input." << endl;
+		cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
+	}
+	if (cin.eof())
+		return;
+	trim(reader);
+	cPacket.setBeginDate(Date(reader));
+	string beggining = reader;
+
+	cout << "End date (Year / Month / Day): "; getline(cin, reader);
+	while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, beggining)) && !cin.eof())
+	{
+		cerr << "Invalid Option! Please enter a valid input." << endl;
+		cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
+	}
+	if (cin.eof())
+		return;
+	trim(reader);
+	cPacket.setEndDate(Date(reader));
+
+	cout << "Price per person: ";
+	while (!(cin >> price) && !cin.eof() || (price < 0))
+	{
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+		cout << endl << "Price per person: ";
+	}
+	if (cin.eof())
+		return;
+	cPacket.setPricePerPerson(price);
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	cout << "Max Lotation: ";
+	while (!(cin >> tMax) && !cin.eof())
+	{
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
+		cout << endl << "Max Lotation: ";
+	}
+	if (cin.eof())
+		return;
+	cPacket.setMaxPersons(tMax);
+
+	int pId = (packetsId + 1);
+	cPacket.setId(pId);
+	packetsId = pId;
+	packetsInfoHasChanged = true;
+	packets.push_back(cPacket);
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cout << endl << "Packet successfully created!" << endl;
+	// Construction PACKET
+	// Date TemporaryBegin(begD), TemporaryEnd(endD);
+	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
 }

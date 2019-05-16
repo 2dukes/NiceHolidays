@@ -138,37 +138,14 @@ bool Packet::sitesFormat(string &sitesStr)
 	return false;
 }
 
-vector<string> Packet::sitesNormalization(string &sitesStr)
-{
-	istringstream iS(sitesStr);
-	vector<string> tSites;
-	string mainPlace;
-	getline(iS, mainPlace, '-');
-	trim(mainPlace);
-	tSites.push_back(mainPlace);
-	// cout << mainPlace << endl;
-	if (iS.eof())
-		return tSites;
-	else
-	{
-		while (getline(iS, mainPlace, ','))
-		{
-			trim(mainPlace);
-			// cout << mainPlace << endl;
-			if (mainPlace != "" && mainPlace.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos)
-				tSites.push_back(mainPlace);
-		}	
-	}
-	// system("pause");
-	return tSites;
-}
 
 
+/*
 void Packet::packetCreation(string &explorer)
 {
 	string reader;
 	double price;
-	int tMax;
+	unsigned tMax;
 
 	system("cls");
 	cout << explorer << endl << endl;
@@ -247,6 +224,7 @@ void Packet::packetCreation(string &explorer)
 	// Date TemporaryBegin(begD), TemporaryEnd(endD);
 	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
 }
+*/
 
 // shows a packet content 
 ostream& operator<<(ostream& out, const Packet & packet) {

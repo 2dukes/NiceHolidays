@@ -88,7 +88,7 @@ void mainMenu(Agency &agency) {
 							{
 								// Create | Client
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
-								agency.clientCreation(auxiliarExplorer, agency);
+								agency.clientCreation(auxiliarExplorer);
 								cin.get();
 								fflush(stdin);
 								break;
@@ -96,11 +96,10 @@ void mainMenu(Agency &agency) {
 							case 2:
 							{
 								// Create | Packs
-								Packet cPacket;
+								//Packet cPacket;
 								string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
+								/*
 								cPacket.packetCreation(auxiliarExplorer);
-								cin.get();
-								fflush(stdin);
 								if(!cin.eof())
 								{ 
 									int pId = (agency.getPacketsId() + 1);
@@ -109,6 +108,10 @@ void mainMenu(Agency &agency) {
 									agency.setPacket(cPacket);
 									agency.getPacketsInfoHasChanged() = true;
 								}
+								*/
+								agency.packetCreation(auxiliarExplorer);
+								cin.get();
+								fflush(stdin);
 								// Update packets.txt file . . .
 
 								/*ofstream out_stream("packets.txt", std::ios_base::app);
@@ -133,7 +136,6 @@ void mainMenu(Agency &agency) {
 								//packscreation(mainchoices.at(mainmenu - 1) + " | " + managechoices.at(option1 - 1) + " | " + managesecundarychoices.at(option2 - 1));
 								// update vpacks
 								//readwritepackst();
-
 								break;
 							}
 						}
