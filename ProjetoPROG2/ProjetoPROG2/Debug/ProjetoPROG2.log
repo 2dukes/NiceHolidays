@@ -1,6 +1,2 @@
-﻿  Agency.cpp
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(460): warning C4018: '>': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1891): warning C4018: '<': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1893): warning C4018: '<': signed/unsigned mismatch
-c:\users\rui pinto\documents\c++\niceholidays\projetoprog2\projetoprog2\agency.cpp(1937): warning C4018: '<': signed/unsigned mismatch
+﻿  main.cpp
   ProjetoPROG2.vcxproj -> C:\Users\Rui Pinto\Documents\C++\NiceHolidays\ProjetoPROG2\Debug\ProjetoPROG2.exe

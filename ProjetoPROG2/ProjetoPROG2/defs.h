@@ -2,5 +2,5 @@
 
 #include <string>
 
-const std::string AGENCY_FILE_NAME = "agency.txt";
+extern const std::string AGENCY_FILE_NAME;
 
