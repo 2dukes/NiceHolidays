@@ -40,7 +40,8 @@ bool VATConfirm(int VAT)
 int slashCount(string reader)
 {
 	istringstream iS(reader);
-	int pos, count = 0;
+	int count = 0;
+	size_t pos;
 	
 	while (true)
 	{

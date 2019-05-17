@@ -140,7 +140,7 @@ ostream& operator<<(ostream& out, const Client & client){
 		out << endl;
 	}*/
 	vector<Packet*> clientPackets = client.packets;
-	int size = clientPackets.size();
+	size_t size = clientPackets.size();
 	if (size > 0)
 	{
 		for (size_t i = 0; i < size; i++)

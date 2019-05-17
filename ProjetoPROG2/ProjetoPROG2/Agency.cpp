@@ -483,7 +483,8 @@ void Agency::viewMoreVisitedForSpecificClient(string &explorer)
 	bool toggle = true;
 	string clientName;
 	int clientVAT;
-	int indexClient, confirm;
+	int confirm;
+	size_t indexClient;
 
 	while (toggle)
 	{
@@ -776,7 +777,7 @@ void Agency::viewPacketByDateAndDest(string &explorer) const
 		transform(locationPack.begin(), locationPack.end(), locationPack.begin(), toupper);
 		vector<int> idxLocation;
 		idxLocation.clear();
-		for (size_t i = 0; i < packets.size(); i++)
+		for (unsigned int i = 0; i < packets.size(); i++)
 		{
 			vector<string> sitesVector = packets.at(i).getSitesVector();
 			for (size_t j = 0; j < sitesVector.size(); j++)
@@ -816,7 +817,7 @@ void Agency::viewPacketByDateAndDest(string &explorer) const
 				return;
 			vector <int> idxDate;
 			idxDate.clear();
-			for (size_t i = 0; i < packets.size(); i++)
+			for (unsigned int i = 0; i < packets.size(); i++)
 			{
 				if (checkBetweenDates(date1, date2, packets.at(i).getBeginDate())
 					&& checkBetweenDates(date1, date2, packets.at(i).getEndDate()))
@@ -860,7 +861,7 @@ void Agency::alterPack(string &explorer)
 {
 	bool toggle = true, confirm;
 	int packId;
-	int index;
+	size_t index;
 	while (toggle)
 	{
 		cout << string(100, '\n');
@@ -1084,7 +1085,8 @@ void Agency::viewSoldPacksAccToSpeClient(string &explorer)
 	bool toggle = true;
 	string clientName;
 	int clientVAT;
-	int indexClient, confirm;
+	int confirm;
+	size_t indexClient;
 	while (toggle)
 	{
 		indexClient = 0;
@@ -1303,7 +1305,8 @@ void Agency::alterClient(string &explorer)
 	{
 		string clientName;
 		int clientVAT;
-		int indexClient = 0, confirm = 0;
+		int confirm = 0;
+		size_t indexClient = 0;
 
 		cout << string(100, '\n');
 		cout << explorer << endl << endl;
@@ -1482,7 +1485,8 @@ void Agency::removeClient(string &explorer)
 	bool toggle = true;
 	string clientName;
 	int clientVAT;
-	int indexClient, confirm;
+	int confirm;
+	size_t indexClient;
 	while (toggle)
 	{
 		cout << string(100, '\n');
@@ -1592,7 +1596,8 @@ void Agency::buyPacket(string &explorer)
 		option = -1;
 		string clientName;
 		int clientVAT;
-		int indexClient = 0, confirm = 0;
+		int confirm = 0;
+		size_t indexClient = 0;
 		cout << string(100, '\n');
 		cout << explorer << endl << endl;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -1652,7 +1657,8 @@ void Agency::buyPacket(string &explorer)
 			}
 			if (confirmNif != 0 || confirm == 1)
 			{
-				int confirm = 0, packId = 0, indexPack;
+				int confirm = 0, packId = 0;
+				size_t indexPack;
 				while (confirm == 0)
 				{
 					packId = checkInt("ID of the pack: ");
@@ -1752,8 +1758,6 @@ Agency::~Agency()
 			else
 				cerr << "An error occurred during the process...";
 			out_stream.close();
-			if (cin.peek() != EOF)
-				cin.ignore(100, '\n');
 			cin.get();
 			fflush(stdin);
 		}
@@ -1797,8 +1801,6 @@ Agency::~Agency()
 				cerr << "An error occurred during the process...";
 			cout << endl << "Clients' info saved!" << endl << endl;
 			out_stream.close();
-			if (cin.peek() != EOF)
-				cin.ignore(100, '\n');
 			cin.get();
 			fflush(stdin);
 		}
@@ -1831,8 +1833,6 @@ Agency::~Agency()
 				cerr << "An error occurred during the process...";
 			out_stream.close();
 			cout << endl << "Packets' info saved!" << endl << endl;
-			if (cin.peek() != EOF)
-				cin.ignore(100, '\n');
 			cin.get();
 			fflush(stdin);
 		}
