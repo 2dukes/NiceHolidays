@@ -363,7 +363,7 @@ void Agency::viewMoreVisited(string &explorer)
 	cout << explorer << endl << endl;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "[Go Back] CTRL+Z" << endl << endl;
-	int N;
+	unsigned int N;
 
 	multimap<int, string, greater<int>> orderedSites = orderedMostVisited(); // greater<int> is a COMPARE
 	N = checkInt("Number of Nth most visited packets: ");
@@ -378,7 +378,7 @@ void Agency::viewMoreVisited(string &explorer)
 	cout << endl << endl << "\t\t\t" << left << setw(35) << "PLACE" << left << setw(35) << "TRIPS" << endl << endl;
 
 	multimap<int, string, greater<int>>::const_iterator mI = orderedSites.begin();
-	int count = 0;
+	unsigned int count = 0;
 	while (count < N)
 	{
 		cout << "\t\t\t" << left << setw(35) << mI->second << left << setw(35) << mI->first << endl;
@@ -1774,7 +1774,7 @@ Agency::~Agency()
 					out_stream << clients.at(j).getFamilySize() << "\n";
 					out_stream << clients.at(j).getAddress().getStreet() + " / " + to_string(clients.at(j).getAddress().getDoorNumber()) + " / " + clients.at(j).getAddress().getFloor() + " / " + clients.at(j).getAddress().getPostalCode() + " / " + clients.at(j).getAddress().getLocation() + "\n";
 					string auxiliarIds = "";
-					int listSize = clients.at(j).getPacketList().size();
+					size_t listSize = clients.at(j).getPacketList().size();
 					if (listSize > 0)
 					{
 						for (size_t i = 0; i < listSize; i++)
@@ -1813,7 +1813,7 @@ Agency::~Agency()
 			if (out_stream.is_open())
 			{
 				out_stream << to_string(packetsId) + "\n";
-				int listSize = packets.size();
+				size_t listSize = packets.size();
 				for (size_t j = 0; j < packets.size(); j++)
 				{
 					out_stream << to_string(packets.at(j).getId()) << "\n";
