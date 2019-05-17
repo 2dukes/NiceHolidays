@@ -1,7 +1,9 @@
 #include <sstream>
 #include "Date.h"
 
-Date::Date() {
+Date::Date() 
+{
+
 }
 
 Date::Date(string date) {
@@ -19,12 +21,12 @@ Date::Date(string date) {
 
 Date::Date(unsigned short day, unsigned short month, unsigned year) {
 
-	// REQUIRES IMPLEMENTATION
+	this->day = day;
+	this->month = month;
+	this->year = year;
 }
 
-/*********************************
- * GET Methods
- ********************************/
+
 unsigned short Date::getDay() const {
 
 	return day;
@@ -49,9 +51,6 @@ string Date::getDate() const
 	return to_string(year) + "/" + to_string(month) + "/" + to_string(day);
 }
 
-/*********************************
- * SET Methods
- ********************************/
 
 void Date::setDay(unsigned short day) {
 
@@ -71,11 +70,6 @@ void Date::setYear(unsigned year) {
 }
 
 
-/*********************************
- * Show Date
- ********************************/
-
- // disply a Date in a nice format
 ostream& operator<<(ostream& out, const Date & date) {
 
 	out << date.year << "/" << date.month << "/" << date.day;

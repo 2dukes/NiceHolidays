@@ -15,7 +15,7 @@ Packet::Packet(vector<string> sites, Date inicio, Date fim, double precoPessoa, 
 	currentPersons = 0;
 }
 
-Packet::Packet() // Irregular packet
+Packet::Packet() 
 {
 	id = 0;
 	currentPersons = 0;
@@ -114,10 +114,6 @@ void Packet::setCurrentPersons(unsigned takenTickets)
 	this->currentPersons = takenTickets;
 }
 
-/*********************************
- * Show Packet information
- ********************************/
-
 bool Packet::sitesFormat(string &sitesStr)
 {
 	istringstream iS(sitesStr);
@@ -138,95 +134,6 @@ bool Packet::sitesFormat(string &sitesStr)
 	return false;
 }
 
-
-
-/*
-void Packet::packetCreation(string &explorer)
-{
-	string reader;
-	double price;
-	unsigned tMax;
-
-	system("cls");
-	cout << explorer << endl << endl;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-	cout << "[Go Back] CTRL+Z" << endl << endl;
-
-	cout << "Places to visit: "; getline(cin, reader); // Places format -> Porto - Porto, Gaia, Arcozelo | OR | Madeira (only)
-
-	while ((reader.empty() || sitesFormat(reader)) && !cin.eof()) // Overload sitesFormat
-	{
-		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Places to visit: "; getline(cin, reader);
-	}
-	if (cin.eof())
-		return;
-	trim(reader);
-	sites = sitesNormalization(reader);
-
-	cout << "Beginning date (Year / Month / Day): "; getline(cin, reader);
-	while ((reader.empty() || existingDate(reader)) && !cin.eof())
-	{
-		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "Beginning date (Year / Month / Day): "; getline(cin, reader);
-	}
-	if (cin.eof())
-		return;
-	trim(reader);
-	begin = Date(reader);
-	string beggining = reader;
-
-	cout << "End date (Year / Month / Day): "; getline(cin, reader);
-	while ((reader.empty() || existingDate(reader) || endLaterThenBeg(reader, beggining)) && !cin.eof())
-	{
-		cerr << "Invalid Option! Please enter a valid input." << endl;
-		cout << endl << "End date (Year / Month / Day): "; getline(cin, reader);
-	}
-	if (cin.eof())
-		return;
-	trim(reader);
-	end = Date(reader);
-
-	cout << "Price per person: ";
-	while (!(cin >> price) && !cin.eof())
-	{
-		if (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
-		cout << endl << "Price per person: ";
-	}
-	if (cin.eof())
-		return;
-	pricePerPerson = price;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-	cout << "Max Lotation: ";
-	while (!(cin >> tMax) && !cin.eof())
-	{
-		if (cin.fail())
-		{ 
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
-		cout << endl << "Max Lotation: ";
-	}
-	if (cin.eof())
-		return;
-	maxPersons = tMax;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cout << endl << "Packet successfully created!" << endl;
-	// Construction PACKET
-	// Date TemporaryBegin(begD), TemporaryEnd(endD);
-	// NewPacket = Packet(sitesNormalization(places), TemporaryBegin, TemporaryEnd, price, tMax);
-}
-*/
-
-// shows a packet content 
 ostream& operator<<(ostream& out, const Packet & packet) {
 
 	out << left << setw(45) << "ID: " << packet.id << endl

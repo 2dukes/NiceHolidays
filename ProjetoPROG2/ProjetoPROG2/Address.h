@@ -18,7 +18,8 @@ private:
 	string location; // site
 
 public:
-	Address();
+	// constructors
+	Address(); 
 	Address(string adr);
 	Address(string street, unsigned short doorNumber, string floor, string postalCode, string location);
 
@@ -37,6 +38,6 @@ public:
 	void setLocation(string  location);
 
 	// outros */
-	friend ostream& operator<<(ostream& out, const Address & address);
+	friend ostream& operator<<(ostream& out, const Address & address); // overload of operator << (display the formatted address on a ostream)
 
 };

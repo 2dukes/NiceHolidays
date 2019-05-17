@@ -24,21 +24,6 @@ void trim(string &s)
 	trimRight(s);
 } 
 
-void decompose(string str, vector<string> &elements, char sep)
-{
-	size_t pos = str.find(sep);
-	while (pos != string::npos)
-	{
-		string elem = str.substr(0, pos);
-		//trim(elem);
-		elements.push_back(elem);
-		str.erase(0, pos + 1);
-		pos = str.find(sep);
-	}
-	//trim(s);
-	elements.push_back(str);
-} // decompoe string a partir de separador
-
 bool VATConfirm(int VAT)
 {
 	int vDigits = 0;
@@ -71,7 +56,7 @@ int slashCount(string reader)
 	return count;
 }
 
-bool adrConfirm(string &reader) // Rua Sem Nome / 100 / - / 4400-345 / Porto
+bool adrConfirm(string &reader) 
 {
 	if (slashCount(reader) == 4)
 	{
@@ -203,7 +188,7 @@ bool checkInt2(string s)
 		}
 	}
 	return confirm;
-} //check if a string is a int
+} 
 
 int checkInt(string sentence)
 {
@@ -223,7 +208,7 @@ int checkInt(string sentence)
 			cout << "Invalid input, try again.\n";
 		}
 	}
-}//ask for a string and check if its integer before returning
+}
 
 vector<int> vectorIntersec(vector<int> &vector1, vector<int> &vector2)
 {
@@ -252,7 +237,6 @@ vector<string> sitesNormalization(string &sitesStr)
 	getline(iS, mainPlace, '-');
 	trim(mainPlace);
 	tSites.push_back(mainPlace);
-	// cout << mainPlace << endl;
 	if (iS.eof())
 		return tSites;
 	else
@@ -260,11 +244,9 @@ vector<string> sitesNormalization(string &sitesStr)
 		while (getline(iS, mainPlace, ','))
 		{
 			trim(mainPlace);
-			// cout << mainPlace << endl;
 			if (mainPlace != "" && mainPlace.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos)
 				tSites.push_back(mainPlace);
 		}	
 	}
-	// system("pause");
 	return tSites;
 }

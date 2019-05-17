@@ -98,46 +98,10 @@ void mainMenu(Agency &agency) {
 						case 2:
 						{
 							// Create | Packs
-							//Packet cPacket;
 							string auxiliarExplorer = mainChoices.at(mainMenu - 1) + " | " + manageChoices.at(option1 - 1) + " | " + manageSecundaryChoices.at(option2 - 1);
-							/*
-							cPacket.packetCreation(auxiliarExplorer);
-							if(!cin.eof())
-							{
-								int pId = (agency.getPacketsId() + 1);
-								cPacket.setId(pId);
-								agency.setPacketsId(pId);
-								agency.setPacket(cPacket);
-								agency.getPacketsInfoHasChanged() = true;
-							}
-							*/
+
 							agency.packetCreation(auxiliarExplorer);
 							cin.get();
-
-							// Update packets.txt file . . .
-
-							/*ofstream out_stream("packets.txt", std::ios_base::app);
-							if (out_stream.is_open())
-							{
-								int pId = agency.getPacketsId() + 1;
-								agency.setPacketsId(pId);
-								cPacket.setId(pId);
-								out_stream << pId << "\n";
-								out_stream << cPacket.getSites() + "\n";
-								out_stream << cPacket.getBeginDate().getDate() + "\n";
-								out_stream << cPacket.getEndDate().getDate() + "\n";
-								out_stream << cPacket.getPricePerPerson() << "\n";
-								out_stream << cPacket.getMaxPersons() << "\n";
-								out_stream << "::::::::::\n";
-								out_stream.close();
-								cout << endl << "Your data was successfully inserted!" << endl << endl;
-							}
-							else
-								cerr << "An error occurred during the process...";
-							system("pause");*/
-							//packscreation(mainchoices.at(mainmenu - 1) + " | " + managechoices.at(option1 - 1) + " | " + managesecundarychoices.at(option2 - 1));
-							// update vpacks
-							//readwritepackst();
 							break;
 						}
 						}

@@ -31,18 +31,18 @@ class Client{
   unsigned getVATnumber() const;
   unsigned short getFamilySize() const;
   Address getAddress() const;
-  vector<Packet*>& getPacketList();
-  double getTotalPurchased() const;
+  vector<Packet*>& getPacketList(); // get the vector of pointers to bought packs
+  double getTotalPurchased() const; // get the total value spent by the client on bought packs
   
   // SET methods
-  
+
   void setName(string name);
   void setVATnumber(unsigned VATnumber);
   void setFamilySize(unsigned short familySize);
   void setAddress(Address address);
-  int setPacketList(string ids, vector<Packet> &packets);
-  void setTotalPurchased(double totalPurchased);
+  int setPacketList(string ids, vector<Packet> &packets); // set the vector of pointers to bought packs and returns the total number of bought packs
+  void setTotalPurchased(double totalPurchased); // set the total value spent by the client on bought packs
   
   // other methods
-  friend ostream& operator<<(ostream& out, const Client & client);
+  friend ostream& operator<<(ostream& out, const Client & client); // overload of operator << (display the formatted client on a ostream)
 };
