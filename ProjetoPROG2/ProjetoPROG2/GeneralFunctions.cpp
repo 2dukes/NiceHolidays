@@ -210,7 +210,7 @@ int checkInt(string sentence)
 	string n;
 	while (true)
 	{ 
-		cout << endl << sentence;
+		cout << sentence;
 		cin >> n;
 		if (cin.eof())
 			return -1;

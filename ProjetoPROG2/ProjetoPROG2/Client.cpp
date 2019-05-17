@@ -112,11 +112,6 @@ int Client::setPacketList(string ids, vector<Packet> &packets)
 	return count;
 }
 
-//void Client::addPacketListIds(unsigned id)
-//{
-//	ids.push_back(id);
-//}
-
 void Client::setTotalPurchased(double totalPurchased){
   
 	this->totalPurchased = totalPurchased;
@@ -161,11 +156,5 @@ ostream& operator<<(ostream& out, const Client & client){
 	else out << "0" << endl;
 	
 	out << left << setw(30) << "Total amount spent: " << client.totalPurchased << endl;
-	//string name; // name of the client
-	//unsigned VATnumber; // VAT number of client
-	//unsigned short familySize;  // number of family members
-	//Address address; // client's address  
-	//vector<Packet*> packets; // vector to store client's packets bought
-	//unsigned totalPurchased; // total value spent by the client
 	return out;
 }

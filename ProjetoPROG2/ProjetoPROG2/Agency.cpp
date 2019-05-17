@@ -251,26 +251,19 @@ void Agency::clientCreation(string &explorer)
 			vatNDigits = VATConfirm(VAT);
 			if (vatNDigits)
 				cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+			else if (VAT <= 0)
+				cerr << "Invalid input! Please consider changing your number." << endl;
 			unsigned Aux = VAT;
 			vatExistence = verifyVATExistence(Aux);
 			if (!vatExistence)
-				cerr << "This VAT already exists..." << endl << endl;
+				cerr << "This already exists..." << endl << endl;
 		}
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	} while (vatNDigits || !vatExistence);
+	} while ((vatNDigits || !vatExistence) || (VAT <= 0));
 	cClient.setVATnumber(VAT);
 
-	cout << "Number of people in household: ";
-	while (!(cin >> house) && !cin.eof())
-	{
-		if (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		cerr << "Invalid Option! Please enter a valid input." << endl << endl;
-		cout << endl << "Number of people in household: ";
-	}
+
+	house = checkInt("Number of people in household: ");
 	if (cin.eof())
 		return;
 	cClient.setFamilySize(house);
@@ -287,12 +280,7 @@ void Agency::clientCreation(string &explorer)
 	trim(reader);
 	Address NewAdress(reader);
 	cClient.setAddress(NewAdress);
-	// out_stream << reader + "\n";
-	// out_stream << reader + "\n";
-	// out_stream << reader + "\n";
-	// out_stream << "::::::::::\n";
 
-	// out_stream.close();
 	clients.push_back(cClient); // Push_Back new client to vector<string> clients
 	cout << endl << "Your data was successfully inserted!" << endl << endl;
 	clientsInfoHasChanged = true;
@@ -365,9 +353,11 @@ string Agency::UpdateAgencyInfo(string &explorer)
 					flag = VATConfirm(VAT);
 					if (flag)
 						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+					else if (VAT <= 0)
+						cerr << "Invalid input! Please consider changing your number." << endl;
 				}
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			} while (flag);
+			} while (flag || (VAT <= 0));
 			setVATnumber(VAT);
 			break;
 		}
@@ -526,24 +516,21 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 
 		if (orderedSitesAux.size() > 0)
 		{
-			mI = orderedSitesAux.begin();
-			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
-			/*
-			string viewP;
-			cout << endl << "View corresponding packet? (Y/N)"; getline(cin, viewP);
-			cout << endl << endl;
 			bool gotOut = false;
-			if (viewP == "y" || viewP == "Y")
+			mI = orderedSitesAux.begin();
+			while (mI != orderedSitesAux.end() && !gotOut)
 			{
 				for (const auto &z : packets)
 				{
-					if (z.getSitesVector().size() > 1)
+					if (z.getSitesVector().size() > 1 && z.getId() > 0)
 					{
 						vector<string> auxiliarSites = z.getSitesVector();
 						for (size_t i = 1; i < auxiliarSites.size(); i++)
 						{
 							if (auxiliarSites.at(i) == mI->second)
 							{
+								cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+								cout << endl << "CORRESPONDING PACK:" << endl << endl;
 								cout << z << endl;
 								gotOut = true;
 								break;
@@ -555,50 +542,25 @@ void Agency::viewMoreVisitedForClient(string & explorer)
 					}
 					else
 					{
-						if (z.getSitesVector().at(0) == mI->second)
+						if (z.getSitesVector().at(0) == mI->second && z.getId() > 0)
 						{
+							cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+							cout << endl << "CORRESPONDING PACK:" << endl << endl;
 							cout << z << endl;
 							gotOut = true;
 							break;
 						}
 					}
 				}
+				mI++;
 			}
-			*/
-			cout << endl << "CORRESPONDING PACK:" << endl << endl;
-			bool gotOut = false;
-
-			for (const auto &z : packets)
-			{
-				if (z.getSitesVector().size() > 1)
-				{
-					vector<string> auxiliarSites = z.getSitesVector();
-					for (size_t i = 1; i < auxiliarSites.size(); i++)
-					{
-						if (auxiliarSites.at(i) == mI->second)
-						{
-							cout << z << endl;
-							gotOut = true;
-							break;
-						}
-
-					}
-					if (gotOut)
-						break;
-				}
-				else
-				{
-					if (z.getSitesVector().at(0) == mI->second)
-					{
-						cout << z << endl;
-						gotOut = true;
-						break;
-					}
-				}
-			}
+			if(!gotOut)
+				cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl;
 		}
 		else
+		{ 
 			cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+		}
 		cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 	}
 	cout << endl << endl;
@@ -647,7 +609,7 @@ void Agency::viewMoreVisitedForSpecificClient(string &explorer)
 				bool valid;
 				do
 				{
-					cin >> clientVAT;
+					cout << "VAT Number: "; cin >> clientVAT;
 					if (cin.eof())
 						return;
 					if (cin.fail())
@@ -656,9 +618,11 @@ void Agency::viewMoreVisitedForSpecificClient(string &explorer)
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					valid = VATConfirm(clientVAT);
-					if (!valid)
+					if (valid)
 						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
-				} while (!valid);
+					else if (clientVAT <= 0)
+						cerr << "Invalid input! Please consider changing your number." << endl;
+				} while (valid || (clientVAT <= 0));
 
 				for (size_t i = 0; i < clients.size(); i++)
 				{
@@ -690,45 +654,53 @@ void Agency::viewMoreVisitedForSpecificClient(string &explorer)
 						}
 					}
 				}
-
+				
 				if (orderedSitesAux.size() > 0)
 				{
-					mI = orderedSitesAux.begin();
-					cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
-					cout << "CORRESPONDING PACK:" << endl << endl;
 					bool gotOut = false;
-
-					for (const auto &z : packets)
+					mI = orderedSitesAux.begin();
+					while (mI != orderedSitesAux.end() && !gotOut)
 					{
-						if (z.getSitesVector().size() > 1)
+						for (const auto &z : packets)
 						{
-							vector<string> auxiliarSites = z.getSitesVector();
-							for (size_t i = 1; i < auxiliarSites.size(); i++)
+							if (z.getSitesVector().size() > 1 && z.getId() > 0)
 							{
-								if (auxiliarSites.at(i) == mI->second)
+								vector<string> auxiliarSites = z.getSitesVector();
+								for (size_t i = 1; i < auxiliarSites.size(); i++)
 								{
+									if (auxiliarSites.at(i) == mI->second)
+									{
+										cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+										cout << endl << "CORRESPONDING PACK:" << endl << endl;
+										cout << z << endl;
+										gotOut = true;
+										break;
+									}
+
+								}
+								if (gotOut)
+									break;
+							}
+							else
+							{
+								if (z.getSitesVector().at(0) == mI->second && z.getId() > 0)
+								{
+									cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << mI->second << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+									cout << endl << "CORRESPONDING PACK:" << endl << endl;
 									cout << z << endl;
 									gotOut = true;
 									break;
 								}
-
-							}
-							if (gotOut)
-								break;
-						}
-						else
-						{
-							if (z.getSitesVector().at(0) == mI->second)
-							{
-								cout << z << endl;
-								gotOut = true;
-								break;
 							}
 						}
+						mI++;
 					}
+					if (!gotOut)
+						cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl;
 				}
 				else
-					cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl << "------------------------------------------------------------------------------------------------------------------------" << endl;
+					cout << "\t\tCLIENT NAME: " << left << setw(25) << x.getName() << "\tRECOMMENDED DESTINATION: " << left << setw(25) << "NONE" << endl;// << "------------------------------------------------------------------------------------------------------------------------" << endl;
+				cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 			}
 			else
 				cout << "\nFound no user with VAT: " << clientVAT << endl << endl;
@@ -1098,21 +1070,17 @@ void Agency::alterPack(string &explorer)
 				}
 				case 5:
 				{
-					int tMax = -1;
-					cout << "Max Lotation: ";
+					int tMax;
 					int curPersons = refPacket.getCurrentPersons();
-					while ((!(cin >> tMax) || !(tMax >= curPersons)) && !cin.eof())
-					{
-						if (cin.fail())
-						{
-							cin.clear();
-							cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						}
-						cerr << "Invalid Option! Please enter a valid input." << endl << endl;
-						cout << endl << "Max Lotation: ";
+					tMax = checkInt("Max Lotation: ");
+					while (tMax < curPersons)
+					{ 
+						cout << "Something wrong has happened..." << endl;
+						tMax = checkInt("Max Lotation: ");
+						if (cin.eof())
+							return;
 					}
-					if (cin.eof())
-						return;
+					
 					refPacket.setMaxPersons(tMax);
 					break;
 				}
@@ -1241,7 +1209,7 @@ void Agency::viewSoldPacksAccToSpeClient(string &explorer)
 				bool valid;
 				do
 				{
-					cin >> clientVAT;
+					cout << "VAT Number: "; cin >> clientVAT;
 					if (cin.eof())
 						return;
 					if (cin.fail())
@@ -1250,9 +1218,11 @@ void Agency::viewSoldPacksAccToSpeClient(string &explorer)
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					valid = VATConfirm(clientVAT);
-					if (!valid)
+					if (valid)
 						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
-				} while (!valid);
+					if (clientVAT <= 0)
+						cerr << "Invalid input! Please consider changing your number" << endl;
+				} while (valid || (clientVAT <= 0));
 
 				for (size_t i = 0; i < clients.size(); i++)
 				{
@@ -1371,7 +1341,7 @@ void Agency::viewSpecificClient(string &explorer) const
 				bool valid;
 				do
 				{
-					cin >> clientVAT;
+					cout << "VAT Number: "; cin >> clientVAT;
 					if (cin.eof())
 						return;
 					if (cin.fail())
@@ -1380,9 +1350,11 @@ void Agency::viewSpecificClient(string &explorer) const
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					valid = VATConfirm(clientVAT);
-					if (!valid)
+					if (valid)
 						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
-				} while (!valid);
+					else if (clientVAT <= 0)
+						cerr << "Invalid input! Please consider changing your number." << endl;
+				} while (valid || (clientVAT <= 0));
 
 				for (unsigned int i = 0; i < size(clients); i++)
 				{
@@ -1457,7 +1429,7 @@ void Agency::alterClient(string &explorer)
 				bool valid;
 				do
 				{
-					cin >> clientVAT;
+					cout << "VAT Number: "; cin >> clientVAT;
 					if (cin.eof())
 						return;
 					if (cin.fail())
@@ -1466,9 +1438,11 @@ void Agency::alterClient(string &explorer)
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					valid = VATConfirm(clientVAT);
-					if (!valid)
+					if (valid)
 						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
-				} while (!valid);
+					else if (clientVAT <= 0)
+						cerr << "Invalid input! Please consider changing your number." << endl;
+				} while (valid || (clientVAT <= 0));
 
 				for (unsigned int i = 0; i < size(clients); i++)
 				{
@@ -1535,13 +1509,15 @@ void Agency::alterClient(string &explorer)
 								vatNDigits = VATConfirm(VAT);
 								if (vatNDigits)
 									cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+								else if (VAT <= 0)
+									cerr << "Invalid input! Please consider changing your number." << endl;
 								unsigned Aux = VAT;
 								vatExistence = verifyVATExistence(Aux);
 								if (!vatExistence)
 									cerr << "This VAT already exists..." << endl << endl;
 							}
 							cin.ignore(numeric_limits<streamsize>::max(), '\n');
-						} while (vatNDigits || !vatExistence);
+						} while (vatNDigits || !vatExistence || (VAT <= 0));
 						clients.at(indexClient).setVATnumber(VAT);
 						cout << endl;
 						break;
@@ -1632,7 +1608,7 @@ void Agency::removeClient(string &explorer)
 				bool valid;
 				do
 				{
-					cin >> clientVAT;
+					cout << "VAT Number: "; cin >> clientVAT;
 					if (cin.eof())
 						return;
 					if (cin.fail())
@@ -1641,9 +1617,11 @@ void Agency::removeClient(string &explorer)
 						cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					}
 					valid = VATConfirm(clientVAT);
-					if (!valid)
+					if (valid)
 						cerr << "Invalid Option! Please enter a 9 digit VAT." << endl;
-				} while (!valid);
+					else if (clientVAT <= 0)
+						cerr << "Invalid input! Please consider changing your number." << endl;
+				} while (valid || (clientVAT <= 0));
 
 				for (size_t i = 0; i < clients.size(); i++)
 				{
@@ -1736,7 +1714,7 @@ void Agency::buyPacket(string &explorer)
 				bool valid;
 				do
 				{
-					cin >> clientVAT;
+					cout << "VAT Number: "; cin >> clientVAT;
 					if (cin.eof())
 						return;
 					if (cin.fail())
@@ -1749,9 +1727,11 @@ void Agency::buyPacket(string &explorer)
 						valid = VATConfirm(clientVAT);
 						if (valid)
 							cerr << "Invalid Option! Please enter a 9 digit VAT." << endl << endl;
+						else if (clientVAT <= 0)
+							cerr << "Invalid input! Please consider changing your number." << endl;
 					}
 					cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				} while (valid);
+				} while (valid || (clientVAT <= 0));
 
 				for (unsigned int i = 0; i < size(clients); i++)
 				{
@@ -1814,10 +1794,7 @@ void Agency::buyPacket(string &explorer)
 						cout << "\nThis client has already bought this pack!\n" << endl;
 					}
 					else
-					{
 						cout << "\nNot enough spots available for this packet!" << " \n----------\n" << endl;
-						break;
-					}
 				}
 			}
 			else
