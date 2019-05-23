@@ -849,7 +849,7 @@ void Agency::viewPacketByDateAndDest(string &explorer) const
 			}
 		}
 		int option;
-		cout << "1. See another pack by date and destination\n0. Back\n\n"; cin >> option;
+		cout << "1. See another pack by date and destination\n0. Back\n\n";
 		while ((!(cin >> option) || !(option == 0 || option == 1)))
 		{
 			if (cin.fail())
