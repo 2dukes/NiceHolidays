@@ -751,7 +751,7 @@ void Agency::viewPacketByDate(string &explorer) const
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
-			cout << endl << "1. See another pack by destination\n0. Back\n\n";
+			cout << endl << "1. See another pack by date\n0. Back\n\n";
 		}
 		if (option == 0)
 			toggle = false;
@@ -850,6 +850,15 @@ void Agency::viewPacketByDateAndDest(string &explorer) const
 		}
 		int option;
 		cout << "1. See another pack by date and destination\n0. Back\n\n"; cin >> option;
+		while ((!(cin >> option) || !(option == 0 || option == 1)))
+		{
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+			cout << endl << "1. See another pack by date and destination\n0. Back\n\n";
+		}
 		if (option == 0)
 			toggle = false;
 	}
@@ -1290,7 +1299,7 @@ void Agency::viewSpecificClient(string &explorer) const
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
-			cout << endl << "1. See another pack by destination\n0. Back\n\n";
+			cout << endl << "1. See another client\n0. Back\n\n";
 		}
 		if (option == 0)
 			toggle = false;
@@ -1470,7 +1479,7 @@ void Agency::alterClient(string &explorer)
 				cin.clear();
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
-			cout << endl << "1. See another pack by destination\n0. Back\n\n";
+			cout << endl << "1. Change another client\n0. Back\n\n";
 		}
 		if (option == 0)
 			toggle = false;
